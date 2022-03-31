@@ -12,4 +12,6 @@
 #include "splashkit.h"
 #include <string>
 #include <json/json.h>
+#ifdef WINDOWS
 #include <Windows.h>
+#endif
