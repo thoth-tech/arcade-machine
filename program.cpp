@@ -1,4 +1,4 @@
-#include "cdata.h"
+#include "helper.h"
 
 using namespace std;
 using std::vector;
@@ -48,6 +48,26 @@ vector<ConfigData> config_data_list()
 int main()
 {
     vector<ConfigData> configs = config_data_list();
+
+    Button button;
+
+    open_window("", WIDTH, HEIGHT);
+
+    while( not quit_requested() )
+        {
+            process_events();
+
+            clear_screen();
+            
+            Button btn0(Button::GREEN, 8, 4);
+            Button btn4(Button::YELLOW, 8, 5);
+            Button btn2(Button::LIGHT_BLUE, 8, 6);
+            Button btn1(Button::RED, 8, 7);
+
+            btn1.draw_screen_guides();
+
+            refresh_screen(60);
+        }
 
     return 0;
 }
