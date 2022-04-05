@@ -18,3 +18,5 @@
 #include "splashscreen.h"
 #include "menu.h"
 #include "helper.h"
+#include "button.h"
+
