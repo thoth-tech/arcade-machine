@@ -14,16 +14,16 @@
 # PLEASE ONLY EDIT CONTENT AFTER THE "=" SIGN FOR EACH CONFIGURATION SETTING  
 
 # Location of git repo (eg. https://github.com/studioant/arcade_game)
-repository=https://github.com/games/arcade_test
+repository=https://github.com/thoth-tech/arcade-games
 
 # Programmnig language the game is written in (eg. C++) 
 language=C#
 
 # Path to your game thumbnail image (eg. images/icon.png)
-image=images/game_icon.jpg
+image=images/icon.jpg
 
 # The title of your game (eg. Super Mario)
-title=My New Game
+title=Game 1
 
 # The genre of your game (eg. Platformer)
 genre=Tile Based
@@ -35,4 +35,4 @@ rating=PG
 author=Foo Bar
 
 # Path to the executable (game.exe)
-executable=new_game.exe
+executable=game1.exe
