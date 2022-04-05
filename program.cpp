@@ -139,25 +139,25 @@ int main()
         refresh_screen(60);
     }
 
-    Button button;
+    //Button button;
 
-    open_window("", WIDTH, HEIGHT);
+    
 
-    while( not quit_requested() )
-        {
-            process_events();
+    // while( not quit_requested() )
+    //     {
+    //         process_events();
 
-            clear_screen();
+    //         clear_screen();
             
-            Button btn0(Button::GREEN, 8, 4);
-            Button btn4(Button::YELLOW, 8, 5);
-            Button btn2(Button::LIGHT_BLUE, 8, 6);
-            Button btn1(Button::RED, 8, 7);
+    //         Button btn0(Button::GREEN, 8, 4);
+    //         Button btn4(Button::YELLOW, 8, 5);
+    //         Button btn2(Button::LIGHT_BLUE, 8, 6);
+    //         Button btn1(Button::RED, 8, 7);
 
-            btn1.draw_screen_guides();
+    //         btn1.draw_screen_guides();
 
-            refresh_screen(60);
-        }
+    //         refresh_screen(60);
+    //     }
 
     return 0;
 }
