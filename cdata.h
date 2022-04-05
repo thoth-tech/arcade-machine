@@ -1,8 +1,6 @@
 // ConfigData Class
 // Parses the data from config text files to an object
 
-#include "helper.h"
-
 using namespace std;
 using std::vector;
 //using Json::Value;

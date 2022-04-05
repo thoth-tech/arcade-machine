@@ -1,10 +1,4 @@
-#include "splashkit.h"
-#include "menu.h"
-#include "splashscreen.h"
-
-//LPCSTR gameDirectoryExe = "GameOfNim_ByAnthonyGeorge\\GameOfNim.exe";
-//LPCSTR gameDirectory = "GameOfNim_ByAnthonyGeorge";
-//LPSTR commandLine = "GameOfNim.exe";
+#include "includes.h"
 
 using namespace std;
 using std::vector;
@@ -108,7 +102,6 @@ void splashscreen()
 int main()
 {
     ConfigData configData;
-    Menu menu;
     point_2d mousePoint;
 
     // Pull the most recent version of the arcade-games repo.
@@ -119,7 +112,7 @@ int main()
     configData.print_config_data();
 
     // Pass the config info to the menu class.
-    menu.get_game_details(configs);
+    Menu menu(configs);
 
     // Open window and toggle border off.
     open_window("arcade-machine", 1920, 1080);

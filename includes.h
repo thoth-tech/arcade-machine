@@ -13,3 +13,8 @@
 #include <string>
 #include <json/json.h>
 #include <Windows.h>
+
+#include "cdata.h"
+#include "splashscreen.h"
+#include "menu.h"
+#include "helper.h"

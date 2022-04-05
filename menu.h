@@ -1,11 +1,10 @@
-#include "includes.h"
-#include "game.h"
-#include "cdata.h"
+using namespace std;
+using std::vector;
 
 class Menu {
     private:
         sprite background = create_sprite("background.png");
-        vector<Game> games;
+        vector<ConfigData> _games;
         vector<sprite> gameImages;
         PROCESS_INFORMATION processInfo;
         DWORD exitCode;
@@ -20,28 +19,23 @@ class Menu {
         bool programExit;
 
     public: 
-        // Get the details from the config data and store in games vector.
-        void get_game_details(vector<ConfigData> configs)
-        {
-            for (int i = 0; i < configs.size(); i++)
-            {
-                Game *game = new Game(configs[i].id(), configs[i].image(), configs[i].title(), 
-                                        configs[i].genre(), configs[i].rating(), configs[i].author(), 
-                                        configs[i].exe(), configs[i].folder());
+        Menu(){}
 
-                games.push_back(*game);
-            }
+        Menu(vector<ConfigData> configs) 
+        {
+            _games = configs;
         }
+        ~Menu(){}
 
         // Draw the game image buttons on the window.  
         void set_game_image()
         {
             int x = 100;
             int y = 100;
-            for (int i = 0; i < games.size(); i++)
+            for (int i = 0; i < _games.size(); i++)
             {
                 // Get image dir and image name from games vector and store the id.
-                string image = games[i].folder() + "/" + games[i].image();
+                string image = _games[i].folder() + "/" + _games[i].image();
                 sprite gameImageSprite = create_sprite(image);
                 gameImages.push_back(gameImageSprite);
 
@@ -75,9 +69,9 @@ class Menu {
                     // If the mouse is then clicked.
                     if (mouse_clicked(LEFT_BUTTON))
                     {
-                        _gamePath = (games[i].folder() + "/" + games[i].exe()).c_str();
-                        _gameExe = strdup(games[i].exe().c_str());
-                        _gameDir = games[i].folder().c_str();
+                        _gamePath = (_games[i].folder() + "/" + _games[i].exe()).c_str();
+                        _gameExe = strdup(_games[i].exe().c_str());
+                        _gameDir = _games[i].folder().c_str();
 
                         x = center_x;
                         y = center_y;
