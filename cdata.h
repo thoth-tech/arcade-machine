@@ -1,3 +1,5 @@
+#ifndef CDATA_H
+#define CDATA_H
 // ConfigData Class
 // Parses the data from config text files to an object
 
@@ -185,3 +187,4 @@ class ConfigData{
             write_line("========================");
         }
 };
+#endif

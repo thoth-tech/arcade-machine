@@ -1,3 +1,5 @@
+#ifndef INCLUDE_H
+#define INCLUDE_H
 // Includes
 
 #include <stdlib.h>
@@ -14,4 +16,6 @@
 #include <json/json.h>
 #ifdef WINDOWS
 #include <Windows.h>
+#endif
+
 #endif
