@@ -1,5 +1,4 @@
-#include "cdata.h"
-#include "gridlayout.h"
+#include "includes.h"
 
 using namespace std;
 using std::vector;
@@ -143,6 +142,7 @@ int main()
 {
     vector<ConfigData> configs = config_data_list();
     GridLayoutExample();
+
 
     return 0;
 }

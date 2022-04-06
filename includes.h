@@ -18,4 +18,11 @@
 #include <Windows.h>
 #endif
 
+#include "cdata.h"
+#include "button.h"
+#include "gridlayout.h"
+#include "helper.h"
 #endif
+
+
+
