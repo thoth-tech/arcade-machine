@@ -1,8 +1,6 @@
 // Helper class
 // Any generic functions can go here
 
-#include "includes.h"
-
 namespace fs = std::experimental::filesystem;
 using namespace std;
 using std::vector;

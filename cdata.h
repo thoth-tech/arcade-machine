@@ -15,6 +15,7 @@ class ConfigData{
         string _rating;
         string _author;
         string _exe;
+        string _folder;
     public:
         // Default Constructor
         ConfigData(){}
@@ -26,7 +27,8 @@ class ConfigData{
         }
 
         //Setters:
-        auto set_id(int &i) { _id = i; };
+        auto set_id(int &i) { _id = i; }
+        auto set_folder(string &dir) { _folder = dir; }
         // Getters:
         auto id() const -> const int& { return _id; }
         auto repo() const -> const string& { return _repo; }
@@ -37,6 +39,7 @@ class ConfigData{
         auto rating() const -> const string& { return _rating; }
         auto author() const -> const string& { return _author; }
         auto exe() const -> const string& { return _exe; }
+        auto folder() const -> const string& { return _folder; }
 
         // Open a file
         ifstream open_file(string file)
@@ -179,6 +182,7 @@ class ConfigData{
             write_line("Language = " + language());
             write_line("Image = " + image());
             write_line("Exe = " + exe());
+            write_line("Folder = " + folder());
             write_line("========================");
         }
 };
