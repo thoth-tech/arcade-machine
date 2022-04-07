@@ -19,6 +19,9 @@
 #endif
 
 #include "cdata.h"
+#include "splashscreen.h"
+#include "menu.h"
+#include "helper.h"
 #include "button.h"
 #include "gridlayout.h"
 #include "helper.h"
