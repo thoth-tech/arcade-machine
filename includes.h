@@ -1,3 +1,5 @@
+#ifndef INCLUDE_H
+#define INCLUDE_H
 // Includes
 
 #include <stdlib.h>
@@ -12,8 +14,15 @@
 #include "splashkit.h"
 #include <string>
 #include <json/json.h>
+#ifdef WINDOWS
 #include <Windows.h>
+#endif
 
 #include "cdata.h"
 #include "button.h"
+#include "gridlayout.h"
+#include "helper.h"
+#endif
+
+
 
