@@ -14,9 +14,7 @@
 #include "splashkit.h"
 #include <string>
 #include <json/json.h>
-#ifdef WINDOWS
 #include <Windows.h>
-#endif
 
 #include "cdata.h"
 #include "splashscreen.h"
@@ -24,7 +22,7 @@
 #include "helper.h"
 #include "button.h"
 #include "gridlayout.h"
-#include "helper.h"
+
 #endif
 
 

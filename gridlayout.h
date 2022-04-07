@@ -1,5 +1,3 @@
-#ifndef GRIDLAYOUT_H
-#define GRIDLAYOUT_H
 
 void write(std::string text);
 
@@ -217,5 +215,3 @@ public:
         }
     }
 };
-
-#endif

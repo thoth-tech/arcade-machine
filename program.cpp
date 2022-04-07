@@ -200,7 +200,7 @@ int main()
 
     // Get the data from the config files.
     vector<ConfigData> configs = config_data_list();
-    GridLayoutExample();
+    //GridLayoutExample();
     configData.print_config_data();
 
     // Pass the config info to the menu class.

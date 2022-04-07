@@ -1,5 +1,3 @@
-#ifndef HELPER_H
-#define HELPER_H
 // Helper class
 // Any generic functions can go here
 
@@ -17,4 +15,3 @@ class Helper{
             return *name;
         }
 };
-#endif
