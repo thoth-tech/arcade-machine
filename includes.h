@@ -20,7 +20,7 @@
 #include "splashscreen.h"
 #include "menu.h"
 #include "helper.h"
-#include "button.h"
+#include "buttons.h"
 #include "gridlayout.h"
 
 #endif
