@@ -38,6 +38,7 @@ class Button{
         auto centre_y() const -> const int& { return _centre_y; }
         auto color() const -> const string& { return _color; }
 
+        // Enumeration of button options
         enum Color
         {
             PLAY,
@@ -47,10 +48,23 @@ class Button{
 
         // Default Constructor
         Button(){}
-        ~Button(){}
+
+        // First Overloaded Constructor
+        Button(Color c, float scale = 1)
+        {
+            // button color
+            _color = btn_color(c);
+            // load button color image
+            _pic = load_bitmap(_color, _color);
+            // create sprite from image
+            _btn = create_sprite(_pic);
+            // scale the sprite
+            sprite_set_scale(_btn, scale);
+        }
         
-        // Overloaded Constructor
-        Button(Color c, float x, float y, float scale = 1)
+        // Second Overloaded Constructor
+        // Calculates the position in the window
+        Button(Color c, float y, float x, float scale = 1)
         {
             // button color
             _color = btn_color(c);
@@ -59,7 +73,7 @@ class Button{
             // create sprite from image
             _btn = create_sprite(_pic);
             // get the centre points of the sprite 
-            _centre_x = sprite_width(_btn)/2;
+            _centre_x = sprite_width(_btn) /2;
             _centre_y = sprite_height(_btn)/2;
             // store the intended location 
             _x = x * X_CELL; _y = y * Y_CELL;
@@ -71,6 +85,8 @@ class Button{
             // scale the sprite
             sprite_set_scale(_btn, scale);
         }
+
+        ~Button(){}
 
         virtual void draw_button()
         {
@@ -113,7 +129,7 @@ class Button{
 class MenuButton : public Button{
     public:
         //MenuButton(){}
-        MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
+        MenuButton(Color c, float y, float x, float scale = 1) : Button(c, y, x, scale){}
         ~MenuButton(){}
 
         void action()
@@ -121,16 +137,23 @@ class MenuButton : public Button{
             if (color() == btn_color(Button::PLAY))
             {
                 draw_sprite(btn());
+                // go to this screen  
             }
             if (color() == btn_color(Button::EXIT))
             {
-                draw_sprite(btn());                
+                draw_sprite(btn());   
+                // go to this screen             
             }
             if (color() == btn_color(Button::OPTIONS))
             {
-                draw_sprite(btn());                 
+                draw_sprite(btn());  
+                // go to this screen                 
             }
         }
+};
+
+class GameScreenButton : public Button{
+
 };
 
 
