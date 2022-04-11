@@ -53,13 +53,13 @@ class Button{
         Button(Color c, float scale = 1)
         {
             // button color
-            _color = btn_color(c);
+            this->_color = btn_color(c);
             // load button color image
-            _pic = load_bitmap(_color, _color);
+            this->_pic = load_bitmap(this->_color, this->_color);
             // create sprite from image
-            _btn = create_sprite(_pic);
+            this->_btn = create_sprite(this->_pic);
             // scale the sprite
-            sprite_set_scale(_btn, scale);
+            sprite_set_scale(this->_btn, scale);
         }
         
         // Second Overloaded Constructor
@@ -67,23 +67,23 @@ class Button{
         Button(Color c, float y, float x, float scale = 1)
         {
             // button color
-            _color = btn_color(c);
+            this->_color = btn_color(c);
             // load button color image
-            _pic = load_bitmap(_color, _color);
+            this->_pic = load_bitmap(this->_color, this->_color);
             // create sprite from image
-            _btn = create_sprite(_pic);
+            this->_btn = create_sprite(this->_pic);
             // get the centre points of the sprite 
-            _centre_x = sprite_width(_btn) /2;
-            _centre_y = sprite_height(_btn)/2;
+            this->_centre_x = sprite_width(this->_btn) /2;
+            this->_centre_y = sprite_height(this->_btn)/2;
             // store the intended location 
-            _x = x * X_CELL; _y = y * Y_CELL;
+            this->_x = x * X_CELL; _y = y * Y_CELL;
             // set button sprite centre point to intended location
-            sprite_set_x(_btn, _x - _centre_x);
-            sprite_set_y(_btn, _y - _centre_y);
+            sprite_set_x(this->_btn, this->_x - this->_centre_x);
+            sprite_set_y(this->_btn, this->_y - this->_centre_y);
             // store the window centre point of button as location
-            _location = center_point(_btn);
+            this->_location = center_point(this->_btn);
             // scale the sprite
-            sprite_set_scale(_btn, scale);
+            sprite_set_scale(this->_btn, scale);
         }
 
         ~Button(){}
@@ -91,7 +91,7 @@ class Button{
         virtual void draw_button()
         {
             // draw button to screen
-            draw_sprite(_btn);
+            draw_sprite(this->_btn);
         }
 
         virtual void action() = 0;
@@ -153,6 +153,15 @@ class MenuButton : public Button{
 };
 
 class GameScreenButton : public Button{
+    public:
+        //MenuButton(){}
+        GameScreenButton(Color c, float y, float x, float scale = 1) : Button(c, y, x, scale){}
+        ~GameScreenButton(){}
+
+        void action()
+        {
+            // play
+        }
 
 };
 
