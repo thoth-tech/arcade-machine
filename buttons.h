@@ -55,7 +55,7 @@ class Button{
             // button color
             this->_color = btn_color(c);
             // load button color image
-            this->_pic = load_bitmap(this->_color, this->_color);
+            this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
             this->_btn = create_sprite(this->_pic);
             // scale the sprite
@@ -64,12 +64,12 @@ class Button{
         
         // Second Overloaded Constructor
         // Calculates the position in the window
-        Button(Color c, float y, float x, float scale = 1)
+        Button(Color c, float x, float y, float scale = 1)
         {
             // button color
             this->_color = btn_color(c);
             // load button color image
-            this->_pic = load_bitmap(this->_color, this->_color);
+            this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
             this->_btn = create_sprite(this->_pic);
             // get the centre points of the sprite 
@@ -88,12 +88,7 @@ class Button{
 
         ~Button(){}
 
-        virtual void draw_button()
-        {
-            // draw button to screen
-            draw_sprite(this->_btn);
-        }
-
+        virtual void draw_button() = 0;
         virtual void action() = 0;
 
         void draw_screen_guides()
@@ -107,17 +102,17 @@ class Button{
 
         string btn_color(Color c)
         {
-            string filepath = "buttons/Red/";
+            string filepath = "buttons/";
             switch(c)
             {
                 case PLAY:
-                    return filepath + "Play.png";
+                    return filepath + "btn_play.png";
                     break;
                 case EXIT:
-                    return filepath + "Exit.png";
+                    return filepath + "btn_exit.png";
                     break;
                 case OPTIONS:
-                    return filepath + "Settings.png";
+                    return filepath + "btn_options.png";
                     break;
                 default:
                     //return;
@@ -129,7 +124,7 @@ class Button{
 class MenuButton : public Button{
     public:
         //MenuButton(){}
-        MenuButton(Color c, float y, float x, float scale = 1) : Button(c, y, x, scale){}
+        MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~MenuButton(){}
 
         void action()
@@ -150,12 +145,18 @@ class MenuButton : public Button{
                 // go to this screen                 
             }
         }
+
+        void draw_button()
+        {
+            // draw button to screen
+            draw_sprite(this->_btn);
+        }
 };
 
 class GameScreenButton : public Button{
     public:
         //MenuButton(){}
-        GameScreenButton(Color c, float y, float x, float scale = 1) : Button(c, y, x, scale){}
+        GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~GameScreenButton(){}
 
         void action()
