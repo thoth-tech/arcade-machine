@@ -71,6 +71,39 @@ public:
     {
         return option_scale_bmp((cellWidth / bmpWidth) * span, cellHeight / bmpHeight);
     }
+    
+    // Draw the cell boundaries, to help with placement
+    void DrawCells()
+    {
+        // Vertical offset between each cell
+        double yOffset = current_window_height() / _rows;
+        // Horizontal offset between each cell
+        double xOffset;
+        // Calculate the horizontal offset
+        // If the number of columns is fixed
+        if (!_useColsArray)
+            xOffset = current_window_width() / _cols;
+
+        int index = 0;
+        // Iterate over rows
+        for (size_t i = 0; i < _rows; i++)
+        {
+            // If user specified dynamic number of columns per row
+            if (_useColsArray)
+            {
+                // Update horizontal offset each row
+                xOffset = current_window_width() / _colsArray[i];
+                // Number of columns to iterate over
+                _cols = _colsArray[i];
+            }
+            // Iterate over columns
+            for (size_t j = 0; j < _cols; j++)
+            {
+                draw_rectangle(COLOR_BLACK,(double)(xOffset * j), (double)(yOffset * i), (double)xOffset, (double)yOffset);
+                ++index;
+            }
+        }
+    }
 
     // Draw the items
     void DrawGrid()
