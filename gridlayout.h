@@ -1,12 +1,20 @@
 
 void write(std::string text);
 
+enum item
+{
+    Empty,
+    Bitmap,
+    Sprite,
+};
+
 class cell
 {
 public:
-    bitmap bmp;
-    sprite sprite;
-    int span;
+    item cellType = Empty;
+    bitmap bmp = NULL;
+    sprite sprite = NULL;
+    int span = 1;
 };
 
 class Grid
@@ -39,12 +47,6 @@ public:
         _cells = _rows * _cols;
         // Initialise the grid
         _grid = new cell[_cells];
-        // Initialise the cells
-        for (size_t i = 0; i < _cells; i++)
-        {
-            _grid[i].bmp = NULL;
-            _grid[i].span = 1;
-        }
     }
     // Dynamic number of columns per row
     Grid(int rows, int colsArray[], bool scaleToFit = false)
@@ -62,14 +64,15 @@ public:
         }
         // Initialise the grid
         _grid = new cell[_cells];
-        // Initialise the cells
-        for (size_t i = 0; i < _cells; i++)
-        {
-            _grid[i].bmp = NULL;
-            _grid[i].span = 1;
-        }
     }
-    // Draw the bitmaps
+
+    //Calculate the bitmap scaling factor, returns options
+    drawing_options BitmapScaleOpt(int bmpWidth, int bmpHeight, double cellWidth, double cellHeight, int span)
+    {
+        return option_scale_bmp((cellWidth / bmpWidth) * span, cellHeight / bmpHeight);
+    }
+
+    // Draw the items
     void DrawGrid()
     {
         // Vertical offset between each cell
@@ -107,17 +110,26 @@ public:
                     continue;
                 }
                 // If the cell is not empty
-                if (_grid[index].bmp != NULL)
+                if (_grid[index].cellType != Empty)
                 {
-                    // Scale the bitmap to fill the cell
-                    if (_scaleToFit)
+                    // Draw object into cell, centre using dimensions
+                    switch (_grid[index].cellType)
                     {
-                        // Calculate the scaling factor
-                        //(xOffset = cell width, yOffset = cell height)
-                        options = option_scale_bmp((xOffset / bitmap_width(_grid[index].bmp)) * _grid[index].span, yOffset / bitmap_height(_grid[index].bmp));
+                    case Bitmap:
+                        if (_scaleToFit)
+                        {
+                            options = BitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp), xOffset, yOffset, _grid[index].span);
+                        }
+                        draw_bitmap(_grid[index].bmp, j * xOffset + (((xOffset * _grid[index].span) - bitmap_width(_grid[index].bmp)) / 2), i * yOffset + ((yOffset - bitmap_height(_grid[index].bmp)) / 2), options);
+                        break;
+                    case Sprite:
+                        if (_scaleToFit)
+                            write("ScaleToFit: Feature not currently available with use of sprites.\n");
+                        draw_sprite(_grid[index].sprite, j * xOffset + (((xOffset * _grid[index].span) - sprite_width(_grid[index].sprite)) / 2), i * yOffset + ((yOffset - sprite_height(_grid[index].sprite)) / 2));
+                        break;
+                    default:
+                        break;
                     }
-                    // Draw bitmap into cell, centre using bitmap dimensions
-                    draw_bitmap(_grid[index].bmp, j * xOffset + (((xOffset * _grid[index].span) - bitmap_width(_grid[index].bmp)) / 2), i * yOffset + ((yOffset - bitmap_height(_grid[index].bmp)) / 2), options);
                 }
                 // If the cell spans multiple columns, skip the next iterations
                 if (_grid[index].span > 1)
@@ -129,7 +141,7 @@ public:
         }
     }
 
-    //Find a cell in the grid using row/col
+    // Find a cell in the grid using row/col
     int FindCell(int row, int col)
     {
         int cellNum = 0;
@@ -175,24 +187,28 @@ public:
     void UpdateCell(bitmap bmp, int row, int col, int span = 1)
     {
         // Stores the index of the cell
-        int cellNum = FindCell(row,col);
+        int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
+        _grid[cellNum].cellType = Bitmap;
         _grid[cellNum].sprite = NULL;
         _grid[cellNum].bmp = bmp;
         _grid[cellNum].span = span;
     }
+
     // Update a cell with a specified sprite
     void UpdateCell(sprite sprite, int row, int col, int span = 1)
     {
         // Stores the index of the cell
-        int cellNum = FindCell(row,col);
+        int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
+        _grid[cellNum].cellType = Sprite;
         _grid[cellNum].sprite = sprite;
         _grid[cellNum].bmp = NULL;
         _grid[cellNum].span = span;
     }
+
     // Update all cells with a specified bitmap
     void UpdateAllCells(bitmap bmp)
     {
@@ -200,9 +216,25 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Update bitmap
+            _grid[i].cellType = Bitmap;
+            _grid[i].sprite = NULL;
             _grid[i].bmp = bmp;
         }
     }
+
+    // Update all cells with a specified sprite
+    void UpdateAllCells(sprite sprite)
+    {
+        // Iterate over all the cells
+        for (size_t i = 0; i < _cells; i++)
+        {
+            // Update bitmap
+            _grid[i].cellType = Sprite;
+            _grid[i].sprite = sprite;
+            _grid[i].bmp = NULL;
+        }
+    }
+
     // Draw the layout to console, used for testing
     void DrawLayout()
     {
@@ -235,6 +267,8 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Reset cell to default
+            _grid[i].cellType = Empty;
+            _grid[i].sprite = NULL;
             _grid[i].bmp = NULL;
             _grid[i].span = 1;
         }
