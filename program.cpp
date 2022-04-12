@@ -3,169 +3,41 @@
 using namespace std;
 using std::vector;
 
-// To test txt configs, change to "config"
-#define CONFIG_DIR "config"
-
-// Method to find the game folder name to store in config class.
-string get_folder_name(string entryPath)
+int main()
 {
-    ConfigData config;
+    Helper h;
+    //ConfigData configData;
+    //point_2d mousePoint;
 
-    unsigned lastPath = entryPath.find("\\", 8);
-    string dir = entryPath.substr(0, lastPath);
-    unsigned findBackSlash = dir.find("\\");
-    dir.replace(findBackSlash, 1, "/");
+    // Pull the most recent version of the arcade-games repo.
+    //h.configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games");
 
-    return dir;
-}
+    // Get the data from the config files.
+    vector<ConfigData> configs = h.config_data_list();
+    //h.GridLayoutExample();
+    //h.configData.print_config_data();
 
-// Method to find the config files in the games directory.
-vector<string> get_config_files(string dir)
-{
-    vector<string> files;
+    // Pass the config info to the menu class.
+    bitmap bgnd = load_bitmap("bgnd", "thoth_artwork.png");
+    
 
-    for (const auto & entry : fs::recursive_directory_iterator(dir))
-    {
-        if (entry.path().filename() == "config.txt")
-        {
-            std::cout << entry << '\n';
-            files.push_back(entry.path().string());
-            cout << entry.path().string() << endl;
-            string path = entry.path().string();
-        }
-    }
+    // Open window and toggle border off.
+    open_window("arcade-machine", 1920, 1080);
+    window_toggle_border("arcade-machine");
+    load_resource_bundle("bundle", "resources.txt");
 
-    return files;
-}
+    // Grid grid(7, 15);
+    // grid.UpdateCell(0, 0, 1, "bgnd");
 
-// Create configs vector from config files.
-vector<ConfigData> config_data_list()
-{   
-    vector<string> files = get_config_files("./games");
-
-    vector<ConfigData> configs;
-
-    for (int i = 0; i < files.size(); i++)
-    {
-        if (strcmp(CONFIG_DIR, "config") == 0)
-        {
-            ConfigData config(files[i]);
-            string dir = get_folder_name(files[i]);
-            config.set_folder(dir);
-            config.set_id(i);
-            config.print_config_data();
-            configs.push_back(config);
-        }
-        else if (strcmp(CONFIG_DIR, "json") == 0)
-        {
-            ConfigData config;
-            string filename = fs::path(files[i]).string();
-            write_line(filename);
-            config.collect_json_data(config.read_json(filename));
-            config.set_id(i);
-            config.print_config_data();
-            configs.push_back(config);
-        }
-    }
-
-    return configs;
-}
-
-void ResetScreen(Grid grid)
-{
-    process_events();
-    clear_screen(COLOR_DARK_SLATE_GRAY);
-    grid.DrawGrid();
-    grid.ClearGrid();
-    refresh_screen();
-    delay(1000);
-}
-
-void GridLayoutExample()
-{
-    load_bitmap("test", "appContainer.png");
-    open_window("Grid Layout Example", 600, 800);
-
-    int colsArray[5] = {4, 2, 3, 2, 2};
-    int rows = 5;
-    int cols = 5;
-    //#rows, #cols, ScaletoFit
-    Grid grid(rows, cols, true);
-    //Grid grid(rows,colsArray, true);
-
-    ResetScreen(grid);
-
-    int span = cols;
-    for (size_t i = 0; i < rows; i++)
-    {
-        grid.UpdateCell("test", i, 0, span);
-        --span;
-    }
-    ResetScreen(grid);
-
-    span = 1;
-    for (size_t i = 0; i < rows; i++)
-    {
-        grid.UpdateCell("test", i, 0, span);
-        ++span;
-    }
-
-    ResetScreen(grid);
-
-    bool alternate = true;
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < cols; j++)
-        {
-            if (alternate)
-                grid.UpdateCell("test", i, j, 1);
-            alternate = !alternate;
-        }
-    }
-
-    ResetScreen(grid);
-
-    alternate = false;
-    for (size_t i = 0; i < rows; i++)
-    {
-        for (size_t j = 0; j < cols; j++)
-        {
-            if (alternate)
-                grid.UpdateCell("test", i, j, 1);
-        }
-        alternate = !alternate;
-    }
-
-    ResetScreen(grid);
-
-    alternate = false;
-    for (size_t i = 0; i < cols; i++)
-    {
-        for (size_t j = 0; j < rows; j++)
-        {
-            if (alternate)
-                grid.UpdateCell("test", i, j, 1);
-            alternate = !alternate;
-        }
-        alternate = !alternate;
-    }
-
-    ResetScreen(grid);
-
-    grid.UpdateAllCells("test");
-    ResetScreen(grid);
-
-
-    while (!quit_requested())
-    {
-        grid.DrawGrid();
-        process_events();
-    }
-}
-// The title screen the user first comes in contact with.
-void splashscreen()
-{
-    Splashscreen splashScreen;
+    Splashscreen s;
+    Menu menu;
+    Button *play = new MenuButton(Button::PLAY, 11, 3, 1.2);
+    Button *options = new MenuButton(Button::OPTIONS, 11, 4, 1.2);
+    Button *exit = new MenuButton(Button::EXIT, 11, 5, 1.2);
+    
+    s.add_button(play);
+    s.add_button(options);
+    s.add_button(exit);
     point_2d mousePoint;
     bool playClicked;
 
@@ -176,80 +48,31 @@ void splashscreen()
         clear_screen();
 
         mousePoint = mouse_position();
-        splashScreen.draw_title_page();
-        splashScreen.button_clicked(mousePoint);
+        s.draw_title_page();
+        s.button_clicked(mousePoint);
 
-        playClicked = splashScreen.getPlayClick();
+        playClicked = s.getPlayClick();
 
         if (playClicked)
         {
-            return;
+            while (not quit_requested() && (not key_down(ESCAPE_KEY)))
+            {
+                process_events();
+
+                clear_screen();
+                // Draw the menu page.
+                menu.draw_menu_page();
+                // Listen for button click and get mouse location.
+                menu.button_clicked(mousePoint);
+                // Keep this running while game is played to keep mouse in the game window.
+                menu.move_mouse_position(mousePoint);
+
+                refresh_screen(60);
+            }
         }
 
         refresh_screen(60);
     }
-}
-
-int main()
-{
-    ConfigData configData;
-    point_2d mousePoint;
-
-    // Pull the most recent version of the arcade-games repo.
-    configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games");
-
-    // Get the data from the config files.
-    vector<ConfigData> configs = config_data_list();
-    //GridLayoutExample();
-    configData.print_config_data();
-
-    // Pass the config info to the menu class.
-    Menu menu(configs);
-
-    // Open window and toggle border off.
-    open_window("arcade-machine", 1920, 1080);
-    window_toggle_border("arcade-machine");
-
-    // Call the splashscreen.
-    splashscreen();
-
-    // Update loop.
-    while (not quit_requested() && (not key_down(ESCAPE_KEY)))
-    {
-        process_events();
-
-        clear_screen();
-        // Constantly update mouse pointer position.
-        mousePoint = mouse_position();
-        // Draw the menu page.
-        menu.draw_menu_page();
-        // Listen for button click and get mouse location.
-        menu.button_clicked(mousePoint);
-        // Keep this running while game is played to keep mouse in the game window.
-        menu.move_mouse_position(mousePoint);
-
-        refresh_screen(60);
-    }
-
-    //Button button;
-
-    
-
-    // while( not quit_requested() )
-    //     {
-    //         process_events();
-
-    //         clear_screen();
-            
-    //         Button btn0(Button::GREEN, 8, 4);
-    //         Button btn4(Button::YELLOW, 8, 5);
-    //         Button btn2(Button::LIGHT_BLUE, 8, 6);
-    //         Button btn1(Button::RED, 8, 7);
-
-    //         btn1.draw_screen_guides();
-
-    //         refresh_screen(60);
-    //     }
 
     return 0;
 }

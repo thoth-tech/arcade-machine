@@ -1,0 +1,17 @@
+// Backgrounds
+BITMAP,bgnd,thoth_artwork.png
+
+// Fonts
+FONT,btn_font,MindPlay.ttf
+
+// Buttons
+
+
+
+// Sounds
+
+
+
+
+
+
