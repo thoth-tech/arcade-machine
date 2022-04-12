@@ -16,12 +16,12 @@
 #include <json/json.h>
 #include <Windows.h>
 
+#include "buttons.h"
+#include "gridlayout.h"
 #include "cdata.h"
 #include "splashscreen.h"
 #include "menu.h"
 #include "helper.h"
-#include "buttons.h"
-#include "gridlayout.h"
 
 #endif
 
