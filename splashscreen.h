@@ -5,6 +5,7 @@ class Splashscreen {
         vector<Button*> btns;
         bool playClicked = false;
         bool exitClicked = false;
+        Selector select;
     public:
         Splashscreen(){}
 
@@ -35,9 +36,11 @@ class Splashscreen {
             draw_bitmap("bgnd", 0, 0);
 
             // Draw text on buttons
-            draw_text("play!", COLOR_BLANCHED_ALMOND, "btn_font", 80, btns[0]->x() - (btns[0]->centre_x()/2) + 5, btns[0]->y() - btns[0]->centre_y(), option_to_screen());
-            draw_text("options", COLOR_BLANCHED_ALMOND, "btn_font", 80, btns[1]->x() - (btns[1]->centre_x()/2) - 20, btns[1]->y() - btns[1]->centre_y(), option_to_screen());
-            draw_text("exit", COLOR_BLANCHED_ALMOND, "btn_font", 80, btns[2]->x() - (btns[2]->centre_x()/2) + 20, btns[2]->y() - btns[2]->centre_y(), option_to_screen());
+            draw_text("play!", COLOR_BLACK, "btn_font", 80, btns[0]->x() - (btns[0]->centre_x()/2) + 5, btns[0]->y() - btns[0]->centre_y(), option_to_screen());
+            draw_text("options", COLOR_BLACK, "btn_font", 80, btns[1]->x() - (btns[1]->centre_x()/2) - 20, btns[1]->y() - btns[1]->centre_y(), option_to_screen());
+            draw_text("exit", COLOR_BLACK, "btn_font", 80, btns[2]->x() - (btns[2]->centre_x()/2) + 20, btns[2]->y() - btns[2]->centre_y(), option_to_screen());
+
+            select.check_key_input(this->btns);
         }
 
         void button_clicked(point_2d point)

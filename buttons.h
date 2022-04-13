@@ -25,6 +25,10 @@ class Button{
         int _centre_y;
         // This buttons color 
         string _color;
+        // This buttons hightlight bitmap.
+        bitmap _hghlt;
+        // This buttons hightlight layer.
+        string _hightlight;
 
     
         // Getters:
@@ -58,6 +62,8 @@ class Button{
             this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
             this->_btn = create_sprite(this->_pic);
+            // add hightlight layer to sprite
+            sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
             // scale the sprite
             sprite_set_scale(this->_btn, scale);
         }
@@ -72,6 +78,8 @@ class Button{
             this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
             this->_btn = create_sprite(this->_pic);
+            // add hightlight layer to sprite
+            sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
             // get the centre points of the sprite 
             this->_centre_x = sprite_width(this->_btn) /2;
             this->_centre_y = sprite_height(this->_btn)/2;
@@ -106,12 +114,18 @@ class Button{
             switch(c)
             {
                 case PLAY:
+                    _hghlt = load_bitmap("play_hghlt", filepath + "btn_play_hghlt.png");
+                    _hightlight = "play_hightlight";
                     return filepath + "btn_play.png";
                     break;
                 case EXIT:
+                    _hghlt = load_bitmap("exit_hghlt", filepath + "btn_exit_hghlt.png");
+                    _hightlight = "exit_hightlight";
                     return filepath + "btn_exit.png";
                     break;
                 case OPTIONS:
+                    _hghlt = load_bitmap("options_hghlt", filepath + "btn_options_hghlt.png");
+                    _hightlight = "options_hightlight";
                     return filepath + "btn_options.png";
                     break;
                 default:
