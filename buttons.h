@@ -129,7 +129,7 @@ class Button{
                     return filepath + "btn_options.png";
                     break;
                 default:
-                    //return;
+                    return filepath + "btn_play.png";
                     break;
             }
         }

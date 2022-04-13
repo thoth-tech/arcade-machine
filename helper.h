@@ -110,7 +110,7 @@ class Helper{
             int span = cols;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell(i, 0, span, "test");
+                grid.UpdateCell("test", i, 0, span);
                 --span;
             }
             ResetScreen(grid);
@@ -118,7 +118,7 @@ class Helper{
             span = 1;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell(i, 0, span, "test");
+                grid.UpdateCell("test", i, 0, span);
                 ++span;
             }
 
@@ -130,7 +130,7 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell( i, j, 1, "test");
+                        grid.UpdateCell("test", i, j, 1);
                     alternate = !alternate;
                 }
             }
@@ -143,7 +143,7 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(i, j, 1, "test");
+                        grid.UpdateCell("test", i, j, 1);
                 }
                 alternate = !alternate;
             }
@@ -156,7 +156,7 @@ class Helper{
                 for (size_t j = 0; j < rows; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(i, j, 1, "test");
+                        grid.UpdateCell("test", i, j, 1);
                     alternate = !alternate;
                 }
                 alternate = !alternate;

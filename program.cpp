@@ -6,19 +6,19 @@ using std::vector;
 int main()
 {
     Helper h;
-    //ConfigData configData;
+    ConfigData configData;
     //point_2d mousePoint;
 
     // Pull the most recent version of the arcade-games repo.
-    //h.configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games");
+    configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games");
 
     // Get the data from the config files.
     vector<ConfigData> configs = h.config_data_list();
     //h.GridLayoutExample();
-    //h.configData.print_config_data();
+    configData.print_config_data();
 
     // Pass the config info to the menu class.
-    bitmap bgnd = load_bitmap("bgnd", "thoth_artwork.png");
+    //bitmap bgnd = load_bitmap("bgnd", "thoth_artwork.png");
     
 
     // Open window and toggle border off.
