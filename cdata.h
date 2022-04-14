@@ -82,14 +82,14 @@ class ConfigData{
 
         void collect_json_data(json json_configs = {})
         {
-            _repo = json_read_string(json_configs, "repo");
-            _language = json_read_string(json_configs, "language");
-            _image = json_read_string(json_configs, "image");
-            _title = json_read_string(json_configs, "title");
-            _genre = json_read_string(json_configs, "genre");
-            _rating = json_read_string(json_configs, "rating");
-            _author = json_read_string(json_configs, "author");
-            _exe = json_read_string(json_configs, "exe");
+            this->_repo = json_read_string(json_configs, "repo");
+            this->_language = json_read_string(json_configs, "language");
+            this->_image = json_read_string(json_configs, "image");
+            this->_title = json_read_string(json_configs, "title");
+            this->_genre = json_read_string(json_configs, "genre");
+            this->_rating = json_read_string(json_configs, "rating");
+            this->_author = json_read_string(json_configs, "author");
+            this->_exe = json_read_string(json_configs, "exe");
         }
 
         void collect_config_data(vector<string> configs = vector<string>())
@@ -109,14 +109,14 @@ class ConfigData{
 
                 if(!data.empty())
                 {
-                    _repo = data[0];
-                    _language = data[1];
-                    _image = data[2];
-                    _title = data[3];
-                    _genre = data[4];
-                    _rating = data[5];
-                    _author = data[6];
-                    _exe = data[7];
+                    this->_repo = data[0];
+                    this->_language = data[1];
+                    this->_image = data[2];
+                    this->_title = data[3];
+                    this->_genre = data[4];
+                    this->_rating = data[5];
+                    this->_author = data[6];
+                    this->_exe = data[7];
                 }
             }
         }

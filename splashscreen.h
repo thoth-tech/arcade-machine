@@ -2,13 +2,18 @@ using namespace std;
 
 class Splashscreen {
     private:
-        sprite background = create_sprite("background.png");
-        sprite playButton = create_sprite("red_button01.png");
-        sprite exitButton = create_sprite("yellow_button04.png");
+        vector<Button*> btns;
         bool playClicked = false;
         bool exitClicked = false;
-
+        Selector select;
     public:
+        Splashscreen(){}
+
+        void add_button(Button *b)
+        {
+            this->btns.push_back(b);
+        }
+
         bool getPlayClick()
         {
             return playClicked;
@@ -21,27 +26,27 @@ class Splashscreen {
 
         void draw_title_page()
         {
-            draw_sprite(background, 0, 0);
+            // Draw buttons to screen
+            for (int i = 0; i < btns.size(); i++)
+            {
+                this->btns[i]->draw_button();
+            }
+            
+            // Draw background iamge to screen
+            draw_bitmap("bgnd", 0, 0);
 
-            point_2d playPosition;
-            playPosition.x = 820;
-            playPosition.y = 620;
+            // Draw text on buttons
+            draw_text("play!", COLOR_BLACK, "btn_font", 80, btns[0]->x() - (btns[0]->centre_x()/2) + 5, btns[0]->y() - btns[0]->centre_y(), option_to_screen());
+            draw_text("options", COLOR_BLACK, "btn_font", 80, btns[1]->x() - (btns[1]->centre_x()/2) - 20, btns[1]->y() - btns[1]->centre_y(), option_to_screen());
+            draw_text("exit", COLOR_BLACK, "btn_font", 80, btns[2]->x() - (btns[2]->centre_x()/2) + 20, btns[2]->y() - btns[2]->centre_y(), option_to_screen());
 
-            sprite_set_position(playButton, playPosition);
-            draw_sprite(playButton, 0, 0);
-
-            point_2d exitPosition;
-            exitPosition.x = 820;
-            exitPosition.y = 820;
-
-            sprite_set_position(exitButton, exitPosition);
-            draw_sprite(exitButton, 0, 0);
+            select.check_key_input(this->btns);
         }
 
         void button_clicked(point_2d point)
         {
             // If mouse is at button sprite position.
-            if (sprite_at(exitButton, point))
+            if (sprite_at(btns[2]->btn(), point))
             {
                 // If the mouse is then clicked.
                 if (mouse_clicked(LEFT_BUTTON))
@@ -52,7 +57,7 @@ class Splashscreen {
                     exit_program();
                 }
             }
-            if (sprite_at(playButton, point))
+            if (sprite_at(btns[0]->btn(), point))
             {
                 // If the mouse is then clicked.
                 if (mouse_clicked(LEFT_BUTTON))
