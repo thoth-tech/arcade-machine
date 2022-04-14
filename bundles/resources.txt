@@ -1,5 +1,5 @@
 // Backgrounds
-BITMAP,bgnd,thoth_artwork.png
+BITMAP,bgnd,backgrounds/thoth_artwork.png
 
 // Fonts
 FONT,btn_font,MindPlay.ttf
