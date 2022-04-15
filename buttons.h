@@ -143,20 +143,20 @@ class MenuButton : public Button{
 
         void action()
         {
-            if (color() == btn_color(Button::PLAY))
+            if (this->color() == btn_color(Button::PLAY))
             {
-                draw_sprite(btn());
-                // go to this screen  
+                // go to this screen
+                write_line("Play");
             }
-            if (color() == btn_color(Button::EXIT))
+            if (this->color() == btn_color(Button::EXIT))
             {
-                draw_sprite(btn());   
-                // go to this screen             
+                // go to this screen
+                write_line("Exit");
             }
-            if (color() == btn_color(Button::OPTIONS))
+            if (this->color() == btn_color(Button::OPTIONS))
             {
-                draw_sprite(btn());  
-                // go to this screen                 
+                // go to this screen
+                write_line("Options");
             }
         }
 

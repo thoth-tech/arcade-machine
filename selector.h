@@ -5,6 +5,7 @@ class Selector {
     private:
         int selected = -1;
         bool down = false;
+        bool first = true; 
         int up_key_state = 0;
         int down_key_state = 0;
         int count = 0;
@@ -14,6 +15,21 @@ class Selector {
         // Key states ensure the functions only get called once per key press.
         void check_key_input(vector<Button*> buttons)
         {
+            // highlight play button when first enter menu
+            if (first == true) 
+            {
+                selected = 0;
+                highlight_down(buttons);
+                first = false;
+                if (count > 0)
+                {
+                    // remove the previous highlight
+                    remove_highlight_down(buttons);
+                }
+                down_key_state = 1;
+                count += 1;
+            }
+
             // Down key pressed
             if (key_down(DOWN_KEY) && down_key_state == 0)
             {
@@ -53,6 +69,11 @@ class Selector {
             else if (key_up(UP_KEY) && up_key_state == 1)
             {
                 up_key_state = 0;
+            }
+
+            if(key_down(RETURN_KEY))
+            {
+                buttons[selected]->action();
             }
         }
 

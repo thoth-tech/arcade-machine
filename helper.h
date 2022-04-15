@@ -175,4 +175,24 @@ class Helper{
                 refresh_screen(60);
             }
         }
+
+        void play_intro()
+        {
+            Splashscreen intro_thothtech("intt");
+            double alpha = 1.0;
+            int i = 50;
+            
+            while(i != 0)
+            {
+                intro_thothtech.draw_title_page();
+                fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
+                i--; alpha = alpha - 0.05;
+
+                if (abs(alpha - 0.0) < 1e-9)
+                Sleep(1500);
+            
+                refresh_screen();
+                Sleep(50);
+            }
+        }
 };

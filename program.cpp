@@ -5,31 +5,42 @@ using std::vector;
 
 int main()
 {
-    Helper h;
+    // Load all resources
+    load_resource_bundle("bundle", "resources.txt");
+
+    // Instantiate introductory classes
+    Helper helper;
     ConfigData configData;
-    //point_2d mousePoint;
-
-    // Pull the most recent version of the arcade-games repo.
-    configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games");
-
-    // Get the data from the config files.
-    vector<ConfigData> configs = h.config_data_list();
-    //h.GridLayoutExample();
-    configData.print_config_data();
-
-    // Pass the config info to the menu class.
-    //bitmap bgnd = load_bitmap("bgnd", "thoth_artwork.png");
-    
+    Splashscreen intro_splashkit("ints");
 
     // Open window and toggle border off.
     open_window("arcade-machine", 1920, 1080);
     window_toggle_border("arcade-machine");
-    load_resource_bundle("bundle", "resources.txt");
+
+    // Play Thoth Tech intro
+    helper.play_intro();
+
+    // Pull the most recent version of the arcade-games repo.
+    do
+    {
+        // Draw SplashKit productions screen
+        intro_splashkit.draw_title_page();
+        draw_text("Loading...", COLOR_SLATE_GRAY, "btn_font", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
+        refresh_screen();
+        
+    } while (!configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
+    
+
+    // Get the data from the config files.
+    vector<ConfigData> configs = helper.config_data_list();
+    //h.GridLayoutExample();
+    configData.print_config_data();
+
 
     // Grid grid(7, 15);
     // grid.UpdateCell(0, 0, 1, "bgnd");
 
-    Splashscreen s;
+    Splashscreen s("thoth");
     Menu menu;
     Button *play = new MenuButton(Button::PLAY, 11, 3, 1.2);
     Button *options = new MenuButton(Button::OPTIONS, 11, 4, 1.2);
@@ -48,6 +59,7 @@ int main()
         clear_screen();
 
         mousePoint = mouse_position();
+
         s.draw_title_page();
         s.button_clicked(mousePoint);
 

@@ -1,13 +1,13 @@
 // Backgrounds
-BITMAP,bgnd,backgrounds/thoth_artwork.png
+BITMAP,thoth,backgrounds/thoth_artwork.png
+BITMAP,ints,backgrounds/intro_splashkit.bmp
+BITMAP,intt,backgrounds/intro_thoth.bmp
 
 // Fonts
 FONT,btn_font,MindPlay.ttf
+FONT,title_font,ExoSpace.ttf
 
 // Buttons
-
-//
-
 
 // Sounds
 

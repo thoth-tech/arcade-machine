@@ -2,12 +2,24 @@ using namespace std;
 
 class Splashscreen {
     private:
+        // Vector of buttons
         vector<Button*> btns;
+        // Bitmap to be drawn as background
+        string bmp;
+        // Check if play has been clicked
         bool playClicked = false;
+        // CHeck if exit has been clicked
         bool exitClicked = false;
+        // A selector
         Selector select;
     public:
+        // Default constructor
         Splashscreen(){}
+        // Overloaded constructor
+        Splashscreen(const string &bitmap)
+        {
+            this->bmp = bitmap;
+        }
 
         void add_button(Button *b)
         {
@@ -25,22 +37,35 @@ class Splashscreen {
         }
 
         void draw_title_page()
-        {
-            // Draw buttons to screen
-            for (int i = 0; i < btns.size(); i++)
+        {            
+            // Draw background image to screen
+            draw_bitmap(this->bmp, 0, 0);
+
+            if (this->btns.size() > 0)
             {
-                this->btns[i]->draw_button();
+                // Arcade Machine title
+                draw_text("Arcade",  COLOR_BLACK, "title_font", 100, 1200, 100);
+                draw_text("Machine", COLOR_BLACK, "title_font", 100, 1180, 200);
+                
+                // Draw buttons to screen
+                for (int i = 0; i < btns.size(); i++)
+                {
+                    this->btns[i]->draw_button();
+                }
+
+                // Draw text on buttons
+                draw_text("play!", COLOR_BLACK, "btn_font", 70, btns[0]->x() - (btns[0]->centre_x()/2) + 5, btns[0]->y() - btns[0]->centre_y()+5);
+                draw_text("options", COLOR_BLACK, "btn_font", 70, btns[1]->x() - (btns[1]->centre_x()/2) - 20, btns[1]->y() - btns[1]->centre_y()+5);
+                draw_text("exit", COLOR_BLACK, "btn_font", 70, btns[2]->x() - (btns[2]->centre_x()/2) + 20, btns[2]->y() - btns[2]->centre_y()+5);
+
+                select.check_key_input(this->btns);
+                
+                draw_text("Created By", COLOR_BLACK, 1200, 850);
+                draw_text("Sarah", COLOR_BLACK, 1200, 870);
+                draw_text("Anthony", COLOR_BLACK, 1200, 890);
+                draw_text("Riley", COLOR_BLACK,  1200, 910);
+                draw_text("Huy", COLOR_BLACK, 1200, 930);
             }
-            
-            // Draw background iamge to screen
-            draw_bitmap("bgnd", 0, 0);
-
-            // Draw text on buttons
-            draw_text("play!", COLOR_BLACK, "btn_font", 80, btns[0]->x() - (btns[0]->centre_x()/2) + 5, btns[0]->y() - btns[0]->centre_y(), option_to_screen());
-            draw_text("options", COLOR_BLACK, "btn_font", 80, btns[1]->x() - (btns[1]->centre_x()/2) - 20, btns[1]->y() - btns[1]->centre_y(), option_to_screen());
-            draw_text("exit", COLOR_BLACK, "btn_font", 80, btns[2]->x() - (btns[2]->centre_x()/2) + 20, btns[2]->y() - btns[2]->centre_y(), option_to_screen());
-
-            select.check_key_input(this->btns);
         }
 
         void button_clicked(point_2d point)
