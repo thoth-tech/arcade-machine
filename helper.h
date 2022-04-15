@@ -178,9 +178,10 @@ class Helper{
 
         void play_intro()
         {
-            Splashscreen intro_thothtech("intt");
+            Splashscreen intro_thothtech("intro_thothtech");
             double alpha = 1.0;
             int i = 50;
+            play_sound_effect("intro");
             
             while(i != 0)
             {

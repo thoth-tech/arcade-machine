@@ -11,7 +11,7 @@ int main()
     // Instantiate introductory classes
     Helper helper;
     ConfigData configData;
-    Splashscreen intro_splashkit("ints");
+    Splashscreen intro_splashkit("intro_splashkit");
 
     // Open window and toggle border off.
     open_window("arcade-machine", 1920, 1080);
@@ -36,7 +36,6 @@ int main()
     //h.GridLayoutExample();
     configData.print_config_data();
 
-
     // Grid grid(7, 15);
     // grid.UpdateCell(0, 0, 1, "bgnd");
 
@@ -51,6 +50,7 @@ int main()
     s.add_button(exit);
     point_2d mousePoint;
     bool playClicked;
+    play_sound_effect("menu");
 
     while (not quit_requested() && (not key_down(ESCAPE_KEY)))
     {

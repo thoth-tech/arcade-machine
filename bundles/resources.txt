@@ -1,18 +1,13 @@
 // Backgrounds
 BITMAP,thoth,backgrounds/thoth_artwork.png
-BITMAP,ints,backgrounds/intro_splashkit.bmp
-BITMAP,intt,backgrounds/intro_thoth.bmp
+BITMAP,intro_splashkit,backgrounds/intro_splashkit.bmp
+BITMAP,intro_thothtech,backgrounds/intro_thoth.bmp
+BITMAP,games_dashboard,retro.jpg
 
 // Fonts
 FONT,btn_font,MindPlay.ttf
 FONT,title_font,ExoSpace.ttf
 
-// Buttons
-
 // Sounds
-
-
-
-
-
-
+SOUND,intro,intro1.wav
+SOUND,menu,menu1.mp3
