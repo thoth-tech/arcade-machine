@@ -9,13 +9,18 @@ class Selector {
         int up_key_state = 0;
         int down_key_state = 0;
         int count = 0;
+        sprite cursor = create_sprite("cursor");
 
     public:
+        sprite get_cursor()
+        {
+            return this->cursor;
+        }
         // Function to check which key is currently pressed and call correct method.
         // Key states ensure the functions only get called once per key press.
         void check_key_input(vector<Button*> buttons)
         {
-            // highlight play button when first enter menu
+            // highlight play button on start
             if (first == true) 
             {
                 selected = 0;
@@ -87,10 +92,11 @@ class Selector {
             }
             // get the current selected sprite
             sprite currentSprite = buttons[selected]->btn();
+            // set cursor pos to selected button pos
+            sprite_set_y(cursor, buttons[selected]->y() - 45);
+            sprite_set_x(cursor, buttons[selected]->x() - 300);
             // toggle highlight layer on.
             sprite_toggle_layer_visible(currentSprite, 1);
-            // draw sprite
-            draw_sprite(currentSprite);
         }
 
         // Remove highlight on previous selected button (down arrow key).
@@ -111,8 +117,6 @@ class Selector {
             sprite oldSprite = buttons[newSelect-1]->btn();
             // toggle highlight layer off.
             sprite_toggle_layer_visible(oldSprite, 1);
-            // draw sprite
-            draw_sprite(oldSprite);
         }
 
         // Highlight button on up arrow key (up arrow key).
@@ -125,10 +129,11 @@ class Selector {
             }
             // get the current selected sprite
             sprite currentSprite = buttons[selected]->btn();
+            // Set cursor pos to selected button pos
+            sprite_set_y(cursor, buttons[selected]->y() - 45);
+            sprite_set_x(cursor, buttons[selected]->x() - 300);
             // toggle highlight layer on.
             sprite_toggle_layer_visible(currentSprite, 1);
-            // draw sprite
-            draw_sprite(currentSprite);
         }
 
         // Remove highlight on previous selected button (up arrow key).
@@ -159,8 +164,6 @@ class Selector {
             }
             // toggle highlight layer off.
             sprite_toggle_layer_visible(old_sprite, 1);
-            // draw sprite
-            draw_sprite(old_sprite);
         }
 
 };

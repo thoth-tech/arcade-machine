@@ -44,14 +44,17 @@ class Splashscreen {
             if (this->btns.size() > 0)
             {
                 // Arcade Machine title
-                draw_text("Arcade",  COLOR_BLACK, "title_font", 100, 1200, 100);
-                draw_text("Machine", COLOR_BLACK, "title_font", 100, 1180, 200);
+                draw_text("Arcade",  COLOR_BLACK, "title_font", 100, 1160, 100);
+                draw_text("Machine", COLOR_BLACK, "title_font", 100, 1130, 200);
                 
                 // Draw buttons to screen
                 for (int i = 0; i < btns.size(); i++)
                 {
                     this->btns[i]->draw_button();
                 }
+
+                // Draw cursor
+                draw_sprite(select.get_cursor());
 
                 // Draw text on buttons
                 draw_text("play!", COLOR_BLACK, "btn_font", 70, btns[0]->x() - (btns[0]->centre_x()/2) + 5, btns[0]->y() - btns[0]->centre_y()+5);
@@ -60,6 +63,7 @@ class Splashscreen {
 
                 select.check_key_input(this->btns);
                 
+                // Draw creators
                 draw_text("Created By", COLOR_BLACK, 1200, 850);
                 draw_text("Sarah", COLOR_BLACK, 1200, 870);
                 draw_text("Anthony", COLOR_BLACK, 1200, 890);

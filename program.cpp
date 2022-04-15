@@ -82,9 +82,7 @@ int main()
                 refresh_screen(60);
             }
         }
-
         refresh_screen(60);
     }
-
     return 0;
 }

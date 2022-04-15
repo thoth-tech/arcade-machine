@@ -3,10 +3,11 @@ BITMAP,thoth,backgrounds/thoth_artwork.png
 BITMAP,intro_splashkit,backgrounds/intro_splashkit.bmp
 BITMAP,intro_thothtech,backgrounds/intro_thoth.bmp
 BITMAP,games_dashboard,retro.jpg
+BITMAP,cursor,splashkit_cursor.png
 
 // Fonts
 FONT,btn_font,MindPlay.ttf
-FONT,title_font,ExoSpace.ttf
+FONT,title_font,Retroking.ttf
 
 // Sounds
 SOUND,intro,intro1.wav
