@@ -30,7 +30,6 @@ int main()
         
     } while (!configData.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
     
-
     // Get the data from the config files.
     vector<ConfigData> configs = helper.config_data_list();
     //h.GridLayoutExample();
@@ -40,7 +39,7 @@ int main()
     // grid.UpdateCell(0, 0, 1, "bgnd");
 
     Splashscreen s("thoth");
-    Menu menu;
+    Menu menu(configs);
     Button *play = new MenuButton(Button::PLAY, 11, 3, 1.2);
     Button *options = new MenuButton(Button::OPTIONS, 11, 4, 1.2);
     Button *exit = new MenuButton(Button::EXIT, 11, 5, 1.2);
@@ -65,7 +64,7 @@ int main()
 
         playClicked = s.getPlayClick();
 
-        if (playClicked)
+        if (playClicked || (s.get_action() == "play"))
         {
             while (not quit_requested() && (not key_down(ESCAPE_KEY)))
             {

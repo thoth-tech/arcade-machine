@@ -18,7 +18,7 @@ class Selector {
         }
         // Function to check which key is currently pressed and call correct method.
         // Key states ensure the functions only get called once per key press.
-        void check_key_input(vector<Button*> buttons)
+        string check_key_input(vector<Button*> buttons)
         {
             // highlight play button on start
             if (first == true) 
@@ -78,8 +78,10 @@ class Selector {
 
             if(key_down(RETURN_KEY))
             {
-                buttons[selected]->action();
+                return buttons[selected]->action();
             }
+
+            return "";
         }
 
         // Highlight button on down arrow key (up arrow key).

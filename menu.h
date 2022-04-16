@@ -4,7 +4,7 @@ using std::vector;
 
 class Menu {
     private:
-        sprite background = create_sprite("background.png");
+        string background = "games_dashboard";
         vector<ConfigData> _games;
         vector<sprite> gameImages;
         PROCESS_INFORMATION processInfo;
@@ -24,7 +24,7 @@ class Menu {
 
         Menu(vector<ConfigData> configs) 
         {
-            _games = configs;
+            this->_games = configs;
         }
         ~Menu(){}
 
@@ -38,7 +38,7 @@ class Menu {
                 // Get image dir and image name from games vector and store the id.
                 string image = _games[i].folder() + "/" + _games[i].image();
                 sprite gameImageSprite = create_sprite(image);
-                gameImages.push_back(gameImageSprite);
+                this->gameImages.push_back(gameImageSprite);
 
                 point_2d gamePosition;
                 gamePosition.x = x;
@@ -55,7 +55,7 @@ class Menu {
         // Draw the background and call set game image.
         void draw_menu_page()
         {
-            draw_sprite(background, 0, 0);
+            draw_bitmap(this->background, 0, 0);
 
             set_game_image();
         }
@@ -74,8 +74,8 @@ class Menu {
                         _gameExe = strdup(_games[i].exe().c_str());
                         _gameDir = _games[i].folder().c_str();
 
-                        x = center_x;
-                        y = center_y;
+                        this->x = center_x;
+                        this->y = center_y;
 
                         start_game(_gamePath, _gameExe, _gameDir);
                         return;

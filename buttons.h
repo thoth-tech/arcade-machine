@@ -97,7 +97,7 @@ class Button{
         ~Button(){}
 
         virtual void draw_button() = 0;
-        virtual void action() = 0;
+        virtual string action() = 0;
 
         void draw_screen_guides()
         {
@@ -141,23 +141,27 @@ class MenuButton : public Button{
         MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~MenuButton(){}
 
-        void action()
+        string action()
         {
             if (this->color() == btn_color(Button::PLAY))
             {
                 // go to this screen
                 write_line("Play");
+                return "play";
             }
             if (this->color() == btn_color(Button::EXIT))
             {
                 // go to this screen
                 write_line("Exit");
+                return "exit";
             }
             if (this->color() == btn_color(Button::OPTIONS))
             {
                 // go to this screen
                 write_line("Options");
+                return "options";
             }
+            return "";
         }
 
         void draw_button()
@@ -173,9 +177,10 @@ class GameScreenButton : public Button{
         GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~GameScreenButton(){}
 
-        void action()
+        string action()
         {
             // play
+            return "";
         }
 
 };
