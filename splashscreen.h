@@ -68,27 +68,25 @@ class Splashscreen {
 
         void button_clicked(point_2d point)
         {
-            // If mouse is at button sprite position.
-            if (sprite_at(btns[2]->btn(), point))
+            // Play
+            if ( action == "play" || (sprite_at(btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
-                // If the mouse is then clicked.
-                if (mouse_clicked(LEFT_BUTTON))
-                {
-                    // Button clicked is true.
-                    exitClicked = true;
-                    write_line("exit BUTTON CLICKED");
-                    exit_program();
-                }
+                playClicked = true;
+                write_line("Play button clicked");
             }
-            if (sprite_at(btns[0]->btn(), point))
+
+            // Options
+            if ( action == "options" || (sprite_at(btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
-                // If the mouse is then clicked.
-                if (mouse_clicked(LEFT_BUTTON) || action == "play")
-                {
-                    // Button clicked is true.
-                    playClicked = true;
-                    write_line("Play button clicked");
-                }
+                write_line("Options button clicked");
+            }
+
+            // Exit
+            if ( action == "exit" || (sprite_at(btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                exitClicked = true;
+                write_line("Exit button clicked");
+                exit_program();
             }
         }
 
