@@ -49,7 +49,7 @@ int main()
     s.add_button(exit);
     point_2d mousePoint;
     bool playClicked;
-    play_sound_effect("menu");
+    play_music("menu_music");
 
     while (not quit_requested() && (not key_down(ESCAPE_KEY)))
     {
@@ -66,6 +66,8 @@ int main()
 
         if (playClicked || (s.get_action() == "play"))
         {
+            fade_music_out(1000);
+
             while (not quit_requested() && (not key_down(ESCAPE_KEY)))
             {
                 process_events();

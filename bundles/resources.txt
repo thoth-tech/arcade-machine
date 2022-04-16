@@ -12,4 +12,6 @@ FONT,roboto,Roboto-Regular.ttf
 
 // Sounds
 SOUND,intro,intro1.wav
-SOUND,menu,menu1.mp3
+
+// Music
+MUSIC,menu_music,menu1.mp3
