@@ -1,19 +1,22 @@
 
 void write(std::string text);
 
+
 enum item
 {
-    Empty,
-    Bitmap,
-    Sprite,
+    EMPTY,
+    BITMAP,
+    SPRITE,
+    BUTTON
 };
 
 class cell
 {
 public:
-    item cellType = Empty;
+    item cellType = EMPTY;
     bitmap bmp = NULL;
     sprite sprite = NULL;
+    Button* button;
     int span = 1;
 };
 
@@ -143,22 +146,29 @@ public:
                     continue;
                 }
                 // If the cell is not empty
-                if (_grid[index].cellType != Empty)
+                if (_grid[index].cellType != EMPTY)
                 {
                     // Draw object into cell, centre using dimensions
                     switch (_grid[index].cellType)
                     {
-                    case Bitmap:
+                    case BITMAP:
                         if (_scaleToFit)
                         {
                             options = BitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp), xOffset, yOffset, _grid[index].span);
                         }
                         draw_bitmap(_grid[index].bmp, j * xOffset + (((xOffset * _grid[index].span) - bitmap_width(_grid[index].bmp)) / 2), i * yOffset + ((yOffset - bitmap_height(_grid[index].bmp)) / 2), options);
                         break;
-                    case Sprite:
+                    case SPRITE:
                         if (_scaleToFit)
                             write("ScaleToFit: Feature not currently available with use of sprites.\n");
                         draw_sprite(_grid[index].sprite, j * xOffset + (((xOffset * _grid[index].span) - sprite_width(_grid[index].sprite)) / 2), i * yOffset + ((yOffset - sprite_height(_grid[index].sprite)) / 2));
+                        break;
+                    case BUTTON:
+                        if (_scaleToFit)
+                            write("ScaleToFit: Feature not currently available with use of sprites.\n");
+                        sprite_set_x(_grid[index].button->btn(),  j * xOffset + (((xOffset * _grid[index].span) - sprite_width(_grid[index].button->_btn)) / 2));
+                        sprite_set_y(_grid[index].button->btn(),  (i * yOffset + _grid[index].button->centre_y()));
+                        draw_sprite(_grid[index].button->btn());
                         break;
                     default:
                         break;
@@ -223,9 +233,10 @@ public:
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
-        _grid[cellNum].cellType = Bitmap;
+        _grid[cellNum].cellType = BITMAP;
         _grid[cellNum].sprite = NULL;
         _grid[cellNum].bmp = bmp;
+        _grid[cellNum].button = NULL;
         _grid[cellNum].span = span;
     }
 
@@ -236,9 +247,23 @@ public:
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
-        _grid[cellNum].cellType = Sprite;
+        _grid[cellNum].cellType = SPRITE;
         _grid[cellNum].sprite = sprite;
         _grid[cellNum].bmp = NULL;
+        _grid[cellNum].button = NULL;
+        _grid[cellNum].span = span;
+    }
+    // Update a cell with a specified button
+    void UpdateCell(Button *button, int row, int col, int span = 1)
+    {
+        // Stores the index of the cell
+        int cellNum = FindCell(row, col);
+        // Selected row is out of bounds
+        // Update the cell
+        _grid[cellNum].cellType = BUTTON;
+        _grid[cellNum].sprite = NULL;
+        _grid[cellNum].bmp = NULL;
+        _grid[cellNum].button = button;
         _grid[cellNum].span = span;
     }
 
@@ -249,7 +274,7 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Update bitmap
-            _grid[i].cellType = Bitmap;
+            _grid[i].cellType = BITMAP;
             _grid[i].sprite = NULL;
             _grid[i].bmp = bmp;
         }
@@ -262,7 +287,7 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Update bitmap
-            _grid[i].cellType = Sprite;
+            _grid[i].cellType = SPRITE;
             _grid[i].sprite = sprite;
             _grid[i].bmp = NULL;
         }
@@ -300,7 +325,7 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Reset cell to default
-            _grid[i].cellType = Empty;
+            _grid[i].cellType = EMPTY;
             _grid[i].sprite = NULL;
             _grid[i].bmp = NULL;
             _grid[i].span = 1;
