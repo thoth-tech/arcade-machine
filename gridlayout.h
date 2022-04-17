@@ -166,9 +166,9 @@ public:
                     case BUTTON:
                         if (_scaleToFit)
                             write("ScaleToFit: Feature not currently available with use of sprites.\n");
-                        sprite_set_x(_grid[index].button->btn(),  j * xOffset + (((xOffset * _grid[index].span) - sprite_width(_grid[index].button->_btn)) / 2));
-                        sprite_set_y(_grid[index].button->btn(),  (i * yOffset + _grid[index].button->centre_y()));
-                        draw_sprite(_grid[index].button->btn());
+                        sprite_set_x(_grid[index].button->btn(),  j * xOffset + ((xOffset * _grid[index].span)/2) - _grid[index].button->centre_x());
+                        sprite_set_y(_grid[index].button->btn(),  i * yOffset + _grid[index].button->centre_y());
+                        _grid[index].button->draw_button();
                         break;
                     default:
                         break;
