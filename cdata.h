@@ -129,7 +129,7 @@ class ConfigData{
         }
 
         // Clone or pull using Git commands
-        void get_from_git(string url, const char* dir)
+        bool get_from_git(string url, const char* dir)
         {
             struct stat info;
 
@@ -139,6 +139,8 @@ class ConfigData{
                 string d = dir;
                 system(("git -C " + d + " pull " + url).c_str());
             }
+
+            return true;
         }
 
         void rename_dir(const char* dir)
