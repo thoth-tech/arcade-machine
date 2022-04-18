@@ -4,9 +4,9 @@ void write(std::string text);
 enum item
 {
     EMPTY,
-    BITMAP,
-    SPRITE,
-    BUTTON
+    BMP,
+    SPT,
+    BTN
 };
 
 class cell
@@ -164,7 +164,7 @@ public:
                     // Draw object into cell, centre using dimensions
                     switch (_grid[index].cellType)
                     {
-                    case BITMAP:
+                    case BMP:
                         if (_scaleToFit)
                         {
                             options = BitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp), xOffset, yOffset, _grid[index].span);
@@ -176,7 +176,7 @@ public:
                         }
                         draw_bitmap(_grid[index].bmp, x, y, options);
                         break;
-                    case SPRITE:
+                    case SPT:
                         if (_scaleToFit)
                             write("ScaleToFit: Feature not currently available with use of sprites.\n");
                         if (_grid[index].centre)
@@ -186,7 +186,7 @@ public:
                         }
                         draw_sprite(_grid[index].sprite, x, y);
                         break;
-                    case BUTTON:
+                    case BTN:
                         if (_scaleToFit)
                             write("ScaleToFit: Feature not currently available with use of sprites.\n");
                         if (_grid[index].centre)
@@ -267,7 +267,7 @@ public:
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
-        _grid[cellNum].cellType = BITMAP;
+        _grid[cellNum].cellType = BMP;
         _grid[cellNum].sprite = NULL;
         _grid[cellNum].bmp = bmp;
         _grid[cellNum].button = NULL;
@@ -282,7 +282,7 @@ public:
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
-        _grid[cellNum].cellType = SPRITE;
+        _grid[cellNum].cellType = SPT;
         _grid[cellNum].sprite = sprite;
         _grid[cellNum].bmp = NULL;
         _grid[cellNum].button = NULL;
@@ -296,7 +296,7 @@ public:
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
         // Update the cell
-        _grid[cellNum].cellType = BUTTON;
+        _grid[cellNum].cellType = BTN;
         _grid[cellNum].sprite = NULL;
         _grid[cellNum].bmp = NULL;
         _grid[cellNum].button = button;
@@ -311,7 +311,7 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Update bitmap
-            _grid[i].cellType = BITMAP;
+            _grid[i].cellType = BMP;
             _grid[i].sprite = NULL;
             _grid[i].bmp = bmp;
             _grid[i].centre = centre;
@@ -325,7 +325,7 @@ public:
         for (size_t i = 0; i < _cells; i++)
         {
             // Update bitmap
-            _grid[i].cellType = SPRITE;
+            _grid[i].cellType = SPT;
             _grid[i].sprite = sprite;
             _grid[i].bmp = NULL;
             _grid[i].centre = centre;
