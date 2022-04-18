@@ -70,6 +70,7 @@ public:
         // Initialise the grid
         _grid = new cell[_cells];
     }
+
     //Update the background of the screen
     void SetBackground(bitmap bmp)
     {
@@ -232,6 +233,12 @@ public:
             cellNum = row * _cols + col;
         }
         return cellNum;
+    }
+
+    //Get a cell from the grid using row/col
+    cell GetCell(int row, int col)
+    {
+        return _grid[FindCell(row, col)];
     }
 
     // Update a cell with a specified bitmap
