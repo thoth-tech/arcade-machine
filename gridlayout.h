@@ -23,6 +23,8 @@ public:
 class Grid
 {
 private:
+    // Stores the bitmap used for the background
+    bitmap _background;
     // Stores the number of columns per row
     int *_colsArray;
     // Different number of columns per row?
@@ -68,6 +70,11 @@ public:
         // Initialise the grid
         _grid = new cell[_cells];
     }
+    //Update the background of the screen
+    void SetBackground(bitmap bmp)
+    {
+        _background = bmp;
+    }
 
     //Calculate the bitmap scaling factor, returns options
     drawing_options BitmapScaleOpt(int bmpWidth, int bmpHeight, double cellWidth, double cellHeight, int span)
@@ -111,6 +118,7 @@ public:
     // Draw the items
     void DrawGrid()
     {
+        draw_bitmap(_background, 0,0);
         // Vertical offset between each cell
         double yOffset = current_window_height() / _rows;
         // Horizontal offset between each cell
