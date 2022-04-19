@@ -95,7 +95,7 @@ class Helper{
 
         void GridLayoutExample()
         {
-            load_bitmap("test", "appContainer.png");
+            bitmap testBitmap = load_bitmap("test", "appContainer.png");
             open_window("Grid Layout Example", 600, 800);
 
             //int colsArray[5] = {4, 2, 3, 2, 2};
@@ -110,7 +110,7 @@ class Helper{
             int span = cols;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell("test", i, 0, span);
+                grid.UpdateCell(testBitmap, i, 0, span);
                 --span;
             }
             ResetScreen(grid);
@@ -118,7 +118,7 @@ class Helper{
             span = 1;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell("test", i, 0, span);
+                grid.UpdateCell(testBitmap, i, 0, span);
                 ++span;
             }
 
@@ -130,7 +130,7 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell("test", i, j, 1);
+                        grid.UpdateCell(testBitmap, i, j, 1);
                     alternate = !alternate;
                 }
             }
@@ -143,7 +143,7 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell("test", i, j, 1);
+                        grid.UpdateCell(testBitmap, i, j, 1);
                 }
                 alternate = !alternate;
             }
@@ -156,7 +156,7 @@ class Helper{
                 for (size_t j = 0; j < rows; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell("test", i, j, 1);
+                        grid.UpdateCell(testBitmap, i, j, 1);
                     alternate = !alternate;
                 }
                 alternate = !alternate;
@@ -164,7 +164,7 @@ class Helper{
 
             ResetScreen(grid);
 
-            grid.UpdateAllCells("test");
+            grid.UpdateAllCells(testBitmap);
             ResetScreen(grid);
 
             while (!quit_requested())
