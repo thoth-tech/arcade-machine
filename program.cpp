@@ -50,8 +50,9 @@ int main()
     point_2d mousePoint;
     bool playClicked;
     play_music("menu_music");
+    menu.get_buttons();
 
-    while (not quit_requested() && (not key_down(ESCAPE_KEY)))
+    while (!quit_requested() && (!key_down(ESCAPE_KEY)))
     {
         process_events();
 
@@ -68,11 +69,12 @@ int main()
         {
             fade_music_out(1000);
 
-            while (not quit_requested() && (not key_down(ESCAPE_KEY)))
+            while (!quit_requested() && (!key_down(ESCAPE_KEY)))
             {
                 process_events();
 
                 clear_screen();
+                mousePoint = mouse_position();
                 // Draw the menu page.
                 menu.draw_menu_page();
                 // Listen for button click and get mouse location.
