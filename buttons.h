@@ -7,27 +7,26 @@
 using namespace std;
 using std::vector;
 
-
 class Button{
     public:
         int _id;
-        // This buttons bitmap
+        /// This buttons bitmap
         bitmap _pic;
-        // This buttons sprite
+        /// This buttons sprite
         sprite _btn;
-        // This buttons position in the window as point_2d in pixels (x,y)
+        /// This buttons position in the window as point_2d in pixels (x,y)
         point_2d _location;
-        // This buttons position in the window in pixels
+        /// This buttons position in the window in pixels
         int _x; int _y;
-        // This buttons centre point offset width in pixels
+        /// This buttons centre point offset width in pixels
         int _centre_x;
-        // This buttons centre point offset height in pixels
+        /// This buttons centre point offset height in pixels
         int _centre_y;
-        // This buttons color 
+        /// This buttons color 
         string _color;
-        // This buttons hightlight bitmap.
+        /// This buttons hightlight bitmap.
         bitmap _hghlt;
-        // This buttons hightlight layer.
+        /// This buttons hightlight layer.
         string _hightlight;
 
     
@@ -47,7 +46,8 @@ class Button{
         {
             PLAY,
             EXIT,
-            OPTIONS
+            OPTIONS,
+            HOME
         };
 
         // Default Constructor
@@ -66,6 +66,9 @@ class Button{
             sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
             // scale the sprite
             sprite_set_scale(this->_btn, scale);
+            // get the centre points of the sprite 
+            this->_centre_x = sprite_width(this->_btn) /2;
+            this->_centre_y = sprite_height(this->_btn)/2;
         }
         
         // Second Overloaded Constructor
@@ -108,6 +111,7 @@ class Button{
             draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.75, 3);                                    
         }
 
+        /// 
         string btn_color(Color c)
         {
             string filepath = "buttons/";
@@ -128,6 +132,9 @@ class Button{
                     _hightlight = "options_hightlight";
                     return filepath + "btn_options.png";
                     break;
+                case HOME:
+                    return filepath + "Gray/home.png";
+                    break;
                 default:
                     return filepath + "btn_play.png";
                     break;
@@ -138,6 +145,7 @@ class Button{
 class MenuButton : public Button{
     public:
         //MenuButton(){}
+        MenuButton(Color c, float scale = 1) : Button(c, scale){}
         MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~MenuButton(){}
 
