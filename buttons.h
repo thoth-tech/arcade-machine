@@ -66,12 +66,15 @@ class Button{
             sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
             // scale the sprite
             sprite_set_scale(this->_btn, scale);
+            // get the centre points of the sprite 
+            this->_centre_x = sprite_width(this->_btn) /2;
+            this->_centre_y = sprite_height(this->_btn)/2;
         }
         
         // Second Overloaded Constructor
         // Calculates the position in the window
         Button(Color c, float x, float y, float scale = 1)
-        {
+        { 
             // button color
             this->_color = btn_color(c);
             // load button color image
@@ -137,7 +140,7 @@ class Button{
 
 class MenuButton : public Button{
     public:
-        //MenuButton(){}
+        MenuButton(Color c, float scale = 1) : Button(c, scale){}
         MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~MenuButton(){}
 
@@ -173,7 +176,7 @@ class MenuButton : public Button{
 
 class GameScreenButton : public Button{
     public:
-        //MenuButton(){}
+        GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
         GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
         ~GameScreenButton(){}
 

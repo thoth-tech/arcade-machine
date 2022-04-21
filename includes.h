@@ -23,6 +23,7 @@
 #include "splashscreen.h"
 #include "menu.h"
 #include "helper.h"
+#include "arcademachine.h"
 
 #endif
 
