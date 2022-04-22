@@ -60,7 +60,7 @@ class ArcadeMachine
         /*
             Draw Main Menu
         */
-        void draw_main_menu()
+        void draw_main_menu() 
         {
             // Get mouse position
             this->_mouse = mouse_position();
