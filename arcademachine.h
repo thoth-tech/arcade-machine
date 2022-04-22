@@ -1,10 +1,5 @@
 // Arcade Machine Class
 
-/* 
-    This class handles the creation of the
-    Arcade Machine itself
-*/
-
 using namespace std;
 using std::vector;
 
@@ -12,28 +7,32 @@ using std::vector;
 #define ROWS 7
 #define COLS 15
 
+/* 
+    This class handles the creation of the
+    Arcade Machine itself
+*/
 class ArcadeMachine
 {
     private:
-        // Instance of Helper
+        /// Instance of Helper
         Helper _helper;
-        // Instance of ConfigData
+        /// Instance of ConfigData
         ConfigData _config;
-        // Vector of ConfigData
+        /// Vector of ConfigData
         vector<ConfigData> _configs;
-        // Vector of MenuButtons
+        /// Vector of MenuButtons
         vector<Button*> _menu_btns;
-        // Thoth Tech Company intro
+        /// Thoth Tech Company intro
         Splashscreen _intro_thothtech;
-        // SplashKit Production intro
+        /// SplashKit Production intro
         Splashscreen _intro_splashkit;
-        // Instance of Selector
+        /// Instance of Selector
         Selector _selector;
-        // Instance of Grid
+        /// Instance of Grid
         Grid _grid; 
-        // Mouse pointer
+        /// Mouse pointer
         point_2d _mouse;
-        // Button Action 
+        /// Button Action 
         string _action;
     public:
         // Default Constructor
