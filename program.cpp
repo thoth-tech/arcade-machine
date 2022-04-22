@@ -5,16 +5,19 @@ using std::vector;
 
 int main()
 {
+    
     // Load all resources
     load_resource_bundle("bundle", "resources.txt");
-
+    Option option=Option();
+    bool hasBackgroundMusic=false;
+    Audio *audio=new Audio();
     // Instantiate introductory classes
     Helper helper;
     ConfigData configData;
     Splashscreen intro_splashkit("intro_splashkit");
 
     // Open window and toggle border off.
-    open_window("arcade-machine", 1920, 1080);
+    open_window("arcade-machine", 1500, 1080);
     window_toggle_border("arcade-machine");
 
     // Play Thoth Tech intro
@@ -81,7 +84,14 @@ int main()
                 menu.button_clicked(mousePoint);
                 // Keep this running while game is played to keep mouse in the game window.
                 menu.move_mouse_position(mousePoint);
-
+              
+                option.updateOption();
+                if(!hasBackgroundMusic){
+                    audio->playMusic(option.getCurrentMusic(),option.getVolumn());
+                    hasBackgroundMusic=true;   
+                }
+                if(option.isChangeMusic()){hasBackgroundMusic=false;}
+                if(option.isChangeVoLume()){audio->setVolume(option.getVolumn());}
                 refresh_screen(60);
             }
         }

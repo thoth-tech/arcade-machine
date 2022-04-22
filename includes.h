@@ -23,7 +23,7 @@
 #include "splashscreen.h"
 #include "menu.h"
 #include "helper.h"
-
+#include "option.h"
 #endif
 
 
