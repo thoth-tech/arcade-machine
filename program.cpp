@@ -1,24 +1,27 @@
 #include "includes.h"
 
 using namespace std;
-using std::vector;
+
+// Define screen size (in pixels)
+#define WIDTH  1920
+#define HEIGHT 1080
 
 int main()
 {
     // Load all resources
     load_resource_bundle("bundle", "resources.txt");
 
-    // Instantiate introductory classes
+    // Instantiate Arcade Machine
     ArcadeMachine Arcade;
-    ConfigData configData;
-    Splashscreen intro_splashkit("intro_splashkit");
 
     // Open window and toggle border off.
-    open_window("arcade-machine", 1920, 1080);
+    open_window("arcade-machine", WIDTH, HEIGHT);
     window_toggle_border("arcade-machine");
 
-    bool play_intro = true;
-    bool load_games = true;
+    // Do we want to play the intro?
+    // Do we want to fetch new games? 
+    bool play_intro = false;
+    bool load_games = false;
 
     // Play Thoth Tech intro
     if (play_intro)
@@ -26,48 +29,22 @@ int main()
     // Play SplashKit intro
     if (load_games)
         Arcade.load_games();
-    
-    // Initialise grid 
-    Grid grid(7, 15);
-    //Splashscreen s("thoth");
-    Menu menu(Arcade.get_configs());
-    // Button *play = new MenuButton(Button::PLAY, 11, 3, 1.2);
-    // Button *options = new MenuButton(Button::OPTIONS, 11, 4, 1.2);
-    // Button *exit = new MenuButton(Button::EXIT, 11, 5, 1.2);
-    Button *play = new MenuButton(Button::PLAY, 1.2);
-    Button *options = new MenuButton(Button::OPTIONS, 1.2);
-    Button *exit = new MenuButton(Button::EXIT, 1.2);
-    string image = path_to_resource("thoth", IMAGE_RESOURCE);
-    bitmap thoth = load_bitmap("thoth", image);
 
-    grid.UpdateCell(thoth, 0, 0, 1, false);
-    grid.UpdateCell(play, 2, 10);
-    grid.UpdateCell(options, 3, 10);
-    grid.UpdateCell(exit, 4, 10);
-    
-    // s.add_button(play);
-    // s.add_button(options);
-    // s.add_button(exit);
-    point_2d mousePoint;
-    bool playClicked = false;
-    // Play main menu music
-    //play_music("menu_music");
+    // Prepare Main Menu
+    Arcade.prepare_main_menu();
+    // Initialise mouse click bool
+    bool play_clicked = false;
 
-    while (not quit_requested() && (not key_down(ESCAPE_KEY)))
+    while (!quit_requested() && (!key_down(ESCAPE_KEY)))
     {
         process_events();
         clear_screen();
-        // Get mouse position
-        mousePoint = mouse_position();
 
-        grid.DrawGrid();
-
-        //s.draw_title_page();
-        //s.button_clicked(mousePoint);
+        Arcade.draw_main_menu();
 
         //playClicked = s.getPlayClick();
 
-        if (playClicked )//|| (s.get_action() == "play"))
+        if (play_clicked)//|| (s.get_action() == "play"))
         {
             fade_music_out(1000);
 
@@ -76,11 +53,11 @@ int main()
                 process_events();
                 clear_screen();
                 // Draw the menu page.
-                menu.draw_menu_page();
+                //menu.draw_menu_page();
                 // Listen for button click and get mouse location.
-                menu.button_clicked(mousePoint);
+                //menu.button_clicked(mousePoint);
                 // Keep this running while game is played to keep mouse in the game window.
-                menu.move_mouse_position(mousePoint);
+                //menu.move_mouse_position(mousePoint);
                 refresh_screen(60);
             }
         }
