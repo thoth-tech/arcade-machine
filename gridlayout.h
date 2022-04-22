@@ -42,6 +42,8 @@ private:
 
 public:
     // Constructor:
+    // Default Constructor
+    Grid(){}
     // Fixed number of columns
     Grid(int rows, int cols, bool scaleToFit = false)
     {
@@ -196,6 +198,10 @@ public:
                         }
                         sprite_set_x(_grid[index].button->btn(), x);
                         sprite_set_y(_grid[index].button->btn(), y);
+                        // Pass position to Button
+                        this->_grid[index].button->set_x(sprite_x(this->_grid[index].button->btn()));
+                        this->_grid[index].button->set_y(sprite_y(this->_grid[index].button->btn()));
+                        // Draw Button
                         _grid[index].button->draw_button();
                         break;
                     default:
