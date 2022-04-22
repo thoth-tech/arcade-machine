@@ -17,7 +17,7 @@ int main()
     Splashscreen intro_splashkit("intro_splashkit");
 
     // Open window and toggle border off.
-    open_window("arcade-machine", 1500, 1080);
+    open_window("arcade-machine", 1920, 1080);
     window_toggle_border("arcade-machine");
 
     // Play Thoth Tech intro
