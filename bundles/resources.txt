@@ -4,7 +4,13 @@ BITMAP,intro_splashkit,backgrounds/intro_splashkit.bmp
 BITMAP,intro_thothtech,backgrounds/intro_thoth.bmp
 BITMAP,games_dashboard,backgrounds/retro.bmp
 BITMAP,cursor,splashkit_cursor.png
-
+BITMAP, backCurrentGame,buttons/Red/Settings.png
+BITMAP, back_ground,abc.jpg
+BITMAP, backGame_notSelected,buttons/Yellow/Settings.png
+BITMAP, changeSound,buttons/Red/Music On.png
+BITMAP, sound_notSelected,buttons/Yellow/Music On.png
+BITMAP, backMenu_notSelected,buttons/Yellow/Home.png
+BITMAP, backMenu, buttons/Red/Home.png
 // Fonts
 FONT,btn_font,MindPlay.ttf
 FONT,title_font,Retroking.ttf
@@ -15,3 +21,6 @@ SOUND,intro,intro1.wav
 
 // Music
 MUSIC,menu_music,menu1.mp3
+MUSIC, 1, 1.mp3
+MUSIC, 2, 2.mp3
+MUSIC, 3, 3.mp3
