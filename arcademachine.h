@@ -21,17 +21,20 @@ class ArcadeMachine
         ConfigData _config;
         // Vector of ConfigData
         vector<ConfigData> _configs;
+        // Vector of MenuButtons
+        vector<Button*> _menu_btns;
         // Thoth Tech Company intro
         Splashscreen _intro_thothtech;
         // SplashKit Production intro
         Splashscreen _intro_splashkit;
         // Instance of Selector
-        Selector selector;
+        Selector _selector;
         // Instance of Grid
         Grid _grid; 
         // Mouse pointer
         point_2d _mouse;
-        // 
+        // Button Action 
+        string _action;
     public:
         // Default Constructor
         ArcadeMachine()
@@ -66,23 +69,26 @@ class ArcadeMachine
             this->_mouse = mouse_position();
             this->_grid.DrawGrid();
             // Draw cursor
-            draw_sprite(selector.get_cursor());
+            draw_sprite(this->_selector.get_cursor());
             // Get button postions
             cell play = this->_grid.GetCell(2, 10);
             cell options = this->_grid.GetCell(3, 10);
             cell exit = this->_grid.GetCell(4, 10);
+            // Arcade Machine title
+            draw_text("Arcade",  COLOR_BLACK, "title_font", 100, 1180, 100);
+            draw_text("Machine", COLOR_BLACK, "title_font", 100, 1150, 200);
             // Draw text on buttons
             draw_text("play!", COLOR_BLACK, "btn_font", 70, play.button->x() + (play.button->centre_x()/2) + 5, play.button->y() + 5);
             draw_text("options", COLOR_BLACK, "btn_font", 70, options.button->x() + (options.button->centre_x()/2) - 20, options.button->y() + 5);
             draw_text("exit", COLOR_BLACK, "btn_font", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
             // Check input
-            //this->action = select.check_key_input(this->btns);
+            this->_action = this->_selector.check_key_input(this->_menu_btns);
             // Draw creators
-            draw_text("Created By", COLOR_BLACK, "roboto", 14, 1200, 850);
-            draw_text("Sarah", COLOR_BLACK, "roboto", 14, 1200, 870);
-            draw_text("Anthony", COLOR_BLACK, "roboto", 14, 1200, 890);
-            draw_text("Riley", COLOR_BLACK,  "roboto", 14, 1200, 910);
-            draw_text("Huy", COLOR_BLACK, "roboto", 14, 1200, 930);
+            // draw_text("Created By", COLOR_BLACK, "roboto", 14, 1200, 850);
+            // draw_text("Sarah", COLOR_BLACK, "roboto", 14, 1200, 870);
+            // draw_text("Anthony", COLOR_BLACK, "roboto", 14, 1200, 890);
+            // draw_text("Riley", COLOR_BLACK,  "roboto", 14, 1200, 910);
+            // draw_text("Huy", COLOR_BLACK, "roboto", 14, 1200, 930);
         }
 
         /*
@@ -96,19 +102,52 @@ class ArcadeMachine
             // Initialise menu
             Menu menu(this->get_configs());
             // Create menu buttons
-            Button *play = new MenuButton(Button::PLAY, 1.2);
-            Button *options = new MenuButton(Button::OPTIONS, 1.2);
-            Button *exit = new MenuButton(Button::EXIT, 1.2);
+            Button *play = new MenuButton(Button::PLAY, 1.5);
+            Button *opts = new MenuButton(Button::OPTS, 1.5);
+            Button *exit = new MenuButton(Button::EXIT, 1.5);
+            // Add menu buttons to local vector
+            this->_menu_btns.push_back(play);
+            this->_menu_btns.push_back(opts);
+            this->_menu_btns.push_back(exit);
             // Set menu background
             string image = path_to_resource("thoth", IMAGE_RESOURCE);
             bitmap thoth = load_bitmap("thoth", image);
             // Update grid cells with assets
             grid.UpdateCell(thoth, 0, 0, 1, false);
             grid.UpdateCell(play, 2, 10);
-            grid.UpdateCell(options, 3, 10);
+            grid.UpdateCell(opts, 3, 10);
             grid.UpdateCell(exit, 4, 10);
             // Play main menu music
             play_music("menu_music");
+        }
+
+        void button_clicked(point_2d point)
+        {
+            // Play
+            if ( this->_action == "play" || (sprite_at(this->_menu_btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                //playClicked = true;
+                write_line("Play button clicked");
+            }
+
+            // Options
+            if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                write_line("Options button clicked");
+            }
+
+            // Exit
+            if ( this->_action == "exit" || (sprite_at(this->_menu_btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                //exitClicked = true;
+                write_line("Exit button clicked");
+                exit_program();
+            }
+        }
+
+         void exit_program()
+        {
+            abort();
         }
 
         /*

@@ -50,7 +50,7 @@ class Button{
         {
             PLAY,
             EXIT,
-            OPTIONS
+            OPTS
         };
 
         // Default Constructor
@@ -129,7 +129,7 @@ class Button{
                     _hightlight = "exit_hightlight";
                     return filepath + "btn_exit.png";
                     break;
-                case OPTIONS:
+                case OPTS:
                     _hghlt = load_bitmap("options_hghlt", filepath + "btn_options_hghlt.png");
                     _hightlight = "options_hightlight";
                     return filepath + "btn_options.png";
@@ -161,7 +161,7 @@ class MenuButton : public Button{
                 write_line("Exit");
                 return "exit";
             }
-            if (this->color() == btn_color(Button::OPTIONS))
+            if (this->color() == btn_color(Button::OPTS))
             {
                 // go to this screen
                 write_line("Options");

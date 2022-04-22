@@ -95,8 +95,8 @@ class Selector {
             // get the current selected sprite
             sprite currentSprite = buttons[selected]->btn();
             // set cursor pos to selected button pos
-            sprite_set_y(cursor, buttons[selected]->y() - 45);
-            sprite_set_x(cursor, buttons[selected]->x() - 300);
+            sprite_set_y(cursor, buttons[selected]->y());
+            sprite_set_x(cursor, buttons[selected]->x() - 200);
             // toggle highlight layer on.
             sprite_toggle_layer_visible(currentSprite, 1);
         }
@@ -132,8 +132,8 @@ class Selector {
             // get the current selected sprite
             sprite currentSprite = buttons[selected]->btn();
             // Set cursor pos to selected button pos
-            sprite_set_y(cursor, buttons[selected]->y() - 45);
-            sprite_set_x(cursor, buttons[selected]->x() - 300);
+            sprite_set_y(cursor, buttons[selected]->y());
+            sprite_set_x(cursor, buttons[selected]->x() - 200);
             // toggle highlight layer on.
             sprite_toggle_layer_visible(currentSprite, 1);
         }
