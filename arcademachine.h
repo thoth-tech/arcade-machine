@@ -179,22 +179,6 @@ class ArcadeMachine
             }
         }
 
-        /*
-            Abort this application
-        */
-        void exit_program()
-        {
-            abort();
-        }
-
-        /*
-            Print config data to console
-        */
-        void print_configs()
-        {
-            this->_config.print_config_data();
-        }
-
         /* 
             Draws the Thoth Tech company logo to screen and
             incremently fills the screen white to animate fading
@@ -246,5 +230,21 @@ class ArcadeMachine
                 
             } while (!this->_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
 
+        }
+
+        /*
+        Print config data to console
+        */
+        void print_configs()
+        {
+            this->_config.print_config_data();
+        }
+
+        /*
+            Abort this application
+        */
+        void exit_program()
+        {
+            abort();
         }
 };
