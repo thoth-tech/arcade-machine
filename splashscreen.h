@@ -66,32 +66,32 @@ class Splashscreen {
             // }
         }
 
-        void button_clicked(point_2d point)
-        {
-            // Play
-            if ( action == "play" || (sprite_at(btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-            {
-                playClicked = true;
-                write_line("Play button clicked");
-            }
+        // void button_clicked(point_2d point)
+        // {
+        //     // Play
+        //     if ( action == "play" || (sprite_at(btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+        //     {
+        //         playClicked = true;
+        //         write_line("Play button clicked");
+        //     }
 
-            // Options
-            if ( action == "options" || (sprite_at(btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-            {
-                write_line("Options button clicked");
-            }
+        //     // Options
+        //     if ( action == "options" || (sprite_at(btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+        //     {
+        //         write_line("Options button clicked");
+        //     }
 
-            // Exit
-            if ( action == "exit" || (sprite_at(btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-            {
-                exitClicked = true;
-                write_line("Exit button clicked");
-                exit_program();
-            }
-        }
+        //     // Exit
+        //     if ( action == "exit" || (sprite_at(btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+        //     {
+        //         exitClicked = true;
+        //         write_line("Exit button clicked");
+        //         exit_program();
+        //     }
+        // }
 
-         void exit_program()
-        {
-            abort();
-        }
+        //  void exit_program()
+        // {
+        //     abort();
+        // }
 };

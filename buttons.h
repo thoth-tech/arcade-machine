@@ -7,7 +7,6 @@
 using namespace std;
 using std::vector;
 
-
 class Button{
     public:
         int _id;
@@ -30,7 +29,6 @@ class Button{
         // This buttons hightlight layer.
         string _hightlight;
 
-    
         // Getters
         auto id() const -> const int& { return _id; }
         auto pic() const -> const bitmap& { return _pic; }

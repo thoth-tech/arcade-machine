@@ -121,8 +121,8 @@ public:
     // Draw the items
     void DrawGrid()
     {
-        if (_background)
-            draw_bitmap(_background, 0, 0);
+        //if (_background)
+        //    draw_bitmap(_background, 0, 0);
         // Vertical offset between each cell
         double yOffset = current_window_height() / _rows;
         // Horizontal offset between each cell
@@ -198,7 +198,7 @@ public:
                         }
                         sprite_set_x(_grid[index].button->btn(), x);
                         sprite_set_y(_grid[index].button->btn(), y);
-                        // Pass position to Button
+                        // Update Button position of button
                         this->_grid[index].button->set_x(sprite_x(this->_grid[index].button->btn()));
                         this->_grid[index].button->set_y(sprite_y(this->_grid[index].button->btn()));
                         // Draw Button
@@ -267,7 +267,7 @@ public:
     }
 
     // Update a cell with a specified bitmap
-    void UpdateCell(bitmap bmp, int row, int col, int span = 1, bool centre = true)
+    void UpdateCell(const bitmap &bmp, int row, int col, int span = 1, bool centre = true)
     {
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
@@ -282,7 +282,7 @@ public:
     }
 
     // Update a cell with a specified sprite
-    void UpdateCell(sprite sprite, int row, int col, int span = 1, bool centre = true)
+    void UpdateCell(const sprite &sprite, int row, int col, int span = 1, bool centre = true)
     {
         // Stores the index of the cell
         int cellNum = FindCell(row, col);

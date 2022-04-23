@@ -29,7 +29,7 @@ class ArcadeMachine
         /// Instance of Selector
         Selector _selector;
         /// Instance of Grid
-        Grid _grid; 
+        Grid _grid;
         /// Mouse pointer
         point_2d _mouse;
         /// Button Action 
@@ -41,11 +41,13 @@ class ArcadeMachine
             // Instantiate fundamental objects
             Helper helper;
             ConfigData config;
+            Selector cursor("cursor");
             Splashscreen intro_thothtech("intro_thothtech");
             Splashscreen intro_splashkit("intro_splashkit");
             // Set objects to private properties
             this->_helper = helper;
             this->_config = config;
+            this->_selector = cursor;
             this->_intro_thothtech = intro_thothtech;
             this->_intro_splashkit = intro_splashkit;
             // Get the data from the config files.
@@ -60,7 +62,25 @@ class ArcadeMachine
         auto get_configs() const -> const vector<ConfigData>& { return this->_configs; }
 
         /*
-            Draw Main Menu
+            Starts the Main Menu
+        */
+        void main_menu()
+        {
+            // Prepare Main Menu
+            prepare_main_menu();
+            // Initialise mouse click bool
+            //bool play_clicked = false;
+            while (!quit_requested() && (!key_down(ESCAPE_KEY)))
+            {
+                process_events();
+                clear_screen();
+                draw_main_menu();
+                refresh_screen(60);
+            }
+        }
+
+        /*
+            Draws the Main Menu
         */
         void draw_main_menu() 
         {
@@ -91,7 +111,7 @@ class ArcadeMachine
         }
 
         /*
-            Prepare Main Menu
+            Prepares the Main Menu
         */
         void prepare_main_menu()
         {
@@ -108,8 +128,9 @@ class ArcadeMachine
             this->_menu_btns.push_back(play);
             this->_menu_btns.push_back(opts);
             this->_menu_btns.push_back(exit);
-            // Set menu background
-            string image = path_to_resource("thoth", IMAGE_RESOURCE);
+            // Fetch menu background
+            const string image = path_to_resource("thoth", IMAGE_RESOURCE);
+            // Load menu background
             bitmap thoth = load_bitmap("thoth", image);
             // Update grid cells with assets
             grid.UpdateCell(thoth, 0, 0, 1, false);
@@ -132,6 +153,7 @@ class ArcadeMachine
             // Options
             if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
+                
                 write_line("Options button clicked");
             }
 
@@ -144,7 +166,10 @@ class ArcadeMachine
             }
         }
 
-         void exit_program()
+        /*
+            Abort this application
+        */
+        void exit_program()
         {
             abort();
         }
@@ -184,7 +209,7 @@ class ArcadeMachine
                 // If alpha is == 0, hold image for 1.5 seconds
                 if (abs(alpha - 0.0) < 1e-9)
                     Sleep(1500);
-                    /* After this has happened, the alpha value will continue into the negatives
+                    /*  After this has happened, the alpha value will continue into the negatives
                         The colour function continues to accept negative alpha values, 
                         effectively creating a fade out animation for the remainder of the while loop
                     */
@@ -194,7 +219,7 @@ class ArcadeMachine
         }
 
         /*
-
+            Fetches new games from Git repo
         */
         void load_games()
         {

@@ -9,9 +9,16 @@ class Selector {
         int up_key_state = 0;
         int down_key_state = 0;
         int count = 0;
-        sprite cursor = create_sprite("cursor");
+        sprite cursor;
 
     public:
+        Selector(){}
+        Selector(const string &cursor)
+        {
+            bitmap cur = load_bitmap("cursor", cursor);
+            this->cursor = create_sprite(cur);
+        }
+        // Return the cursor sprite
         sprite get_cursor()
         {
             return this->cursor;
