@@ -11,6 +11,7 @@ BITMAP, changeSound,buttons/Red/Music On.png
 BITMAP, sound_notSelected,buttons/Yellow/Music On.png
 BITMAP, backMenu_notSelected,buttons/Yellow/Home.png
 BITMAP, backMenu, buttons/Red/Home.png
+
 // Fonts
 FONT,btn_font,MindPlay.ttf
 FONT,title_font,Retroking.ttf
