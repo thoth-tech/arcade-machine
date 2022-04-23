@@ -5,12 +5,12 @@ using std::vector;
 
 int main()
 {
-    
     // Load all resources
     load_resource_bundle("bundle", "resources.txt");
     Option option=Option();
     bool hasBackgroundMusic=false;
     Audio *audio=new Audio();
+
     // Instantiate introductory classes
     Helper helper;
     ConfigData configData;
@@ -84,7 +84,6 @@ int main()
                 menu.button_clicked(mousePoint);
                 // Keep this running while game is played to keep mouse in the game window.
                 menu.move_mouse_position(mousePoint);
-              
                 option.updateOption();
                 if(!hasBackgroundMusic){
                     audio->playMusic(option.getCurrentMusic(),option.getVolumn());
@@ -92,6 +91,7 @@ int main()
                 }
                 if(option.isChangeMusic()){hasBackgroundMusic=false;}
                 if(option.isChangeVoLume()){audio->setVolume(option.getVolumn());}
+
                 refresh_screen(60);
             }
         }
