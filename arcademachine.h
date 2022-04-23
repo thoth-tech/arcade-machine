@@ -34,6 +34,8 @@ class ArcadeMachine
         point_2d _mouse;
         /// Button Action 
         string _action;
+        /// Play clicked
+        bool _play_clicked = false;
     public:
         // Default Constructor
         ArcadeMachine()
@@ -66,15 +68,28 @@ class ArcadeMachine
         */
         void main_menu()
         {
-            // Prepare Main Menu
-            prepare_main_menu();
-            // Initialise mouse click bool
-            //bool play_clicked = false;
-            while (!quit_requested() && (!key_down(ESCAPE_KEY)))
+            while (this->_play_clicked == false)
             {
                 process_events();
                 clear_screen();
                 draw_main_menu();
+                button_clicked(this->_mouse);
+                refresh_screen(60);
+            }
+        }
+
+        void games_menu()
+        {
+            Menu menu(this->_configs);
+            
+            while (!key_down(ESCAPE_KEY))
+            {
+                process_events();
+                clear_screen();
+                this->_mouse = mouse_position();
+                menu.draw_menu_page();
+                menu.button_clicked(this->_mouse);
+                menu.move_mouse_position(this->_mouse);
                 refresh_screen(60);
             }
         }
@@ -146,21 +161,19 @@ class ArcadeMachine
             // Play
             if ( this->_action == "play" || (sprite_at(this->_menu_btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
-                //playClicked = true;
+                this->_play_clicked = true;
                 write_line("Play button clicked");
             }
 
             // Options
             if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
-                
                 write_line("Options button clicked");
             }
 
             // Exit
             if ( this->_action == "exit" || (sprite_at(this->_menu_btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
-                //exitClicked = true;
                 write_line("Exit button clicked");
                 exit_program();
             }

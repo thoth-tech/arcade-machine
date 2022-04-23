@@ -30,37 +30,12 @@ int main()
     if (load_games)
         Arcade.load_games();
     
-    // Prepare the Main Menu
+    // Prepare the main menu
     Arcade.prepare_main_menu();
+    // Draw the main menu
+    Arcade.main_menu();
+    // Draw games menu
+    Arcade.games_menu();
 
-    while (!quit_requested() && (!key_down(ESCAPE_KEY)))
-    {
-        process_events();
-        clear_screen();
-        
-        // Draw the Main Menu
-        Arcade.draw_main_menu();
-
-        //playClicked = s.getPlayClick();
-
-        // if (play_clicked)//|| (s.get_action() == "play"))
-        // {
-        //     fade_music_out(1000);
-
-        //     while (not quit_requested() && (not key_down(ESCAPE_KEY)))
-        //     {
-        //         process_events();
-        //         clear_screen();
-        //         // Draw the menu page.
-        //         //menu.draw_menu_page();
-        //         // Listen for button click and get mouse location.
-        //         //menu.button_clicked(mousePoint);
-        //         // Keep this running while game is played to keep mouse in the game window.
-        //         //menu.move_mouse_position(mousePoint);
-        //         refresh_screen(60);
-        //     }
-        // }
-        refresh_screen(60);
-    }
     return 0;
 }
