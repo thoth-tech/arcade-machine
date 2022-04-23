@@ -48,7 +48,8 @@ class Button{
             PLAY,
             EXIT,
             OPTIONS, 
-            GAME
+            GAME,
+            HOME
 
         };
 
