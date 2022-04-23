@@ -1,3 +1,5 @@
+// Options class
+
 using namespace std;
 using std::vector;
 class Audio{
