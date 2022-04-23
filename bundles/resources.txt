@@ -5,7 +5,7 @@ BITMAP,intro_thothtech,backgrounds/intro_thoth.bmp
 BITMAP,games_dashboard,backgrounds/retro.bmp
 BITMAP,cursor,splashkit_cursor.png
 BITMAP, backCurrentGame,buttons/Red/Settings.png
-BITMAP, back_ground,abc.jpg
+BITMAP, back_ground,back_ground.jpg
 BITMAP, backGame_notSelected,buttons/Yellow/Settings.png
 BITMAP, changeSound,buttons/Red/Music On.png
 BITMAP, sound_notSelected,buttons/Yellow/Music On.png
