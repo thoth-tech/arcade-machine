@@ -79,8 +79,6 @@ class Button{
         { 
             // button color
             this->_color = btn_color(c);
-            // load button color image
-            //this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
             this->_btn = create_sprite(this->_color);
             // add hightlight layer to sprite
@@ -104,14 +102,14 @@ class Button{
         virtual void draw_button() = 0;
         virtual string action() = 0;
 
-        void draw_screen_guides()
-        {
-            draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.5 , 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.25, HEIGHT*0.5 , 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.75, HEIGHT*0.5 , 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.25, 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.75, 3);                                    
-        }
+        // void draw_screen_guides()
+        // {
+        //     draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.5 , 3);
+        //     draw_circle(COLOR_BLACK, WIDTH*0.25, HEIGHT*0.5 , 3);
+        //     draw_circle(COLOR_BLACK, WIDTH*0.75, HEIGHT*0.5 , 3);
+        //     draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.25, 3);
+        //     draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.75, 3);                                    
+        // }
 
         string btn_color(Color c)
         {
@@ -144,7 +142,6 @@ class MenuButton : public Button{
     public:
         MenuButton(Color c, float scale = 1) : Button(c, scale){}
         MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
-        ~MenuButton(){}
 
         string action()
         {
@@ -169,9 +166,9 @@ class MenuButton : public Button{
             return "";
         }
 
+        // Draw button to screen
         void draw_button()
         {
-            // draw button to screen
             draw_sprite(this->_btn);
         }
 };
@@ -180,14 +177,17 @@ class GameScreenButton : public Button{
     public:
         GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
         GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
-        ~GameScreenButton(){}
 
         string action()
         {
-            // play
             return "";
         }
 
+        // Draw button to screen
+        void draw_button()
+        {
+            draw_sprite(this->_btn);
+        }
 };
 
 
