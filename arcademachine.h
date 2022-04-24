@@ -109,20 +109,20 @@ class ArcadeMachine
             cell options = this->_grid.GetCell(3, 10);
             cell exit = this->_grid.GetCell(4, 10);
             // Arcade Machine title
-            draw_text("Arcade",  COLOR_BLACK, "title_font", 100, 1180, 100);
-            draw_text("Machine", COLOR_BLACK, "title_font", 100, 1150, 200);
+            draw_text("Arcade",  COLOR_BLACK, "font_title", 100, 1180, 100);
+            draw_text("Machine", COLOR_BLACK, "font_title", 100, 1150, 200);
             // Draw text on buttons
-            draw_text("play!", COLOR_BLACK, "btn_font", 70, play.button->x() + (play.button->centre_x()/2) + 5, play.button->y() + 5);
-            draw_text("options", COLOR_BLACK, "btn_font", 70, options.button->x() + (options.button->centre_x()/2) - 20, options.button->y() + 5);
-            draw_text("exit", COLOR_BLACK, "btn_font", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
+            draw_text("play!", COLOR_BLACK, "font_btn", 70, play.button->x() + (play.button->centre_x()/2) + 5, play.button->y() + 5);
+            draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centre_x()/2) - 20, options.button->y() + 5);
+            draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
             // Check input
             this->_action = this->_selector.check_key_input(this->_menu_btns);
             // Draw creators
-            // draw_text("Created By", COLOR_BLACK, "roboto", 14, 1200, 850);
-            // draw_text("Sarah", COLOR_BLACK, "roboto", 14, 1200, 870);
-            // draw_text("Anthony", COLOR_BLACK, "roboto", 14, 1200, 890);
-            // draw_text("Riley", COLOR_BLACK,  "roboto", 14, 1200, 910);
-            // draw_text("Huy", COLOR_BLACK, "roboto", 14, 1200, 930);
+            // draw_text("Created By", COLOR_BLACK, "font_text", 14, 1200, 850);
+            // draw_text("Sarah", COLOR_BLACK, "font_text", 14, 1200, 870);
+            // draw_text("Anthony", COLOR_BLACK, "font_text", 14, 1200, 890);
+            // draw_text("Riley", COLOR_BLACK,  "font_text", 14, 1200, 910);
+            // draw_text("Huy", COLOR_BLACK, "font_text", 14, 1200, 930);
         }
 
         /*
@@ -153,7 +153,7 @@ class ArcadeMachine
             grid.UpdateCell(opts, 3, 10);
             grid.UpdateCell(exit, 4, 10);
             // Play main menu music
-            play_music("menu_music");
+            play_music("music_mainmenu");
         }
 
         void button_clicked(point_2d point)
