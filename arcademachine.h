@@ -52,13 +52,9 @@ class ArcadeMachine
             this->_selector = cursor;
             this->_intro_thothtech = intro_thothtech;
             this->_intro_splashkit = intro_splashkit;
-            // Get the data from the config files.
-            this->_configs = helper.config_data_list();
         }
         // Destructor
         ~ArcadeMachine(){}
-        // First Overloaded Constructor
-        ArcadeMachine(Grid grid){}
 
         // Getters
         auto get_configs() const -> const vector<ConfigData>& { return this->_configs; }
@@ -78,6 +74,9 @@ class ArcadeMachine
             }
         }
 
+        /*
+            Starts the Games Menu
+        */
         void games_menu()
         {
             Menu menu(this->_configs);
@@ -130,6 +129,8 @@ class ArcadeMachine
         */
         void prepare_main_menu()
         {
+            // Get the data from the config files.
+            this->_configs = this->_helper.config_data_list();
             // Initialise grid 
             Grid grid(ROWS, COLS);
             this->_grid = grid;
@@ -139,6 +140,7 @@ class ArcadeMachine
             Button *play = new MenuButton(Button::PLAY, 1.5);
             Button *opts = new MenuButton(Button::OPTS, 1.5);
             Button *exit = new MenuButton(Button::EXIT, 1.5);
+
             // Add menu buttons to local vector
             this->_menu_btns.push_back(play);
             this->_menu_btns.push_back(opts);
@@ -225,11 +227,10 @@ class ArcadeMachine
             {
                 // Draw SplashKit productions screen
                 this->_intro_splashkit.draw_title_page();
-                draw_text("Loading...", COLOR_SLATE_GRAY, "btn_font", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
+                draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
                 refresh_screen();
                 
             } while (!this->_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
-
         }
 
         /*
