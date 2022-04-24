@@ -6,15 +6,25 @@ using std::vector;
 
 class ConfigData{
     private:
+        /// This configs ID
         int _id;
+        /// The repository
         string _repo;
+        /// This programming language this game was written in 
         string _language;
+        /// The thumbnail image of this game  
         string _image;
+        /// The title of this game
         string _title;
+        /// The genre of this game
         string _genre;
+        /// The MPA rating of this game 
         string _rating;
+        /// Th author/creator of this game
         string _author;
+        /// The path to the executable of this game
         string _exe;
+        /// The folder this game is inside
         string _folder;
     public:
         // Default Constructor
@@ -30,18 +40,20 @@ class ConfigData{
         auto set_id(int &i) { _id = i; }
         auto set_folder(string &dir) { _folder = dir; }
         // Getters:
-        auto id() const -> const int& { return _id; }
-        auto repo() const -> const string& { return _repo; }
+        auto id()       const -> const int&    { return _id;       }
+        auto repo()     const -> const string& { return _repo;     }
         auto language() const -> const string& { return _language; }
-        auto image() const -> const string& { return _image; }
-        auto title() const -> const string& { return _title; }
-        auto genre() const -> const string& { return _genre; }
-        auto rating() const -> const string& { return _rating; }
-        auto author() const -> const string& { return _author; }
-        auto exe() const -> const string& { return _exe; }
-        auto folder() const -> const string& { return _folder; }
+        auto image()    const -> const string& { return _image;    }
+        auto title()    const -> const string& { return _title;    }
+        auto genre()    const -> const string& { return _genre;    }
+        auto rating()   const -> const string& { return _rating;   }
+        auto author()   const -> const string& { return _author;   }
+        auto exe()      const -> const string& { return _exe;      }
+        auto folder()   const -> const string& { return _folder;   }
 
-        // Open a file
+        /*
+            Returns a file given the filepath
+        */
         ifstream open_file(string file)
         {
             ifstream config_file;
@@ -57,6 +69,9 @@ class ConfigData{
             return config_file;
         }
 
+        /*
+            Returns an array of data from a text file
+        */        
         vector<string> read_txt(ifstream file)
         {
             vector<string> config_items;
@@ -74,24 +89,9 @@ class ConfigData{
             return config_items;
         }
 
-        json read_json(string filepath)
-        {
-            json config_items = json_from_file(filepath);
-            return config_items;
-        }
-
-        void collect_json_data(json json_configs = {})
-        {
-            this->_repo = json_read_string(json_configs, "repo");
-            this->_language = json_read_string(json_configs, "language");
-            this->_image = json_read_string(json_configs, "image");
-            this->_title = json_read_string(json_configs, "title");
-            this->_genre = json_read_string(json_configs, "genre");
-            this->_rating = json_read_string(json_configs, "rating");
-            this->_author = json_read_string(json_configs, "author");
-            this->_exe = json_read_string(json_configs, "exe");
-        }
-
+        /*
+            Populates this config data with the data from the given array
+        */  
         void collect_config_data(vector<string> configs = vector<string>())
         {
             smatch sm;
@@ -121,14 +121,27 @@ class ConfigData{
             }
         }
 
-        bool game_exists()
+        json read_json(string filepath)
         {
-            bool exists = false;
-
-            return exists;
+            json config_items = json_from_file(filepath);
+            return config_items;
         }
 
-        // Clone or pull using Git commands
+        void collect_json_data(json json_configs = {})
+        {
+            this->_repo = json_read_string(json_configs, "repo");
+            this->_language = json_read_string(json_configs, "language");
+            this->_image = json_read_string(json_configs, "image");
+            this->_title = json_read_string(json_configs, "title");
+            this->_genre = json_read_string(json_configs, "genre");
+            this->_rating = json_read_string(json_configs, "rating");
+            this->_author = json_read_string(json_configs, "author");
+            this->_exe = json_read_string(json_configs, "exe");
+        }
+
+        /*
+            Clones a git repository given the URL and proposed directory name
+        */
         bool get_from_git(string url, const char* dir)
         {
             struct stat info;
