@@ -20,8 +20,8 @@ int main()
 
     // Do we want to play the intro?
     // Do we want to fetch new games? 
-    bool play_intro = false;
-    bool load_games = false;
+    bool play_intro = true;
+    bool load_games = true;
 
     // Play Thoth Tech intro
     if (play_intro) Arcade.play_intro();
