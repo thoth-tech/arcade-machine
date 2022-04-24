@@ -18,13 +18,16 @@ class Selector {
             bitmap cur = load_bitmap("cursor", cursor);
             this->cursor = create_sprite(cur);
         }
+
         // Return the cursor sprite
         sprite get_cursor()
         {
             return this->cursor;
         }
+
         // Function to check which key is currently pressed and call correct method.
         // Key states ensure the functions only get called once per key press.
+        // This function returns a string
         string check_key_input(vector<Button*> buttons)
         {
             // highlight play button on start
@@ -82,11 +85,9 @@ class Selector {
             {
                 up_key_state = 0;
             }
-
-            if(key_down(RETURN_KEY))
-            {
-                return buttons[selected]->action();
-            }
+            
+            // Enter key returns the action of the selected button
+            if(key_down(RETURN_KEY)) return buttons[selected]->action();
 
             return "";
         }
