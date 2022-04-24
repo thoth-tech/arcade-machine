@@ -24,11 +24,9 @@ int main()
     bool load_games = false;
 
     // Play Thoth Tech intro
-    if (play_intro)
-        Arcade.play_intro();
+    if (play_intro) Arcade.play_intro();
     // Play SplashKit intro
-    if (load_games)
-        Arcade.load_games();
+    if (load_games) Arcade.load_games();
     
     // Prepare the main menu
     Arcade.prepare_main_menu();
