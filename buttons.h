@@ -9,36 +9,37 @@ using std::vector;
 
 class Button{
     public:
+        /// This buttons ID
         int _id;
-        // This buttons bitmap
-        bitmap _pic;
-        // This buttons sprite
+        /// This buttons bitmap
+        //bitmap _pic;
+        /// This buttons sprite
         sprite _btn;
-        // This buttons position in the window as point_2d in pixels (x,y)
+        /// This buttons position in the window as point_2d in pixels (x,y)
         point_2d _location;
-        // This buttons position in the window in pixels
+        /// This buttons position in the window in pixels
         int _x; int _y;
-        // This buttons centre point offset width in pixels
+        /// This buttons centre point offset width in pixels
         int _centre_x;
-        // This buttons centre point offset height in pixels
+        /// This buttons centre point offset height in pixels
         int _centre_y;
-        // This buttons color 
+        /// This buttons color 
         string _color;
-        // This buttons hightlight bitmap.
+        /// This buttons hightlight bitmap.
         bitmap _hghlt;
-        // This buttons hightlight layer.
+        /// This buttons hightlight layer.
         string _hightlight;
 
         // Getters
-        auto id() const -> const int& { return _id; }
-        auto pic() const -> const bitmap& { return _pic; }
-        auto btn() const -> const sprite& { return _btn; }
+        auto id()       const -> const int&      { return _id; }
+        //auto pic()    const -> const bitmap&   { return _pic; }
+        auto btn()      const -> const sprite&   { return _btn; }
         auto location() const -> const point_2d& { return _location; }
-        auto x() const -> const int& { return _x; }
-        auto y() const -> const int& { return _y; }
-        auto centre_x() const -> const int& { return _centre_x; }
-        auto centre_y() const -> const int& { return _centre_y; }
-        auto color() const -> const string& { return _color; }
+        auto x()        const -> const int&      { return _x; }
+        auto y()        const -> const int&      { return _y; }
+        auto centre_x() const -> const int&      { return _centre_x; }
+        auto centre_y() const -> const int&      { return _centre_y; }
+        auto color()    const -> const string&   { return _color; }
         // Setters
         void set_x(const int &x){ this->_x = x; }
         void set_y(const int &y){ this->_y = y; }
@@ -60,9 +61,9 @@ class Button{
             // button color
             this->_color = btn_color(c);
             // load button color image
-            this->_pic = load_bitmap(to_string(c), this->_color);
+            //this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
-            this->_btn = create_sprite(this->_pic);
+            this->_btn = create_sprite(this->_color);
             // add hightlight layer to sprite
             sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
             // scale the sprite
@@ -79,9 +80,9 @@ class Button{
             // button color
             this->_color = btn_color(c);
             // load button color image
-            this->_pic = load_bitmap(to_string(c), this->_color);
+            //this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
-            this->_btn = create_sprite(this->_pic);
+            this->_btn = create_sprite(this->_color);
             // add hightlight layer to sprite
             sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
             // get the centre points of the sprite 
@@ -120,20 +121,20 @@ class Button{
                 case PLAY:
                     _hghlt = load_bitmap("play_hghlt", filepath + "btn_play_hghlt.png");
                     _hightlight = "play_hightlight";
-                    return filepath + "btn_play.png";
+                    return "btn_play";
                     break;
                 case EXIT:
                     _hghlt = load_bitmap("exit_hghlt", filepath + "btn_exit_hghlt.png");
                     _hightlight = "exit_hightlight";
-                    return filepath + "btn_exit.png";
+                    return "btn_exit";
                     break;
                 case OPTS:
                     _hghlt = load_bitmap("options_hghlt", filepath + "btn_options_hghlt.png");
                     _hightlight = "options_hightlight";
-                    return filepath + "btn_options.png";
+                    return "btn_opts";
                     break;
                 default:
-                    return filepath + "btn_play.png";
+                    return "btn_play";
                     break;
             }
         }
