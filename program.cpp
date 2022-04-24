@@ -10,6 +10,9 @@ int main()
 {
     // Load all resources
     load_resource_bundle("bundle", "resources.txt");
+    Option option;
+    bool hasBackgroundMusic=false;
+    Audio *audio = new Audio();
 
     // Instantiate Arcade Machine
     ArcadeMachine Arcade;

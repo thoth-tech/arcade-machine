@@ -5,19 +5,38 @@ using std::vector;
 class Menu {
     private:
         string background = "games_dashboard";
+        // Vector to store the config data of each game
         vector<ConfigData> _games;
-        vector<sprite> gameImages;
+        // Contains info about newly created process and thread
         PROCESS_INFORMATION processInfo;
-        DWORD exitCode;
+        // Unsigned int to store exit info
+        DWORD exit_code;
+        // Holds the game path of selected game
         LPCSTR _gamePath;
+        // Holds the executable of selected game
         LPSTR _gameExe;
+        // Holds the game directory of selected game
         LPCSTR _gameDir;
-        double center_x = 960;
-        double center_y = 540;
-        double x;
-        double y;
-        bool inGame = false;
-        bool programExit;
+        // Used to find x centre of screen
+        double _center_x = 960;
+        // Used to fine y centre of screen
+        double _center_y = 540;
+        // Stores x of mouse position
+        double _x;
+        // Stores y of mouse position
+        double _y;
+        // Checks if game is running
+        bool _in_game = false;
+        // Checks if program has exited
+        bool _program_exit;
+        // Vector of buttons
+        vector<Button*> btns;
+        // A selector
+        Selector select;
+        // The action to take
+        string action;
+        // Vectore to store game images
+        vector<string> game_images;
 
     public: 
         Menu(){}
@@ -28,27 +47,54 @@ class Menu {
         }
         ~Menu(){}
 
+        // This function gets the game images from the config files and returns vector of game images.
+        vector<string> get_game_sprites(vector<ConfigData> configs) 
+        {
+            vector<string> game_images;
+
+            for (int i = 0; i < configs.size(); i++)
+            {
+                // Get image dir and image name from games vector.
+                string image = configs[i].folder() + "/" + configs[i].image();
+                game_images.push_back(image);
+            }
+
+            return game_images;
+        }
+
+        // This function creates the game buttons from the game images.
+        void get_buttons()
+        {
+            // Call function to get game images.
+            game_images = get_game_sprites(_games);
+            for (int i = 0; i < game_images.size(); i++)
+            {
+                // Get each image
+                string image = game_images[i];
+                // Create new buttons
+                Button *button1 = new GameScreenButton(Button::GAME, image);
+                // Add to buttons array
+                this->btns.push_back(button1);
+            }
+        }
+
         // Draw the game image buttons on the window.  
         void set_game_image()
         {
-            int x = 100;
-            int y = 100;
-            for (int i = 0; i < _games.size(); i++)
+            // Instantiate grid object
+            Grid grid(6, 4);
+
+            if (this->btns.size() > 0)
             {
-                // Get image dir and image name from games vector and store the id.
-                string image = _games[i].folder() + "/" + _games[i].image();
-                sprite gameImageSprite = create_sprite(image);
-                this->gameImages.push_back(gameImageSprite);
+                // Update the grid cells from the button array
+         //       grid.UpdateCell(this->btns[0], 1, 0);
+                grid.UpdateCell(this->btns[0], 1, 1);
+                grid.UpdateCell(this->btns[2], 1, 3);
 
-                point_2d gamePosition;
-                gamePosition.x = x;
-                gamePosition.y = y;
-
-                sprite_set_position(gameImageSprite, gamePosition);
-                sprite_set_scale(gameImageSprite, 0.3);
-                draw_sprite(gameImageSprite, 0, 0);
-
-                x = x + 500;
+                // Draw grid to screen
+                grid.DrawGrid();
+                // Check for key input
+                this->action = select.check_key_input(this->btns);
             }
         }
 
@@ -63,20 +109,25 @@ class Menu {
         // Determine which game button object is clicked on and get the game info for start game.
         void button_clicked(point_2d point)
         {
-            for (int i = 0; i < gameImages.size(); i++)
+            for (int i = 0; i < game_images.size(); i++)
             {
-                if (sprite_at(gameImages[i], point))
+                if (sprite_at(this->btns[i]->btn(), point))
                 {
                     // If the mouse is then clicked.
                     if (mouse_clicked(LEFT_BUTTON))
                     {
+                        // Get game path
                         _gamePath = (_games[i].folder() + "/" + _games[i].exe()).c_str();
+                        // Get executable name
                         _gameExe = strdup(_games[i].exe().c_str());
+                        // Get game directory
                         _gameDir = _games[i].folder().c_str();
 
-                        this->x = center_x;
-                        this->y = center_y;
+                        // Set the center of the game
+                        this->_x = _center_x;
+                        this->_y = _center_y;
 
+                        // Call method to open game executable
                         start_game(_gamePath, _gameExe, _gameDir);
                         return;
                     }
@@ -112,28 +163,28 @@ class Menu {
 
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
-            inGame = true;
+            this->_in_game = true;
         }
 
         // Method to keep the mouse positioned within the game window.
         void move_mouse_position(point_2d mousePoint)
         {
-            if (inGame == true)
+            if (this->_in_game == true)
             {
                 // Check if game has been exited.
-                programExit = GetExitCodeProcess(processInfo.hProcess, &exitCode);
-                if ((programExit) && (STILL_ACTIVE != exitCode))
+                this->_program_exit = GetExitCodeProcess(processInfo.hProcess, &exit_code);
+                if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
                 {
-                    inGame = false;
+                    this->_in_game = false;
                 }
                 // If game is not exited, keep the mouse pointer in the game window.
                 int mouse_x = mousePoint.x;
                 int mouse_y = mousePoint.y;
-                if (mousePoint.x > x || mousePoint.x < x || mousePoint.y > y || mousePoint.y < y)
+                if (mousePoint.x > this->_x || mousePoint.x < this->_x || mousePoint.y > this->_y || mousePoint.y < this->_y)
                 {
-                    move_mouse(center_x, center_y);
-                    x = mouse_x;
-                    y = mouse_y;
+                    move_mouse(_center_x, _center_y);
+                    this->_x = mouse_x;
+                    this->_y = mouse_y;
                 }
             }
         }

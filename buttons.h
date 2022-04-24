@@ -25,15 +25,17 @@ class Button{
         int _centre_y;
         /// This buttons color 
         string _color;
-        /// This buttons hightlight bitmap.
+        // This buttons hightlight bitmap
         bitmap _hghlt;
-        /// This buttons hightlight layer.
+        // This buttons hightlight layer
         string _hightlight;
-
-        // Getters
-        auto id()       const -> const int&      { return _id; }
-        //auto pic()    const -> const bitmap&   { return _pic; }
-        auto btn()      const -> const sprite&   { return _btn; }
+        // This buttons image path
+        string _image_path;
+    
+        // Getters:
+        auto id()       const -> const int& { return _id; }
+        //auto pic()    const -> const bitmap& { return _pic; }
+        auto btn()      const -> const sprite& { return _btn; }
         auto location() const -> const point_2d& { return _location; }
         auto x()        const -> const int&      { return _x; }
         auto y()        const -> const int&      { return _y; }
@@ -49,7 +51,9 @@ class Button{
         {
             PLAY,
             EXIT,
-            OPTS
+            OPTS, 
+            GAME,
+            HOME
         };
 
         // Default Constructor
@@ -97,10 +101,25 @@ class Button{
             sprite_set_scale(this->_btn, scale);
         }
 
+        // Third Overloaded Constructor
+        Button(Color c, string image, float scale = 1)
+        {
+            // button color
+            this->_color = btn_color(c);
+            // create sprite from image
+            this->_btn = create_sprite(image);
+            // add hightlight layer to sprite
+            sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
+            // scale the sprite
+            sprite_set_scale(this->_btn, scale);
+        }
+
         ~Button(){}
 
+        virtual void btn_image(string image) = 0;
         virtual void draw_button() = 0;
         virtual string action() = 0;
+        
 
         // void draw_screen_guides()
         // {
@@ -111,6 +130,7 @@ class Button{
         //     draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.75, 3);                                    
         // }
 
+        /// 
         string btn_color(Color c)
         {
             string filepath = "buttons/";
@@ -131,11 +151,20 @@ class Button{
                     _hightlight = "options_hightlight";
                     return "btn_opts";
                     break;
+                case GAME:
+                    _hghlt = load_bitmap("game_hghlt", filepath + "btn_game_hghlt.png");
+                    _hightlight = "game_hightlight";
+                    return "";
+                case HOME:
+                    return filepath + "Gray/home.png";
+                    break;
                 default:
                     return "btn_play";
                     break;
             }
         }
+
+
 };
 
 class MenuButton : public Button{
@@ -171,9 +200,14 @@ class MenuButton : public Button{
         {
             draw_sprite(this->_btn);
         }
+
+        void get_button_image(string image) {};
+        void btn_image(string image) { }
 };
 
 class GameScreenButton : public Button{
+    private: 
+
     public:
         GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
         GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
@@ -183,9 +217,14 @@ class GameScreenButton : public Button{
             return "";
         }
 
-        // Draw button to screen
+        void btn_image(string image)
+        {
+            this->_color = image;
+        }
+
         void draw_button()
         {
+            // draw button to screen
             draw_sprite(this->_btn);
         }
 };
