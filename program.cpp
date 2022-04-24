@@ -10,16 +10,13 @@ int main()
 {
     // Load all resources
     load_resource_bundle("bundle", "resources.txt");
-    Option option;
-    bool hasBackgroundMusic=false;
-    Audio *audio = new Audio();
 
     // Instantiate Arcade Machine
     ArcadeMachine Arcade;
 
     // Open window and toggle border off.
     open_window("arcade-machine", WIDTH, HEIGHT);
-    window_toggle_border("arcade-machine");
+    //window_toggle_border("arcade-machine");
 
     // Do we want to play the intro?
     // Do we want to fetch new games? 
@@ -27,16 +24,14 @@ int main()
     bool load_games = true;
 
     // Play Thoth Tech intro
-    if (play_intro) Arcade.play_intro();
+    if (play_intro) Arcade.intro_thoth_tech();
     // Play SplashKit intro
-    if (load_games) Arcade.load_games();
+    if (load_games) Arcade.intro_splashkit();
     
     // Prepare the main menu
     Arcade.prepare_main_menu();
     // Draw the main menu
     Arcade.main_menu();
-    // Draw games menu
-    Arcade.games_menu();
 
     return 0;
 }
