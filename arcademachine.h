@@ -1,5 +1,4 @@
 // Arcade Machine Class
-
 using namespace std;
 using std::vector;
 
@@ -22,6 +21,8 @@ class ArcadeMachine
         vector<ConfigData> _configs;
         /// Vector of MenuButtons
         vector<Button*> _menu_btns;
+        /// Vector of GameScreenButtons
+        vector<Button*> _game_btns;
         /// Thoth Tech Company intro
         Splashscreen _intro_thothtech;
         /// SplashKit Production intro
@@ -36,6 +37,8 @@ class ArcadeMachine
         string _action;
         /// Play clicked
         bool _play_clicked = false;
+        /// Turn menu music on/off
+        bool _play_music = false;
     public:
         // Default Constructor
         ArcadeMachine()
@@ -64,7 +67,7 @@ class ArcadeMachine
         */
         void main_menu()
         {
-            while (this->_play_clicked == false)
+            while (1)
             {
                 process_events();
                 clear_screen();
@@ -80,15 +83,24 @@ class ArcadeMachine
         void games_menu()
         {
             Menu menu(this->_configs);
+            write_line("got configs");
+            menu.create_grid();
+            menu.create_buttons();
+            write_line("got buttons");
+            menu.set_game_image();
+            write_line("set image");
+            this->_game_btns = menu.get_buttons();
             
             while (!key_down(ESCAPE_KEY))
             {
+                write_line("into while");
                 process_events();
                 clear_screen();
                 this->_mouse = mouse_position();
                 menu.draw_menu_page();
                 menu.button_clicked(this->_mouse);
                 menu.move_mouse_position(this->_mouse);
+                //this->_action = this->_selector.check_key_input(this->_game_btns);
                 refresh_screen(60);
             }
         }
@@ -116,12 +128,6 @@ class ArcadeMachine
             draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
             // Check input
             this->_action = this->_selector.check_key_input(this->_menu_btns);
-            // Draw creators
-            // draw_text("Created By", COLOR_BLACK, "font_text", 14, 1200, 850);
-            // draw_text("Sarah", COLOR_BLACK, "font_text", 14, 1200, 870);
-            // draw_text("Anthony", COLOR_BLACK, "font_text", 14, 1200, 890);
-            // draw_text("Riley", COLOR_BLACK,  "font_text", 14, 1200, 910);
-            // draw_text("Huy", COLOR_BLACK, "font_text", 14, 1200, 930);
         }
 
         /*
@@ -134,13 +140,10 @@ class ArcadeMachine
             // Initialise grid 
             Grid grid(ROWS, COLS);
             this->_grid = grid;
-            // Initialise menu
-            Menu menu(this->get_configs());
             // Create menu buttons
             Button *play = new MenuButton(Button::PLAY, 1.5);
             Button *opts = new MenuButton(Button::OPTS, 1.5);
             Button *exit = new MenuButton(Button::EXIT, 1.5);
-
             // Add menu buttons to local vector
             this->_menu_btns.push_back(play);
             this->_menu_btns.push_back(opts);
@@ -155,7 +158,40 @@ class ArcadeMachine
             grid.UpdateCell(opts, 3, 10);
             grid.UpdateCell(exit, 4, 10);
             // Play main menu music
-            play_music("music_mainmenu");
+            if (this->_play_music) play_music("music_mainmenu");
+        }
+
+        void prepare_options_menu()
+        {
+            Option options;
+            Audio *audio = new Audio();
+            bool has_background_music = false;
+            
+            while (!key_down(ESCAPE_KEY))
+            {
+                process_events();
+                clear_screen();
+
+                options.updateOption();
+
+                if(!has_background_music)
+                {
+                    audio->playMusic(options.getCurrentMusic(), options.getVolume());
+                    has_background_music=true;   
+                }
+                
+                if(options.isChangeMusic())
+                {
+                    has_background_music=false;
+                }
+
+                if(options.isChangeVoLume())
+                {
+                    audio->setVolume(options.getVolume());
+                }
+
+                refresh_screen(60);
+            }
         }
 
         void button_clicked(point_2d point)
@@ -163,18 +199,19 @@ class ArcadeMachine
             // Play
             if ( this->_action == "play" || (sprite_at(this->_menu_btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
-                this->_play_clicked = true;
+                games_menu();
                 write_line("Play button clicked");
             }
 
             // Options
-            if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            else if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
+                prepare_options_menu();
                 write_line("Options button clicked");
             }
 
             // Exit
-            if ( this->_action == "exit" || (sprite_at(this->_menu_btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            else if ( this->_action == "exit" || (sprite_at(this->_menu_btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
             {
                 write_line("Exit button clicked");
                 exit_program();
@@ -182,24 +219,35 @@ class ArcadeMachine
         }
 
         /* 
+            Draws the Arcade Machine team logo to screen and
+            incremently fills the screen white to animate fading
+        */
+        void intro_arcade_machine_team()
+        {
+            // Draw creators
+            draw_text("- Created By -", COLOR_BLACK, "font_text", 14, 1200, 850);
+            draw_text("(220094149) Sarah Gosling", COLOR_BLACK, "font_text", 14, 1200, 870);
+            draw_text("(220180567) Anthony George", COLOR_BLACK, "font_text", 14, 1200, 890);
+            draw_text("(219191105) Riley Dellios", COLOR_BLACK,  "font_text", 14, 1200, 910);
+            draw_text("(219453121) Nguyen Quoc Huy Pham", COLOR_BLACK, "font_text", 14, 1200, 930);
+        }
+
+        /* 
             Draws the Thoth Tech company logo to screen and
             incremently fills the screen white to animate fading
         */
-        void play_intro()
+        void intro_thoth_tech()
         {
-            // Create new splashscreen with Thoth Tech logo
-            
             // Set fade increment (opacity)
             double alpha = 1.0;
             // Set iterations
             int i = 50;
-            // Play sound effect 
+            // Play Thoth Tech Company sound 
             play_sound_effect("intro");
-            
             // Do this until iterations finish
             while(i != 0)
             {
-                // Draw Thoth Tech company logo
+                // Draw logo
                 this->_intro_thothtech.draw_title_page();
                 // Fill screen with white at alpha value (opacity)
                 fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
@@ -218,9 +266,10 @@ class ArcadeMachine
         }
 
         /*
-            Fetches new games from Git repo
+            Draws the Splashkit Productions logo to the screen and 
+            fetches new games from Git repo
         */
-        void load_games()
+        void intro_splashkit()
         {
             // Pull the most recent version of the arcade-games repo.
             do
