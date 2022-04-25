@@ -17,8 +17,8 @@ public:
     ButtonNode(Button *button, ButtonNode *next, ButtonNode *prev)
     {
         this->button = button;
-        this->next = this;
-        this->prev = this;
+        this->next = next;
+        this->prev = prev;
     }
 
     //Add a new node after this node
