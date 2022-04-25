@@ -153,10 +153,10 @@ class ArcadeMachine
             // Load menu background
             bitmap thoth = load_bitmap("thoth", image);
             // Update grid cells with assets
-            grid.UpdateCell(thoth, 0, 0, 1, false);
-            grid.UpdateCell(play, 2, 10);
-            grid.UpdateCell(opts, 3, 10);
-            grid.UpdateCell(exit, 4, 10);
+            this->_grid.SetBackground(thoth);
+            this->_grid.UpdateCell(play, 2, 10);
+            this->_grid.UpdateCell(opts, 3, 10);
+            this->_grid.UpdateCell(exit, 4, 10);
             // Play main menu music
             if (this->_play_music) play_music("music_mainmenu");
         }
