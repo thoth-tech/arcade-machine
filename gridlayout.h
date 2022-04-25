@@ -24,7 +24,7 @@ class Grid
 {
 private:
     // Stores the bitmap used for the background
-    bitmap _background;
+    bitmap _background = NULL;
     // Stores the number of columns per row
     int *_colsArray;
     // Different number of columns per row?
@@ -121,8 +121,8 @@ public:
     // Draw the items
     void DrawGrid()
     {
-        //if (_background)
-        //    draw_bitmap(_background, 0, 0);
+        if (_background)
+           draw_bitmap(_background, 0, 0);
         // Vertical offset between each cell
         double yOffset = current_window_height() / _rows;
         // Horizontal offset between each cell
