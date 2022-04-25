@@ -24,7 +24,7 @@ class Grid
 {
 private:
     // Stores the bitmap used for the background
-    bitmap _background;
+    bitmap _background = NULL;
     // Stores the number of columns per row
     int *_colsArray;
     // Different number of columns per row?
@@ -42,6 +42,8 @@ private:
 
 public:
     // Constructor:
+    // Default Constructor
+    Grid(){}
     // Fixed number of columns
     Grid(int rows, int cols, bool scaleToFit = false)
     {
@@ -120,7 +122,7 @@ public:
     void DrawGrid()
     {
         if (_background)
-            draw_bitmap(_background, 0, 0);
+           draw_bitmap(_background, 0, 0);
         // Vertical offset between each cell
         double yOffset = current_window_height() / _rows;
         // Horizontal offset between each cell
@@ -196,6 +198,10 @@ public:
                         }
                         sprite_set_x(_grid[index].button->btn(), x);
                         sprite_set_y(_grid[index].button->btn(), y);
+                        // Update Button position of button
+                        this->_grid[index].button->set_x(sprite_x(this->_grid[index].button->btn()));
+                        this->_grid[index].button->set_y(sprite_y(this->_grid[index].button->btn()));
+                        // Draw Button
                         _grid[index].button->draw_button();
                         break;
                     default:
@@ -261,7 +267,7 @@ public:
     }
 
     // Update a cell with a specified bitmap
-    void UpdateCell(bitmap bmp, int row, int col, int span = 1, bool centre = true)
+    void UpdateCell(const bitmap &bmp, int row, int col, int span = 1, bool centre = true)
     {
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
@@ -276,7 +282,7 @@ public:
     }
 
     // Update a cell with a specified sprite
-    void UpdateCell(sprite sprite, int row, int col, int span = 1, bool centre = true)
+    void UpdateCell(const sprite &sprite, int row, int col, int span = 1, bool centre = true)
     {
         // Stores the index of the cell
         int cellNum = FindCell(row, col);

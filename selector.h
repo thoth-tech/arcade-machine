@@ -9,15 +9,25 @@ class Selector {
         int up_key_state = 0;
         int down_key_state = 0;
         int count = 0;
-        sprite cursor = create_sprite("cursor");
+        sprite cursor;
 
     public:
+        Selector(){}
+        Selector(const string &cursor)
+        {
+            bitmap cur = load_bitmap("cursor", cursor);
+            this->cursor = create_sprite(cur);
+        }
+
+        // Return the cursor sprite
         sprite get_cursor()
         {
             return this->cursor;
         }
+
         // Function to check which key is currently pressed and call correct method.
         // Key states ensure the functions only get called once per key press.
+        // This function returns a string
         string check_key_input(vector<Button*> buttons)
         {
             // highlight play button on start
@@ -75,11 +85,9 @@ class Selector {
             {
                 up_key_state = 0;
             }
-
-            if(key_down(RETURN_KEY))
-            {
-                return buttons[selected]->action();
-            }
+            
+            // Enter key returns the action of the selected button
+            if(key_down(RETURN_KEY)) return buttons[selected]->action();
 
             return "";
         }
@@ -95,8 +103,8 @@ class Selector {
             // get the current selected sprite
             sprite currentSprite = buttons[selected]->btn();
             // set cursor pos to selected button pos
-            sprite_set_y(cursor, buttons[selected]->y() - 45);
-            sprite_set_x(cursor, buttons[selected]->x() - 300);
+            sprite_set_y(cursor, buttons[selected]->y());
+            sprite_set_x(cursor, buttons[selected]->x() - 200);
             // toggle highlight layer on.
             sprite_toggle_layer_visible(currentSprite, 1);
         }
@@ -132,8 +140,8 @@ class Selector {
             // get the current selected sprite
             sprite currentSprite = buttons[selected]->btn();
             // Set cursor pos to selected button pos
-            sprite_set_y(cursor, buttons[selected]->y() - 45);
-            sprite_set_x(cursor, buttons[selected]->x() - 300);
+            sprite_set_y(cursor, buttons[selected]->y());
+            sprite_set_x(cursor, buttons[selected]->x() - 200);
             // toggle highlight layer on.
             sprite_toggle_layer_visible(currentSprite, 1);
         }

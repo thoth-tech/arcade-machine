@@ -37,6 +37,8 @@ class Menu {
         string action;
         // Vectore to store game images
         vector<string> game_images;
+        // Menu grid
+        Grid _grid;
 
     public: 
         Menu(){}
@@ -46,6 +48,9 @@ class Menu {
             this->_games = configs;
         }
         ~Menu(){}
+
+        // Getters
+        auto get_buttons() const -> const vector<Button*> { return this->btns; }
 
         // This function gets the game images from the config files and returns vector of game images.
         vector<string> get_game_sprites(vector<ConfigData> configs) 
@@ -62,47 +67,55 @@ class Menu {
             return game_images;
         }
 
+        void create_grid()
+        {
+            // Instantiate grid object
+            Grid grid(6, 4);
+            this->_grid = grid;
+        }
+
         // This function creates the game buttons from the game images.
-        void get_buttons()
+        void create_buttons()
         {
             // Call function to get game images.
             game_images = get_game_sprites(_games);
+
             for (int i = 0; i < game_images.size(); i++)
             {
-                // Get each image
+                // Get each image 
                 string image = game_images[i];
                 // Create new buttons
-                Button *button1 = new GameScreenButton(Button::GAME, image);
+                Button *button = new GameScreenButton(Button::GAME, image);
                 // Add to buttons array
-                this->btns.push_back(button1);
+                this->btns.push_back(button);
             }
         }
 
         // Draw the game image buttons on the window.  
         void set_game_image()
         {
-            // Instantiate grid object
-            Grid grid(6, 4);
-
             if (this->btns.size() > 0)
             {
+                write_line("buttons are greater than 0");
                 // Update the grid cells from the button array
-         //       grid.UpdateCell(this->btns[0], 1, 0);
-                grid.UpdateCell(this->btns[0], 1, 1);
-                grid.UpdateCell(this->btns[2], 1, 3);
-
+                //grid.UpdateCell(this->btns[0], 1, 1, 0.5);
+                this->_grid.UpdateCell(this->btns[1], 0, 1);
+                this->_grid.UpdateCell(this->btns[2], 0, 3);
+                write_line("updated cells");
                 // Draw grid to screen
-                grid.DrawGrid();
+                this->_grid.DrawGrid();
+                write_line("drew grid");
                 // Check for key input
-                this->action = select.check_key_input(this->btns);
+                //this->action = select.check_key_input(this->btns);
+                //write_line("checking inputs");
             }
         }
 
         // Draw the background and call set game image.
         void draw_menu_page()
         {
+            // Draw background
             draw_bitmap(this->background, 0, 0);
-
             set_game_image();
         }
 

@@ -1,7 +1,7 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
-// Includes
 
+// Includes
 #include <stdlib.h>
 #include <iostream>
 #include <istream>
@@ -16,6 +16,7 @@
 //#include <json/json.h>
 #include <Windows.h>
 
+// Custom classes
 #include "buttons.h"
 #include "gridlayout.h"
 #include "cdata.h"
@@ -24,6 +25,7 @@
 #include "menu.h"
 #include "helper.h"
 #include "option.h"
+#include "arcademachine.h"
 
 #endif
 

@@ -4,24 +4,29 @@ BITMAP,intro_splashkit,backgrounds/intro_splashkit.bmp
 BITMAP,intro_thothtech,backgrounds/intro_thoth.bmp
 BITMAP,games_dashboard,backgrounds/retro.bmp
 BITMAP,cursor,splashkit_cursor.png
-BITMAP, backCurrentGame,buttons/Red/Settings.png
-BITMAP, back_ground,back_ground.jpg
-BITMAP, backGame_notSelected,buttons/Yellow/Settings.png
-BITMAP, changeSound,buttons/Red/Music On.png
-BITMAP, sound_notSelected,buttons/Yellow/Music On.png
-BITMAP, backMenu_notSelected,buttons/Yellow/Home.png
-BITMAP, backMenu, buttons/Red/Home.png
+BITMAP,backCurrentGame,buttons/Red/Settings.png
+BITMAP,back_ground,back_ground.jpg
+BITMAP,backGame_notSelected,buttons/Yellow/Settings.png
+BITMAP,changeSound,buttons/Red/Music On.png
+BITMAP,sound_notSelected,buttons/Yellow/Music On.png
+BITMAP,backMenu_notSelected,buttons/Yellow/Home.png
+BITMAP,backMenu, buttons/Red/Home.png
+
+// Buttons
+BITMAP,btn_play,buttons/btn_play.png
+BITMAP,btn_exit,buttons/btn_exit.png
+BITMAP,btn_opts,buttons/btn_options.png
 
 // Fonts
-FONT,btn_font,MindPlay.ttf
-FONT,title_font,Retroking.ttf
-FONT,roboto,Roboto-Regular.ttf
+FONT,font_btn,MindPlay.ttf
+FONT,font_title,Retroking.ttf
+FONT,font_text,Roboto-Regular.ttf
 
 // Sounds
 SOUND,intro,intro1.wav
 
 // Music
-MUSIC,menu_music,menu1.mp3
+MUSIC,music_mainmenu,main_menu.mp3
 MUSIC, 1, 1.mp3
 MUSIC, 2, 2.mp3
 MUSIC, 3, 3.mp3
