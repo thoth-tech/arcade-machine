@@ -18,9 +18,9 @@
 
 // Custom classes
 #include "buttons.h"
-#include "ButtonList.h"
 #include "gridlayout.h"
 #include "cdata.h"
+#include "ButtonList.h"
 #include "selector.h"
 #include "splashscreen.h"
 #include "menu.h"
