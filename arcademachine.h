@@ -87,7 +87,6 @@ class ArcadeMachine
             menu.create_grid();
             menu.create_buttons();
             write_line("got buttons");
-            menu.set_game_image();
             write_line("set image");
             this->_game_btns = menu.get_buttons();
             
