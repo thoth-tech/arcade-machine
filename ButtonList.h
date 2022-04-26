@@ -6,6 +6,7 @@ private:
 
 public:
     Button *button;
+    ConfigData config;
     //Create a new node with the given data
     ButtonNode(Button *button)
     {
