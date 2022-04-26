@@ -143,7 +143,7 @@ public:
                     if (key_typed(RETURN_KEY))
                     {
                         // Get game path
-                        _gamePath = (this->button->config.folder() + "/" + _games[i].exe()).c_str();
+                        _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                         // Get executable name
                         _gameExe = strdup(this->button->config.exe().c_str());
                         // Get game directory
