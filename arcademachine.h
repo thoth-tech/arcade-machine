@@ -24,11 +24,15 @@ class ArcadeMachine
         /// Vector of GameScreenButtons
         vector<Button*> _game_btns;
         /// Thoth Tech Company intro
-        Splashscreen _intro_thothtech;
+        Splashscreen _intro_thoth_tech;
+        /// Arcade Machine Team intro
+        Splashscreen _intro_arcade_team;
         /// SplashKit Production intro
         Splashscreen _intro_splashkit;
-        /// Instance of Selector
-        Selector _selector;
+        /// Main Menu Selector
+        Selector _selector_main_menu;
+        /// Games Menu Selector
+        Selector _selector_games_menu;
         /// Instance of Grid
         Grid _grid;
         /// Mouse pointer
@@ -47,13 +51,15 @@ class ArcadeMachine
             Helper helper;
             ConfigData config;
             Selector cursor("cursor");
-            Splashscreen intro_thothtech("intro_thothtech");
+            Splashscreen intro_thoth_tech("intro_thoth_tech");
+            Splashscreen intro_arcade_machine_team("intro_arcade_team");
             Splashscreen intro_splashkit("intro_splashkit");
             // Set objects to private properties
             this->_helper = helper;
             this->_config = config;
-            this->_selector = cursor;
-            this->_intro_thothtech = intro_thothtech;
+            this->_selector_main_menu = cursor;
+            this->_intro_thoth_tech = intro_thoth_tech;
+            this->_intro_arcade_team = intro_arcade_machine_team;
             this->_intro_splashkit = intro_splashkit;
         }
         // Destructor
@@ -61,6 +67,8 @@ class ArcadeMachine
 
         // Getters
         auto get_configs() const -> const vector<ConfigData>& { return this->_configs; }
+        auto get_intro_thoth_tech() const -> const Splashscreen& { return this->_intro_thoth_tech; }
+        auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; }
 
         /*
             Starts the Main Menu
@@ -83,24 +91,20 @@ class ArcadeMachine
         void games_menu()
         {
             Menu menu(this->_configs);
-            write_line("got configs");
             menu.create_grid();
             menu.create_buttons();
-            write_line("got buttons");
             menu.set_game_image();
-            write_line("set image");
-            this->_game_btns = menu.get_buttons();
             
             while (!key_down(ESCAPE_KEY))
             {
-                write_line("into while");
                 process_events();
                 clear_screen();
                 this->_mouse = mouse_position();
                 menu.draw_menu_page();
                 menu.button_clicked(this->_mouse);
                 menu.move_mouse_position(this->_mouse);
-                //this->_action = this->_selector.check_key_input(this->_game_btns);
+                // Check input
+                //this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
                 refresh_screen(60);
             }
         }
@@ -114,7 +118,7 @@ class ArcadeMachine
             this->_mouse = mouse_position();
             this->_grid.DrawGrid();
             // Draw cursor
-            draw_sprite(this->_selector.get_cursor());
+            draw_sprite(this->_selector_main_menu.get_cursor());
             // Get button postions
             cell play = this->_grid.GetCell(2, 10);
             cell options = this->_grid.GetCell(3, 10);
@@ -127,7 +131,7 @@ class ArcadeMachine
             draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centre_x()/2) - 20, options.button->y() + 5);
             draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
             // Check input
-            this->_action = this->_selector.check_key_input(this->_menu_btns);
+            this->_action = this->_selector_main_menu.check_key_input(this->_menu_btns);
         }
 
         /*
@@ -219,48 +223,40 @@ class ArcadeMachine
         }
 
         /* 
-            Draws the Arcade Machine team logo to screen and
+            Draws a Splashscreen, plays a sound and
             incremently fills the screen white to animate fading
         */
-        void intro_arcade_machine_team()
-        {
-            // Draw creators
-            draw_text("- Created By -", COLOR_BLACK, "font_text", 14, 1200, 850);
-            draw_text("(220094149) Sarah Gosling", COLOR_BLACK, "font_text", 14, 1200, 870);
-            draw_text("(220180567) Anthony George", COLOR_BLACK, "font_text", 14, 1200, 890);
-            draw_text("(219191105) Riley Dellios", COLOR_BLACK,  "font_text", 14, 1200, 910);
-            draw_text("(219453121) Nguyen Quoc Huy Pham", COLOR_BLACK, "font_text", 14, 1200, 930);
-        }
-
-        /* 
-            Draws the Thoth Tech company logo to screen and
-            incremently fills the screen white to animate fading
-        */
-        void intro_thoth_tech()
+        void intro_animation(Splashscreen screen, string sound1 = "", string sound2 = "")
         {
             // Set fade increment (opacity)
             double alpha = 1.0;
             // Set iterations
-            int i = 50;
+            int i = 60;
             // Play Thoth Tech Company sound 
-            play_sound_effect("intro");
-            // Do this until iterations finish
+            play_sound_effect(sound1);
+
             while(i != 0)
             {
+                process_events();
+                clear_screen();
                 // Draw logo
-                this->_intro_thothtech.draw_title_page();
+                screen.draw_title_page();
                 // Fill screen with white at alpha value (opacity)
                 fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
                 // Decrement i and alpha 
                 i--; alpha = alpha - 0.05;
+                write_line(to_string(alpha));
                 // If alpha is == 0, hold image for 1.5 seconds
                 if (abs(alpha - 0.0) < 1e-9)
-                    Sleep(1500);
+                {
+                    play_sound_effect(sound2);
+                    Sleep(2000);
                     /*  After this has happened, the alpha value will continue into the negatives
                         The colour function continues to accept negative alpha values, 
                         effectively creating a fade out animation for the remainder of the while loop
                     */
-                refresh_screen();
+                }
+                refresh_screen(60);
                 Sleep(50);
             }
         }
