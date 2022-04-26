@@ -35,3 +35,11 @@ MUSIC,music_mainmenu,main_menu.mp3
 MUSIC, 1, 1.mp3
 MUSIC, 2, 2.mp3
 MUSIC, 3, 3.mp3
+
+// Artist Attribution
+// Main Menu Thoth Artwork by Nikolay Todorov (fineartamerica.com/profiles/nikolay-todorov)
+// Main Menu Button Artwork Design by sang (pngtree.com)
+// Options Menu Button Design by
+// Intro Arcade Team Sound by Kenneth Cooney (freesound.org)
+// Intro Thoth Tech Sound by Mikepro (freesound.org)
+// Main Menu Music by Lena Orsa (freesound.org)
