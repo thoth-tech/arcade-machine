@@ -70,7 +70,7 @@ class ArcadeMachine
         auto get_intro_thoth_tech() const -> const Splashscreen& { return this->_intro_thoth_tech; }
         auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; }
 
-        /*
+        /**
             Starts the Main Menu
         */
         void main_menu()
@@ -85,11 +85,12 @@ class ArcadeMachine
             }
         }
 
-        /*
+        /**
             Starts the Games Menu
         */
         void games_menu()
         {
+            // Instantiate new menu
             Menu menu(this->_configs);
             menu.create_grid();
             menu.create_buttons();
@@ -99,8 +100,11 @@ class ArcadeMachine
             {
                 process_events();
                 clear_screen();
+                // Get mouse position
                 this->_mouse = mouse_position();
+                // Draw games menu
                 menu.draw_menu_page();
+                // Check mouse button clicked
                 menu.button_clicked(this->_mouse);
                 menu.move_mouse_position(this->_mouse);
                 // Check input
@@ -109,7 +113,72 @@ class ArcadeMachine
             }
         }
 
-        /*
+        /**
+            Starts the Options Menu
+        */
+        void options_menu()
+        {
+            Option options;
+            Audio *audio = new Audio();
+            bool has_background_music = false;
+            
+            while (!key_down(ESCAPE_KEY))
+            {
+                process_events();
+                clear_screen();
+
+                options.updateOption();
+
+                if(!has_background_music)
+                {
+                    audio->playMusic(options.getCurrentMusic(), options.getVolume());
+                    has_background_music=true;   
+                }
+                
+                if(options.isChangeMusic())
+                {
+                    has_background_music=false;
+                }
+
+                if(options.isChangeVoLume())
+                {
+                    audio->setVolume(options.getVolume());
+                }
+                refresh_screen(60);
+            }
+            fade_music_out(500);
+        }
+        
+        /**
+            Checks for buttons clicked
+
+            @param point The mouse pointer location on screen
+        */
+        void button_clicked(point_2d point)
+        {
+            // Play
+            if ( this->_action == "play" || (sprite_at(this->_menu_btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                games_menu();
+                write_line("Play button clicked");
+            }
+
+            // Options
+            else if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                options_menu();
+                write_line("Options button clicked");
+            }
+
+            // Exit
+            else if ( this->_action == "exit" || (sprite_at(this->_menu_btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
+            {
+                write_line("Exit button clicked");
+                exit_program();
+            }
+        }
+
+        /**
             Draws the Main Menu
         */
         void draw_main_menu() 
@@ -134,7 +203,7 @@ class ArcadeMachine
             this->_action = this->_selector_main_menu.check_key_input(this->_menu_btns);
         }
 
-        /*
+        /**
             Prepares the Main Menu
         */
         void prepare_main_menu()
@@ -165,66 +234,13 @@ class ArcadeMachine
             if (this->_play_music) play_music("music_mainmenu");
         }
 
-        void prepare_options_menu()
-        {
-            Option options;
-            Audio *audio = new Audio();
-            bool has_background_music = false;
-            
-            while (!key_down(ESCAPE_KEY))
-            {
-                process_events();
-                clear_screen();
-
-                options.updateOption();
-
-                if(!has_background_music)
-                {
-                    audio->playMusic(options.getCurrentMusic(), options.getVolume());
-                    has_background_music=true;   
-                }
-                
-                if(options.isChangeMusic())
-                {
-                    has_background_music=false;
-                }
-
-                if(options.isChangeVoLume())
-                {
-                    audio->setVolume(options.getVolume());
-                }
-
-                refresh_screen(60);
-            }
-        }
-
-        void button_clicked(point_2d point)
-        {
-            // Play
-            if ( this->_action == "play" || (sprite_at(this->_menu_btns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-            {
-                games_menu();
-                write_line("Play button clicked");
-            }
-
-            // Options
-            else if ( this->_action == "options" || (sprite_at(this->_menu_btns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-            {
-                prepare_options_menu();
-                write_line("Options button clicked");
-            }
-
-            // Exit
-            else if ( this->_action == "exit" || (sprite_at(this->_menu_btns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-            {
-                write_line("Exit button clicked");
-                exit_program();
-            }
-        }
-
-        /* 
+        /** 
             Draws a Splashscreen, plays a sound and
             incremently fills the screen white to animate fading
+
+            @param screen The Splashscreen to draw to screen
+            @param sound1 (optional) The first sound to play
+            @param sound2 (optional) The second sound to play 
         */
         void intro_animation(Splashscreen screen, string sound1 = "", string sound2 = "")
         {
@@ -261,7 +277,7 @@ class ArcadeMachine
             }
         }
 
-        /*
+        /**
             Draws the Splashkit Productions logo to the screen and 
             fetches new games from Git repo
         */
@@ -278,15 +294,15 @@ class ArcadeMachine
             } while (!this->_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
         }
 
-        /*
-        Print config data to console
+        /**
+            Print config data to console
         */
         void print_configs()
         {
             this->_config.print_config_data();
         }
 
-        /*
+        /**
             Abort this application
         */
         void exit_program()
