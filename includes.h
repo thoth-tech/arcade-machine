@@ -18,6 +18,7 @@
 
 // Custom classes
 #include "buttons.h"
+#include "ButtonList.h"
 #include "gridlayout.h"
 #include "cdata.h"
 #include "selector.h"
