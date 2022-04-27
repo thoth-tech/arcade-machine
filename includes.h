@@ -20,6 +20,7 @@
 #include "buttons.h"
 #include "gridlayout.h"
 #include "cdata.h"
+#include "ButtonList.h"
 #include "selector.h"
 #include "splashscreen.h"
 #include "menu.h"
