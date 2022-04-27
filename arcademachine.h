@@ -92,20 +92,24 @@ class ArcadeMachine
         {
             // Instantiate new menu
             Menu menu(this->_configs);
+            bool overlayActive = menu.get_overlay_state();
+            write_line("got configs");
             menu.create_grid();
             menu.create_buttons();
-            menu.set_game_image();
+            write_line("got buttons");
+            write_line("set image");
+            this->_game_btns = menu.get_buttons();
             
-            while (!key_down(ESCAPE_KEY))
+            while ((!key_typed(ESCAPE_KEY) && !overlayActive) || overlayActive)
             {
-                process_events();
+                //write_line("into while");
+                overlayActive = menu.get_overlay_state();
+                process_events();   
                 clear_screen();
                 // Get mouse position
                 this->_mouse = mouse_position();
                 // Draw games menu
                 menu.draw_menu_page();
-                // Check mouse button clicked
-                menu.button_clicked(this->_mouse);
                 menu.move_mouse_position(this->_mouse);
                 // Check input
                 //this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
