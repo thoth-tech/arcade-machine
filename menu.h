@@ -40,6 +40,7 @@ private:
     // Menu grid
     Grid _grid;
     ButtonNode *button = nullptr;
+    bool _overlayActive = false;
 
 public:
     Menu(){}
@@ -52,6 +53,7 @@ public:
 
     // Getters
     auto get_buttons() const -> const vector<Button*> { return this->btns; }
+    bool get_overlay_state() { return _overlayActive; }
 
     // This function gets the game images from the config files and returns vector of game images.
     vector<string> get_game_sprites(vector<ConfigData> configs)
@@ -114,12 +116,37 @@ public:
     void carousel_handler()
     {
         if (key_typed(RIGHT_KEY))
-        {
             this->button = button->getNext();
-        }
         else if (key_typed(LEFT_KEY))
-        {
             this->button = button->getPrev();
+
+        if (this->button)
+        {
+            if (key_typed(ESCAPE_KEY) && _overlayActive)
+            {
+                _overlayActive = false;
+            }
+            else if (key_typed(RETURN_KEY))
+            {
+                if (_overlayActive)
+                {
+                    // Get game path
+                    _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
+                    // Get executable name
+                    _gameExe = strdup(this->button->config.exe().c_str());
+                    // Get game directory
+                    _gameDir = this->button->config.folder().c_str();
+
+                    // Set the center of the game
+                    this->_x = _center_x;
+                    this->_y = _center_y;
+
+                    // Call method to open game executable
+                    start_game(_gamePath, _gameExe, _gameDir);
+                    return;
+                }
+                _overlayActive = true;
+            }
         }
     }
 
@@ -129,37 +156,24 @@ public:
         carousel_handler();
         update_carousel();
         this->_grid.DrawGrid();
+        if (_overlayActive)
+            draw_overlay(button->config);
     }
-
-
-
-    // Determine which game button object is clicked on and get the game info for start game.
-    void button_clicked(point_2d point)
+    void draw_overlay(ConfigData config)
     {
-        for (int i = 0; i < game_images.size(); i++)
-        {
-            if (this->button)
-            {
-                    if (key_typed(RETURN_KEY))
-                    {
-                        // Get game path
-                        _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
-                        // Get executable name
-                        _gameExe = strdup(this->button->config.exe().c_str());
-                        // Get game directory
-                        _gameDir = this->button->config.folder().c_str();
+        int x_offset = (current_window_width() / 2) + (current_window_width() / 14);
+        int y_start = current_window_height() / 6;
+        int y_offset = current_window_height() / 40;
 
-                        // Set the center of the game
-                        this->_x = _center_x;
-                        this->_y = _center_y;
-
-                        // Call method to open game executable
-                        start_game(_gamePath, _gameExe, _gameDir);
-                        return;
-                    }
-                }
-            }
-        }
+        fill_rectangle(rgba_color(0.0, 0.0, 0.0, 0.8), (current_window_width() / 2), 0, (current_window_width() / 2), current_window_height());
+        draw_text(config.title(), COLOR_WHITE, "font_title", y_offset * 3, x_offset, y_start);
+        y_start += y_offset * 3;
+        draw_text("Author: " + config.author(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (1 * y_offset));
+        draw_text("Genre: " + config.genre(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (2 * y_offset));
+        draw_text("Language: " + config.language(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (3 * y_offset));
+        draw_text("Rating: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
+        draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
+    }
 
     // Start up the chosen game using CreateProcessA.
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
@@ -214,5 +228,5 @@ public:
             }
         }
     }
-    
+
 };

@@ -83,6 +83,7 @@ class ArcadeMachine
         void games_menu()
         {
             Menu menu(this->_configs);
+            bool overlayActive = menu.get_overlay_state();
             write_line("got configs");
             menu.create_grid();
             menu.create_buttons();
@@ -90,14 +91,14 @@ class ArcadeMachine
             write_line("set image");
             this->_game_btns = menu.get_buttons();
             
-            while (!key_down(ESCAPE_KEY))
+            while ((!key_typed(ESCAPE_KEY) && !overlayState) || overlayState)
             {
                 write_line("into while");
-                process_events();
+                overlayActive = menu.get_overlay_state();
+                process_events();   
                 clear_screen();
                 this->_mouse = mouse_position();
                 menu.draw_menu_page();
-                menu.button_clicked(this->_mouse);
                 menu.move_mouse_position(this->_mouse);
                 //this->_action = this->_selector.check_key_input(this->_game_btns);
                 refresh_screen(60);
