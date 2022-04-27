@@ -91,7 +91,7 @@ class ArcadeMachine
             write_line("set image");
             this->_game_btns = menu.get_buttons();
             
-            while ((!key_typed(ESCAPE_KEY) && !overlayState) || overlayState)
+            while ((!key_typed(ESCAPE_KEY) && !overlayActive) || overlayActive)
             {
                 write_line("into while");
                 overlayActive = menu.get_overlay_state();
