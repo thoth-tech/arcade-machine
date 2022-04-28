@@ -42,7 +42,7 @@ class ArcadeMachine
         /// Play clicked
         bool _play_clicked = false;
         /// Turn menu music on/off
-        bool _play_music = false;
+        bool _play_music = true;
     public:
         // Default Constructor
         ArcadeMachine()
