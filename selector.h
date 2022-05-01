@@ -33,33 +33,13 @@ class Selector {
             // highlight play button on start
             if (first == true) 
             {
-                selected = 0;
-                highlight_down(buttons);
-                first = false;
-                if (count > 0)
-                {
-                    // remove the previous highlight
-                    remove_highlight_down(buttons);
-                }
-                down_key_state = 1;
-                count += 1;
+                highlight_first(buttons);
             }
 
             // Down key pressed
             if (key_down(DOWN_KEY) && down_key_state == 0)
             {
-                // increment selected
-                selected += 1;
-                // call functin to highlight button
-                highlight_down(buttons);
-                // this if statement is used to remove the hightlight after first run
-                if (count > 0)
-                {
-                    // remove the previous highlight
-                    remove_highlight_down(buttons);
-                }
-                down_key_state = 1;
-                count += 1;
+                move_down(buttons);
             }
             else if (key_up(DOWN_KEY) && down_key_state == 1)
             {
@@ -68,18 +48,7 @@ class Selector {
             // Up key pressed
             else if (key_down(UP_KEY) && up_key_state == 0)
             {
-                // decrease seletced by 1
-                selected -= 1;
-                // call function to highlight button
-                highlight_up(buttons);
-                // this if statement is used to remove the hightlight after first run
-                if (count > 0)
-                {
-                    // remove the previous highlight
-                    remove_highlight_up(buttons);
-                }
-                up_key_state = 1;
-                count += 1;
+                move_up(buttons);
             }
             else if (key_up(UP_KEY) && up_key_state == 1)
             {
@@ -90,6 +59,55 @@ class Selector {
             if(key_down(RETURN_KEY)) return buttons[selected]->action();
 
             return "";
+        }
+
+        // Highlights the first button upon page load.
+        void highlight_first(vector<Button*> buttons)
+        {
+            selected = 0;
+            highlight_down(buttons);
+            first = false;
+            if (count > 0)
+            {
+                // remove the previous highlight
+                remove_highlight_down(buttons);
+            }
+            down_key_state = 1;
+            count += 1;
+        }
+
+        // Moves the selector down.
+        void move_down(vector<Button*> buttons)
+        {
+            // increment selected
+            selected += 1;
+            // call functin to highlight button
+            highlight_down(buttons);
+            // this if statement is used to remove the hightlight after first run
+            if (count > 0)
+            {
+                // remove the previous highlight
+                remove_highlight_down(buttons);
+            }
+            down_key_state = 1;
+            count += 1;
+        }
+
+        // Moves the selector up.
+        void move_up(vector<Button*> buttons)
+        {
+                    // decrease seletced by 1
+            selected -= 1;
+            // call function to highlight button
+            highlight_up(buttons);
+            // this if statement is used to remove the hightlight after first run
+            if (count > 0)
+            {
+                // remove the previous highlight
+                remove_highlight_up(buttons);
+            }
+            up_key_state = 1;
+            count += 1;
         }
 
         // Highlight button on down arrow key (up arrow key).
