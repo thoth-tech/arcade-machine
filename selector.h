@@ -8,6 +8,8 @@ class Selector {
         bool first = true; 
         int up_key_state = 0;
         int down_key_state = 0;
+        int left_key_state = 0;
+        int right_key_state = 0;
         int count = 0;
         sprite cursor;
 
@@ -39,7 +41,7 @@ class Selector {
             // Down key pressed
             if (key_down(DOWN_KEY) && down_key_state == 0)
             {
-                move_down(buttons);
+                down_key_state = move_down(buttons, down_key_state);
             }
             else if (key_up(DOWN_KEY) && down_key_state == 1)
             {
@@ -48,11 +50,29 @@ class Selector {
             // Up key pressed
             else if (key_down(UP_KEY) && up_key_state == 0)
             {
-                move_up(buttons);
+                up_key_state = move_up(buttons, up_key_state);
             }
             else if (key_up(UP_KEY) && up_key_state == 1)
             {
                 up_key_state = 0;
+            }
+            // Left key pressed
+            else if (key_down(LEFT_KEY) && left_key_state == 0)
+            {
+                left_key_state = move_up(buttons, left_key_state);
+            }
+            else if (key_up(LEFT_KEY) && left_key_state == 1)
+            {
+                left_key_state = 0;
+            }
+            // Right key pressed
+            else if (key_down(RIGHT_KEY) && right_key_state == 0)
+            {
+                right_key_state = move_down(buttons, right_key_state);
+            }
+            else if (key_up(RIGHT_KEY) && right_key_state == 1)
+            {
+                right_key_state = 0;
             }
             
             // Enter key returns the action of the selected button
@@ -77,7 +97,7 @@ class Selector {
         }
 
         // Moves the selector down.
-        void move_down(vector<Button*> buttons)
+        int move_down(vector<Button*> buttons, int key_state)
         {
             // increment selected
             selected += 1;
@@ -89,14 +109,16 @@ class Selector {
                 // remove the previous highlight
                 remove_highlight_down(buttons);
             }
-            down_key_state = 1;
+            key_state = 1;
             count += 1;
+
+            return key_state;
         }
 
         // Moves the selector up.
-        void move_up(vector<Button*> buttons)
+        int move_up(vector<Button*> buttons, int key_state)
         {
-                    // decrease seletced by 1
+            // decrease seletced by 1
             selected -= 1;
             // call function to highlight button
             highlight_up(buttons);
@@ -106,8 +128,10 @@ class Selector {
                 // remove the previous highlight
                 remove_highlight_up(buttons);
             }
-            up_key_state = 1;
+            key_state = 1;
             count += 1;
+
+            return key_state;
         }
 
         // Highlight button on down arrow key (up arrow key).
