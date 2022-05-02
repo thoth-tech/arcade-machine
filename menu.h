@@ -123,9 +123,11 @@ public:
         /// Check for input in selector class.
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
 
+        this->_action = this->_selector_games_menu.check_for_selection(this->button);
+
         if (this->button)
         {
-            if (key_typed(ESCAPE_KEY) && _overlayActive)
+            if (this->action == "escape" && _overlayActive)//(key_typed(ESCAPE_KEY) && _overlayActive)
             {
                 _overlayActive = false;
             }
@@ -183,6 +185,8 @@ public:
     {
         // Additional info
         STARTUPINFOA startupInfo;
+        HWND handle;
+        handle=FindWindowA(NULL, "arcade-machine");
 
         // Set the size of the structures
         ZeroMemory(&startupInfo, sizeof(startupInfo));
@@ -203,6 +207,8 @@ public:
             &startupInfo,            // Pointer to STARTUPINFO structure
             &processInfo           // Pointer to PROCESS_INFORMATION structure
         );
+
+        EnableWindow(handle, false);
 
         OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
