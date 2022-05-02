@@ -3,14 +3,7 @@ using namespace std;
 
 class Selector {
     private:
-        int selected = -1;
-        bool down = false;
         bool first = true; 
-        int up_key_state = 0;
-        int down_key_state = 0;
-        int left_key_state = 0;
-        int right_key_state = 0;
-        int count = 0;
         sprite cursor;
 
     public:
