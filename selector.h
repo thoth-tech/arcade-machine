@@ -38,6 +38,7 @@ class Selector {
                 highlight_first(button_node);
             }
 
+            // If it is the game menu only allow left/right arrows selection.
             if (game_menu == true)
             {
                 if (key_typed(LEFT_KEY))
@@ -51,6 +52,7 @@ class Selector {
                     highlight_center_button(button_node, "next");
                 }
             }
+            // Else use up/down selection.
             else if (game_menu == false)
             {
                 if (key_typed(UP_KEY))
@@ -67,10 +69,17 @@ class Selector {
                 }
             }
 
-            // Enter key returns the action of the selected button
-       //     if(key_down(RETURN_KEY)) return button_node->button->action();
-
             return button_node;
+        }
+
+        // Check for return key input.
+        string check_for_selection(ButtonNode* button_node)
+        {
+            // Enter key returns the action of the selected button
+            if(key_typed(RETURN_KEY)) 
+                return button_node->button->action();
+
+            return "";
         }
 
         // Highlights the first button upon page load.

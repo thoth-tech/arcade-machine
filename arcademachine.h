@@ -209,6 +209,9 @@ class ArcadeMachine
 
             // Check input in selector class.
             this->menu_button_node = this->_selector_main_menu.check_key_input(this->menu_button_node);
+
+            // Check input in selector class.
+            this->_action = this->_selector_main_menu.check_for_selection(this->menu_button_node);
         }
 
         /**
