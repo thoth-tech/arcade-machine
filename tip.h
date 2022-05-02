@@ -42,35 +42,16 @@ private:
     //Width of the container
     int containerWidth;
 
+    //Stores the animation
+    animation anim = NULL;
+    //Drawing options required to load the animation
+    drawing_options opt = option_defaults();
 
-    animation anim;
-    drawing_options opt;
     int i = 30;
 
-public:
-    Tip(){};
-    Tip(string text, bitmap image, int charsPerLine = 30, location loc = TOPCENTER)
+    //Calculate the positioning of the container
+    void CalculatePosition()
     {
-        this->text = text;
-        this->textLength = text.length();
-        this->charsPerLine = charsPerLine;
-        this->image = image;
-
-        //Initialise bitmap
-        bitmap_set_cell_details(image, 50, 50, 4, 3, 12);
-        bmpWidth = bitmap_cell_width(image);
-        //Setup animation
-        animation_script info_script = load_animation_script("info-script", "information.txt");
-        anim = create_animation(info_script, "rotate");
-        opt = option_with_animation(anim);
-
-        //Calculate number of lines
-        numLines = textLength / charsPerLine;
-        //Calculate container dimensions
-        containerHeight = numLines * FONT_SIZE + FONT_SIZE + 2 * CONTENT_BUFFER;
-        containerWidth = charsPerLine * 9 + 3 * CONTENT_BUFFER + bmpWidth;
-
-        //Calculate the positioning of the container
         switch (loc)
         {
         case TOPLEFT:
@@ -99,9 +80,50 @@ public:
         default:
             break;
         }
+    }
+public:
+    Tip(){};
+    Tip(string text, bitmap image, int charsPerLine = 30, location loc = TOPCENTER)
+    {
+        this->text = text;
+        this->textLength = text.length();
+        this->charsPerLine = charsPerLine;
+        this->image = image;
+        this->loc = loc;
 
+        //Initialise bitmap
+        bmpWidth = bitmap_width(image);
+
+        //Calculate number of lines
+        numLines = textLength / charsPerLine;
+        //Calculate container dimensions
+        containerHeight = numLines * FONT_SIZE + FONT_SIZE + 2 * CONTENT_BUFFER;
+        containerWidth = charsPerLine * 9 + 3 * CONTENT_BUFFER + bmpWidth;
+
+        CalculatePosition();
     };
-    // ~Tip();
+    Tip(string text, bitmap image, animation anim, drawing_options opt, int charsPerLine = 30, location loc = TOPCENTER)
+    {
+        this->text = text;
+        this->textLength = text.length();
+        this->charsPerLine = charsPerLine;
+        this->image = image;
+        this->anim = anim;
+        this->opt = opt;
+        this->loc = loc;
+        //Initialise bitmap
+        bmpWidth = bitmap_cell_width(image);
+
+        //Calculate number of lines
+        numLines = textLength / charsPerLine;
+        //Calculate container dimensions
+        containerHeight = numLines * FONT_SIZE + FONT_SIZE + 2 * CONTENT_BUFFER;
+        containerWidth = charsPerLine * 9 + 3 * CONTENT_BUFFER + bmpWidth;
+
+        CalculatePosition();
+    };
+    ~Tip();
+
     void draw()
     {
         //Draw border rectangle
@@ -119,6 +141,7 @@ public:
         }
 
         //Update the animation
-        update_animation(anim);
+        if (anim)
+            update_animation(anim);
     }
 };
