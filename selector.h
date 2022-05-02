@@ -30,192 +30,76 @@ class Selector {
         // Function to check which key is currently pressed and call correct method.
         // Key states ensure the functions only get called once per key press.
         // This function returns a string
-        string check_key_input(vector<Button*> buttons)
+        ButtonNode* check_key_input(ButtonNode* button_node, bool game_menu = false)
         {
             // highlight play button on start
             if (first == true) 
             {
-                highlight_first(buttons);
+                highlight_first(button_node);
             }
 
-            // Down key pressed
-            if (key_down(DOWN_KEY) && down_key_state == 0)
+            if (game_menu == true)
             {
-                down_key_state = move_down(buttons, down_key_state);
+                if (key_typed(LEFT_KEY))
+                {
+                    button_node = button_node->getPrev();
+                    highlight_center_button(button_node, "prev");
+                }
+                if (key_typed(RIGHT_KEY))
+                {
+                    button_node = button_node->getNext();
+                    highlight_center_button(button_node, "next");
+                }
             }
-            else if (key_up(DOWN_KEY) && down_key_state == 1)
+            else if (game_menu == false)
             {
-                down_key_state = 0;
+                if (key_typed(UP_KEY))
+                {
+                    write_line(button_node->getPrev()->button->color());
+                    button_node = button_node->getPrev();
+                    highlight_center_button(button_node, "prev");
+                }
+                if (key_typed(DOWN_KEY))
+                {
+                    write_line(button_node->getNext()->button->color());
+                    button_node = button_node->getNext();
+                    highlight_center_button(button_node, "next");
+                }
             }
-            // Up key pressed
-            else if (key_down(UP_KEY) && up_key_state == 0)
-            {
-                up_key_state = move_up(buttons, up_key_state);
-            }
-            else if (key_up(UP_KEY) && up_key_state == 1)
-            {
-                up_key_state = 0;
-            }
-            // Left key pressed
-            else if (key_down(LEFT_KEY) && left_key_state == 0)
-            {
-                left_key_state = move_up(buttons, left_key_state);
-            }
-            else if (key_up(LEFT_KEY) && left_key_state == 1)
-            {
-                left_key_state = 0;
-            }
-            // Right key pressed
-            else if (key_down(RIGHT_KEY) && right_key_state == 0)
-            {
-                right_key_state = move_down(buttons, right_key_state);
-            }
-            else if (key_up(RIGHT_KEY) && right_key_state == 1)
-            {
-                right_key_state = 0;
-            }
-            
+
             // Enter key returns the action of the selected button
-            if(key_down(RETURN_KEY)) return buttons[selected]->action();
+       //     if(key_down(RETURN_KEY)) return button_node->button->action();
 
-            return "";
+            return button_node;
         }
 
         // Highlights the first button upon page load.
-        void highlight_first(vector<Button*> buttons)
+        void highlight_first(ButtonNode* button_node)
         {
-            selected = 0;
-            highlight_down(buttons);
-            first = false;
-            if (count > 0)
-            {
-                // remove the previous highlight
-                remove_highlight_down(buttons);
-            }
-            down_key_state = 1;
-            count += 1;
-        }
-
-        // Moves the selector down.
-        int move_down(vector<Button*> buttons, int key_state)
-        {
-            // increment selected
-            selected += 1;
-            // call functin to highlight button
-            highlight_down(buttons);
-            // this if statement is used to remove the hightlight after first run
-            if (count > 0)
-            {
-                // remove the previous highlight
-                remove_highlight_down(buttons);
-            }
-            key_state = 1;
-            count += 1;
-
-            return key_state;
-        }
-
-        // Moves the selector up.
-        int move_up(vector<Button*> buttons, int key_state)
-        {
-            // decrease seletced by 1
-            selected -= 1;
-            // call function to highlight button
-            highlight_up(buttons);
-            // this if statement is used to remove the hightlight after first run
-            if (count > 0)
-            {
-                // remove the previous highlight
-                remove_highlight_up(buttons);
-            }
-            key_state = 1;
-            count += 1;
-
-            return key_state;
-        }
-
-        // Highlight button on down arrow key (up arrow key).
-        void highlight_down(vector<Button*> buttons)
-        {
-            // if selected is greater than or equal buttons array size, reset back to zero.
-            if (selected >= buttons.size())
-            {
-                selected = 0;
-            }
-            // get the current selected sprite
-            sprite currentSprite = buttons[selected]->btn();
-            // set cursor pos to selected button pos
-            sprite_set_y(cursor, buttons[selected]->y());
-            sprite_set_x(cursor, buttons[selected]->x() - 200);
-            // toggle highlight layer on.
+            sprite currentSprite = button_node->button->_btn;
             sprite_toggle_layer_visible(currentSprite, 1);
+
+            first = false;
         }
 
-        // Remove highlight on previous selected button (down arrow key).
-        void remove_highlight_down(vector<Button*> buttons)
+        // Highlights the selected button.
+        void highlight_center_button(ButtonNode* button_node, string direction)
         {
-            int newSelect = selected;
-            // if selected is greater than or equal buttons array size, reset back to zero.
-            if (newSelect >= buttons.size())
-            {
-                newSelect = 0;
-            }
-            // if selected is less than or equal to zero, reset to end of array.
-            if (newSelect <= 0)
-            {
-                newSelect = buttons.size();
-            }
-            // get the previous selected sprite
-            sprite oldSprite = buttons[newSelect-1]->btn();
-            // toggle highlight layer off.
+            sprite oldSprite;
+
+            // Get current sprite.
+            sprite currentSprite = button_node->button->_btn;
+
+            // Toggle current sprites highlight layer.
+            sprite_toggle_layer_visible(currentSprite, 1);
+
+            // Get previous sprite by checking direction of movement.
+            if (direction == "prev")
+                oldSprite = button_node->getNext()->button->btn();
+            else if (direction == "next")
+                oldSprite = button_node->getPrev()->button->btn();
+
+            // Toggle previous sprite highlight layer off.
             sprite_toggle_layer_visible(oldSprite, 1);
         }
-
-        // Highlight button on up arrow key (up arrow key).
-        void highlight_up(vector<Button*> buttons)
-        {   
-            // if selected is greater than zero reset size to end of array.
-            if (selected < 0)
-            {
-                selected = buttons.size() -1;
-            }
-            // get the current selected sprite
-            sprite currentSprite = buttons[selected]->btn();
-            // Set cursor pos to selected button pos
-            sprite_set_y(cursor, buttons[selected]->y());
-            sprite_set_x(cursor, buttons[selected]->x() - 200);
-            // toggle highlight layer on.
-            sprite_toggle_layer_visible(currentSprite, 1);
-        }
-
-        // Remove highlight on previous selected button (up arrow key).
-        void remove_highlight_up(vector<Button*> buttons)
-        {
-            int new_select = selected;
-            sprite old_sprite;
-
-            // if selection is at the end of the array, reset to start of array.
-            if (new_select == buttons.size() - 1)
-            {
-                new_select = -1;
-            }
-            // if the selection is less than zero, reset to end of array.
-            if (new_select < 0)
-            {
-                new_select = buttons.size() - 1;
-            }
-            // if selection equals 2, remove highlight on button zero.
-            if (new_select == 2)
-            {
-                old_sprite = buttons[0]->btn();
-            }
-            // else get the previous selected sprite
-            else
-            {
-                old_sprite = buttons[new_select+1]->btn();
-            }
-            // toggle highlight layer off.
-            sprite_toggle_layer_visible(old_sprite, 1);
-        }
-
 };

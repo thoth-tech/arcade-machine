@@ -41,6 +41,11 @@ private:
     Grid _grid;
     ButtonNode *button = nullptr;
     bool _overlayActive = false;
+    /// Button Action 
+    string _action;
+    Selector _selector_games_menu;
+    // Passes into Selector optional parameter.
+    bool game_menu = true;
 
 public:
     Menu(){}
@@ -115,10 +120,8 @@ public:
     //Handle carousel input
     void carousel_handler()
     {
-        if (key_typed(RIGHT_KEY))
-            this->button = button->getNext();
-        else if (key_typed(LEFT_KEY))
-            this->button = button->getPrev();
+        /// Check for input in selector class.
+        this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
 
         if (this->button)
         {
