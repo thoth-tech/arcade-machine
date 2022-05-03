@@ -124,7 +124,7 @@ class Button{
 
         virtual void btn_image(string image) = 0;
         virtual void draw_button() = 0;
-        virtual string action() = 0;
+        virtual string action(string keyinput = "") = 0;
 
         /// 
         string btn_color(Color c)
@@ -168,7 +168,7 @@ class MenuButton : public Button{
         MenuButton(Color c, float scale = 1) : Button(c, scale){}
         MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
 
-        string action()
+        string action(string keyinput = "")
         {
             if (this->color() == btn_color(Button::PLAY))
             {
@@ -188,7 +188,7 @@ class MenuButton : public Button{
                 write_line("Options");
                 return "options";
             }
-            return "";
+            return keyinput;
         }
 
         // Draw button to screen
@@ -209,9 +209,9 @@ class GameScreenButton : public Button{
         GameScreenButton(Color c, string s, float scale = 1) : Button(c, s, scale){}
         GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
 
-        string action()
+        string action(string keyinput = "")
         {
-            return "";
+            return keyinput;
         }
 
         void btn_image(string image)
