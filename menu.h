@@ -33,8 +33,6 @@ private:
     vector<Button*> btns;
     // A selector
     Selector select;
-    // The action to take
-    string action;
     // Vectore to store game images
     vector<string> game_images;
     // Menu grid
@@ -46,6 +44,8 @@ private:
     Selector _selector_games_menu;
     // Passes into Selector optional parameter.
     bool game_menu = true;
+    // Handle for game window.
+    HWND handle;
 
 public:
     Menu(){}
@@ -53,6 +53,7 @@ public:
     Menu(vector<ConfigData> configs)
     {
         this->_games = configs;
+        handle = FindWindowA(NULL, "arcade-machine");
     }
     ~Menu(){}
 
@@ -123,19 +124,24 @@ public:
         /// Check for input in selector class.
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
 
-        this->_action = this->_selector_games_menu.check_for_selection(this->button);
+        this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
+
+        check_game_exit();
 
         if (this->button)
         {
-            if (this->action == "escape" && _overlayActive)//(key_typed(ESCAPE_KEY) && _overlayActive)
+            if (this->_action == "escape" && _overlayActive)
             {
                 _overlayActive = false;
             }
-            else if (key_typed(RETURN_KEY)) 
+            else if (this->_action == "return")
             {
                 if (_overlayActive)
-                {
-                    // Get game path
+                {   
+                    // Disable the arcade machine window.
+                    EnableWindow(handle, false);
+
+                   //  Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
                     _gameExe = strdup(this->button->config.exe().c_str());
@@ -146,8 +152,11 @@ public:
                     this->_x = _center_x;
                     this->_y = _center_y;
 
+                    // Delay starting game to give time for arcade machine to disable input.
+                    Sleep(200);
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
+
                     return;
                 }
                 _overlayActive = true;
@@ -183,40 +192,40 @@ public:
     // Start up the chosen game using CreateProcessA.
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
-        // Additional info
-        STARTUPINFOA startupInfo;
-        HWND handle;
-        handle=FindWindowA(NULL, "arcade-machine");
+        if (!this->_in_game)
+        {                              
+            // Additional info
+            STARTUPINFOA startupInfo;
+            
+            // Set the size of the structures
+            ZeroMemory(&startupInfo, sizeof(startupInfo));
+            startupInfo.cb = sizeof(startupInfo);
+            ZeroMemory(&processInfo, sizeof(processInfo));
 
-        // Set the size of the structures
-        ZeroMemory(&startupInfo, sizeof(startupInfo));
-        startupInfo.cb = sizeof(startupInfo);
-        ZeroMemory(&processInfo, sizeof(processInfo));
+            // Start the program up
+            WINBOOL gameProcess = CreateProcessA
+            (
+                gamePath,               // the path
+                gameExe,                // Command line
+                NULL,                   // Process handle not inheritable
+                NULL,                   // Thread handle not inheritable
+                FALSE,                  // Set handle inheritance to FALSE
+                NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
+                NULL,                    // Use parent's environment block
+                gameDirectory,           // Use parent's starting directory
+                &startupInfo,            // Pointer to STARTUPINFO structure
+                &processInfo           // Pointer to PROCESS_INFORMATION structure
+            );
 
-        // Start the program up
-        WINBOOL gameProcess = CreateProcessA
-        (
-            gamePath,               // the path
-            gameExe,                // Command line
-            NULL,                   // Process handle not inheritable
-            NULL,                   // Thread handle not inheritable
-            FALSE,                  // Set handle inheritance to FALSE
-            NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
-            NULL,                    // Use parent's environment block
-            gameDirectory,           // Use parent's starting directory
-            &startupInfo,            // Pointer to STARTUPINFO structure
-            &processInfo           // Pointer to PROCESS_INFORMATION structure
-        );
+            // Start the game.
+            OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
-        EnableWindow(handle, false);
-
-        OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
-
-        this->_in_game = true;
+            this->_in_game = true;
+        }
     }
 
     // Method to keep the mouse positioned within the game window.
-    void move_mouse_position(point_2d mousePoint)
+    void check_game_exit()
     {
         if (this->_in_game == true)
         {
@@ -225,15 +234,8 @@ public:
             if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
             {
                 this->_in_game = false;
-            }
-            // If game is not exited, keep the mouse pointer in the game window.
-            int mouse_x = mousePoint.x;
-            int mouse_y = mousePoint.y;
-            if (mousePoint.x > this->_x || mousePoint.x < this->_x || mousePoint.y > this->_y || mousePoint.y < this->_y)
-            {
-                move_mouse(_center_x, _center_y);
-                this->_x = mouse_x;
-                this->_y = mouse_y;
+                // Enable to arcade-machine window again.
+                EnableWindow(handle, true);
             }
         }
     }

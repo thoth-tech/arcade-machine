@@ -113,7 +113,6 @@ class ArcadeMachine
                 this->_mouse = mouse_position();
                 // Draw games menu
                 menu.draw_menu_page();
-                menu.move_mouse_position(this->_mouse);
                 // Check input
               //  this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
                 refresh_screen(60);
@@ -139,7 +138,7 @@ class ArcadeMachine
                 if(!has_background_music)
                 {
                     audio->playMusic(options.getCurrentMusic(), options.getVolume());
-                    has_background_music=true;   
+                    has_background_music=false;   
                 }
                 
                 if(options.isChangeMusic())
