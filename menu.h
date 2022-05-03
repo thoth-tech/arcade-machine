@@ -129,7 +129,6 @@ public:
         {
             if (this->action == "escape" && _overlayActive)//(key_typed(ESCAPE_KEY) && _overlayActive)
             {
-                
                 _overlayActive = false;
             }
             else if (key_typed(RETURN_KEY)) 
