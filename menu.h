@@ -178,32 +178,35 @@ public:
     // Start up the chosen game using CreateProcessA.
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
-        // Additional info
-        STARTUPINFOA startupInfo;
+        if (!this->_in_game)
+        {
+            // Additional info
+            STARTUPINFOA startupInfo;
 
-        // Set the size of the structures
-        ZeroMemory(&startupInfo, sizeof(startupInfo));
-        startupInfo.cb = sizeof(startupInfo);
-        ZeroMemory(&processInfo, sizeof(processInfo));
+            // Set the size of the structures
+            ZeroMemory(&startupInfo, sizeof(startupInfo));
+            startupInfo.cb = sizeof(startupInfo);
+            ZeroMemory(&processInfo, sizeof(processInfo));
 
-        // Start the program up
-        WINBOOL gameProcess = CreateProcessA
-        (
-            gamePath,               // the path
-            gameExe,                // Command line
-            NULL,                   // Process handle not inheritable
-            NULL,                   // Thread handle not inheritable
-            FALSE,                  // Set handle inheritance to FALSE
-            NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
-            NULL,                    // Use parent's environment block
-            gameDirectory,           // Use parent's starting directory
-            &startupInfo,            // Pointer to STARTUPINFO structure
-            &processInfo           // Pointer to PROCESS_INFORMATION structure
-        );
+            // Start the program up
+            WINBOOL gameProcess = CreateProcessA
+            (
+                gamePath,               // the path
+                gameExe,                // Command line
+                NULL,                   // Process handle not inheritable
+                NULL,                   // Thread handle not inheritable
+                FALSE,                  // Set handle inheritance to FALSE
+                NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
+                NULL,                    // Use parent's environment block
+                gameDirectory,           // Use parent's starting directory
+                &startupInfo,            // Pointer to STARTUPINFO structure
+                &processInfo           // Pointer to PROCESS_INFORMATION structure
+            );
 
-        OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
+            OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
-        this->_in_game = true;
+            this->_in_game = true;
+        }
     }
 
     // Method to keep the mouse positioned within the game window.
