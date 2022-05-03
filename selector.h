@@ -66,11 +66,24 @@ class Selector {
         }
 
         // Check for return key input.
-        string check_for_selection(ButtonNode* button_node)
+        string check_for_selection(ButtonNode* button_node, bool game_menu = false)
         {
-            // Enter key returns the action of the selected button
-            if(key_typed(RETURN_KEY)) 
-                return button_node->button->action();
+            if (game_menu == false)
+            {
+                // Enter key returns the action of the selected button
+                if(key_typed(RETURN_KEY)) 
+                    return button_node->button->action();
+            }
+            else
+            {
+                // Enter key returns the action of the selected button
+                if(key_typed(RETURN_KEY)) 
+                     return button_node->button->action("return");
+
+                // Esc key returns the action of the selected button
+                if(key_typed(ESCAPE_KEY)) 
+                    return button_node->button->action("escape");
+            }
 
             return "";
         }
