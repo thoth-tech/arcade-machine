@@ -47,6 +47,8 @@ private:
     // Handle for game window.
     HWND handle;
 
+    bool _game_started = false;
+
 public:
     Menu(){}
 
@@ -110,7 +112,7 @@ public:
     // Draw the game buttons to the window, using the carousel layout
     void update_carousel()
     {
-        if (this->button)
+        if (this->button && !this->_in_game)
         {
             this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
             this->_grid.UpdateCell(this->button->button, 2, 5, 1, false);
@@ -139,9 +141,9 @@ public:
                 if (_overlayActive)
                 {   
                     // Disable the arcade machine window.
-                    EnableWindow(handle, false);
+                    //EnableWindow(handle, false);
 
-                   //  Get game path
+                    // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
                     _gameExe = strdup(this->button->config.exe().c_str());
@@ -151,15 +153,29 @@ public:
                     // Set the center of the game
                     this->_x = _center_x;
                     this->_y = _center_y;
-
+                    
+                    // fade screen 
+                    fade_to_black();
+                    // fill with black
+                    fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
+                    // clear grid
+                    this->_grid.ClearGrid();
+                    // set new background
+                    this->_grid.SetBackground(bitmap_named("in_game_bgnd"));
+                    //turn off overlay
+                    this->_overlayActive = false;
+                    // fade back in
+                    fade_back_in();
                     // Delay starting game to give time for arcade machine to disable input.
-                    Sleep(200);
+                    //Sleep(200);
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
-
+                    
                     return;
                 }
+
                 _overlayActive = true;
+                
             }
         }
     }
@@ -168,11 +184,20 @@ public:
     void draw_menu_page()
     {
         carousel_handler();
+
+        // if the game has ended, go back to games menu
+        if(!this->_in_game && this->_game_started) 
+        { 
+            this->_game_started = false; 
+            back_to_games_menu(); 
+        }
+        
         update_carousel();
         this->_grid.DrawGrid();
         if (_overlayActive)
             draw_overlay(button->config);
     }
+
     void draw_overlay(ConfigData config)
     {
         int x_offset = (current_window_width() / 2) + (current_window_width() / 14);
@@ -216,7 +241,7 @@ public:
                 &startupInfo,            // Pointer to STARTUPINFO structure
                 &processInfo           // Pointer to PROCESS_INFORMATION structure
             );
-
+            
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
             this->_in_game = true;
@@ -228,15 +253,62 @@ public:
     {
         if (this->_in_game == true)
         {
+            this->_game_started = true;
             // Check if game has been exited.
             this->_program_exit = GetExitCodeProcess(processInfo.hProcess, &exit_code);
             if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
             {
                 this->_in_game = false;
                 // Enable to arcade-machine window again.
-                EnableWindow(handle, true);
+                //EnableWindow(handle, true);
             }
         }
+    }
+
+    // fade back to regualr games menu
+    void back_to_games_menu()
+    {
+        fade_to_black();
+        fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
+        this->_grid.SetBackground(bitmap_named("games_dashboard"));
+        fade_back_in();
+    }
+
+    // fade screen to black
+    void fade_to_black()
+    {
+        // Set fade increment (opacity)
+        double alpha = 0.0;
+
+        do
+        {
+            clear_screen();
+            this->_grid.DrawGrid();
+            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alpha), 0, 0, 1920, 1080);
+            alpha = alpha + 0.1;
+            refresh_screen(60);
+            Sleep(50);
+
+        } while (alpha < 1.0);
+    }
+    
+    // fade screen back from black
+    void fade_back_in()
+    {
+        // Set fade increment (opacity)
+        double alpha = 1.0;
+
+        do
+        {
+            clear_screen();
+            this->_grid.DrawGrid();
+            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alpha), 0, 0, 1920, 1080);
+            alpha = alpha - 0.1;
+            refresh_screen(60);
+            Sleep(50);
+
+        } while (alpha > 0.0);
+
     }
 
 };
