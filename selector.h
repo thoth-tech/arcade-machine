@@ -53,12 +53,16 @@ class Selector {
                     write_line(button_node->getPrev()->button->color());
                     button_node = button_node->getPrev();
                     highlight_center_button(button_node, "prev");
+                    // move cursor
+                    sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
                 }
                 if (key_typed(DOWN_KEY))
                 {
                     write_line(button_node->getNext()->button->color());
                     button_node = button_node->getNext();
                     highlight_center_button(button_node, "next");
+                    // move cursor
+                    sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
                 }
             }
 
@@ -93,6 +97,9 @@ class Selector {
         {
             sprite currentSprite = button_node->button->_btn;
             sprite_toggle_layer_visible(currentSprite, 1);
+            // set start location of cursor
+            sprite_set_x(this->cursor, sprite_x(button_node->button->btn()) - 200);
+            sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
 
             first = false;
         }
