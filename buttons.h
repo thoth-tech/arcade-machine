@@ -43,6 +43,7 @@ class Button{
         auto centre_y() const -> const int&      { return _centre_y; }
         auto color()    const -> const string&   { return _color;    }
         // Setters
+        void set_id(int id){ this->_id = id; }
         void set_x(const int &x){ this->_x = x; }
         void set_y(const int &y){ this->_y = y; }
 
