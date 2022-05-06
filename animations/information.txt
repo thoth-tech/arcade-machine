@@ -1,0 +1,4 @@
+SplashKit Animation
+
+f: [0-11], [0-11], 3, 0
+i:rotate,0
