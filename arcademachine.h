@@ -328,6 +328,6 @@ class ArcadeMachine
         */
         void exit_program()
         {
-            abort();
+            exit(EXIT_SUCCESS);
         }
 };
