@@ -22,8 +22,9 @@ class Tip
 {
 private:
     bitmap image;
-    //Width of the bitmap
+    //bitmap dimensions
     int bmpWidth;
+    int bmpHeight;
     string text;
     //Length of the string, text
     int textLength;
@@ -93,11 +94,15 @@ public:
 
         //Initialise bitmap
         bmpWidth = bitmap_width(image);
-
+        bmpHeight = bitmap_height(image);
         //Calculate number of lines
         numLines = textLength / charsPerLine;
-        //Calculate container dimensions
+        //Calculate container height based off lines of text
         containerHeight = numLines * FONT_SIZE + FONT_SIZE + 2 * CONTENT_BUFFER;
+        //If the bitmap is bigger than the container, resize
+        if (containerHeight < bmpHeight)
+            containerHeight = 2*CONTENT_BUFFER + bmpHeight;
+        //Calculate container width based on number of characters per line and bitmap width
         containerWidth = charsPerLine * 9 + 3 * CONTENT_BUFFER + bmpWidth;
 
         CalculatePosition();
@@ -111,13 +116,18 @@ public:
         this->anim = anim;
         this->opt = opt;
         this->loc = loc;
+
         //Initialise bitmap
         bmpWidth = bitmap_cell_width(image);
-
+        bmpHeight = bitmap_cell_height(image);
         //Calculate number of lines
         numLines = textLength / charsPerLine;
-        //Calculate container dimensions
+        //Calculate container height based off lines of text
         containerHeight = numLines * FONT_SIZE + FONT_SIZE + 2 * CONTENT_BUFFER;
+        //If the bitmap is bigger than the container, resize
+        if (containerHeight < bmpHeight)
+            containerHeight = 2*CONTENT_BUFFER + bmpHeight;
+        //Calculate container width based on number of characters per line and bitmap width
         containerWidth = charsPerLine * 9 + 3 * CONTENT_BUFFER + bmpWidth;
 
         CalculatePosition();
@@ -127,6 +137,7 @@ public:
     void draw()
     {
         //Draw border rectangle
+        //NOTE: Variable i is used to scale the rectangle, each function call, animating the border.
         fill_rectangle(rgba_color(0.0, 67.5, 75.7, 0.30), xOffset - BORDER_WIDTH, yOffset - BORDER_WIDTH, (containerWidth + (BORDER_WIDTH * 2)) / (i / 2), containerHeight + (BORDER_WIDTH * 2));
         if (i != 2)
             i--;
