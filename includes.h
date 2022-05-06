@@ -21,6 +21,7 @@
 #include "gridlayout.h"
 #include "cdata.h"
 #include "ButtonList.h"
+#include "tip.h"
 #include "selector.h"
 #include "splashscreen.h"
 #include "menu.h"
