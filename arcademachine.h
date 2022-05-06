@@ -43,6 +43,9 @@ class ArcadeMachine
         bool _play_clicked = false;
         /// Turn menu music on/off
         bool _play_music = true;
+        ButtonNode *menu_button_node = nullptr;
+
+
     public:
         // Default Constructor
         ArcadeMachine()
@@ -110,9 +113,8 @@ class ArcadeMachine
                 this->_mouse = mouse_position();
                 // Draw games menu
                 menu.draw_menu_page();
-                menu.move_mouse_position(this->_mouse);
                 // Check input
-                //this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
+              //  this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
                 refresh_screen(60);
             }
         }
@@ -136,7 +138,7 @@ class ArcadeMachine
                 if(!has_background_music)
                 {
                     audio->playMusic(options.getCurrentMusic(), options.getVolume());
-                    has_background_music=true;   
+                    has_background_music=false;   
                 }
                 
                 if(options.isChangeMusic())
@@ -203,8 +205,12 @@ class ArcadeMachine
             draw_text("play!", COLOR_BLACK, "font_btn", 70, play.button->x() + (play.button->centre_x()/2) + 5, play.button->y() + 5);
             draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centre_x()/2) - 20, options.button->y() + 5);
             draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
-            // Check input
-            this->_action = this->_selector_main_menu.check_key_input(this->_menu_btns);
+
+            // Check input in selector class.
+            this->menu_button_node = this->_selector_main_menu.check_key_input(this->menu_button_node);
+
+            // Check input in selector class.
+            this->_action = this->_selector_main_menu.check_for_selection(this->menu_button_node);
         }
 
         /**
@@ -221,19 +227,29 @@ class ArcadeMachine
             Button *play = new MenuButton(Button::PLAY, 1.5);
             Button *opts = new MenuButton(Button::OPTS, 1.5);
             Button *exit = new MenuButton(Button::EXIT, 1.5);
+
             // Add menu buttons to local vector
             this->_menu_btns.push_back(play);
             this->_menu_btns.push_back(opts);
             this->_menu_btns.push_back(exit);
+
             // Fetch menu background
             const string image = path_to_resource("thoth", IMAGE_RESOURCE);
             // Load menu background
             bitmap thoth = load_bitmap("thoth", image);
             // Update grid cells with assets
             this->_grid.SetBackground(thoth);
-            this->_grid.UpdateCell(play, 2, 10);
-            this->_grid.UpdateCell(opts, 3, 10);
-            this->_grid.UpdateCell(exit, 4, 10);
+
+            // Make new nodes with buttons.
+            this->menu_button_node = new ButtonNode(play);
+            this->menu_button_node->addAfter(new ButtonNode(opts));
+            this->menu_button_node->addBefore(new ButtonNode(exit));
+
+            // Update grid with nodes.
+            this->_grid.UpdateCell(menu_button_node->button, 2, 10);
+            this->_grid.UpdateCell(menu_button_node->getPrev()->button, 4, 10);
+            this->_grid.UpdateCell(menu_button_node->getNext()->button, 3, 10);
+
             // Play main menu music
             if (this->_play_music) play_music("music_mainmenu");
         }
