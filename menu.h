@@ -164,6 +164,8 @@ public:
                     this->_grid.SetBackground(bitmap_named("in_game_bgnd"));
                     //turn off overlay
                     this->_overlayActive = false;
+                    // turn off menu music
+                    fade_music_out(1000);
                     // fade back in
                     fade_back_in();
                     // Delay starting game to give time for arcade machine to disable input.
