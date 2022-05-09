@@ -216,6 +216,37 @@ public:
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
     }
 
+    //Attempts to find a window and bring it to focus, if it exists.
+    //Returns true if successful, false if not.
+    bool FocusWindow(string windowName, int timeout = 2000)
+    {
+        LPCSTR gameWindow =  windowName.c_str();
+        HWND gameWindowHandle = NULL;
+
+        int timeElapsed;
+        auto startTime = chrono::steady_clock::now();
+
+        //Find the window handle
+        do {
+            gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
+            timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+            Sleep(250);
+        }
+        while (gameWindowHandle == NULL && timeElapsed <= timeout);
+
+        //Maximise the Window
+        if (gameWindowHandle != NULL)
+        {   
+            ShowWindow(gameWindowHandle, SW_SHOWMAXIMIZED);
+            return true;
+        }
+        else
+        {
+            write_line("Unable to find gameWindow Handle");
+            return false;
+        }
+    }
+
     // Start up the chosen game using CreateProcessA.
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
@@ -245,9 +276,15 @@ public:
             );
             
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
+            
+            string windowName = gameExe;
+            //Remove the extension from the application name (.exe)
+            windowName = windowName.substr(0, windowName.find("."));
+            //Focus the window
+            FocusWindow(windowName);
 
             this->_in_game = true;
-        }
+        }   
     }
 
     // Method to keep the mouse positioned within the game window.
