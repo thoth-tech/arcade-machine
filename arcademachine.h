@@ -43,6 +43,7 @@ class ArcadeMachine
         bool _play_clicked = false;
         /// Turn menu music on/off
         bool _play_music = true;
+        /// Menu button node
         ButtonNode *menu_button_node = nullptr;
 
 
@@ -327,6 +328,6 @@ class ArcadeMachine
         */
         void exit_program()
         {
-            abort();
+            exit(EXIT_SUCCESS);
         }
 };

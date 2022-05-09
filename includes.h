@@ -13,6 +13,7 @@
 #include <regex>
 #include "splashkit.h"
 #include <string>
+#include <chrono>
 //#include <json/json.h>
 #include <Windows.h>
 
