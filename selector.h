@@ -5,6 +5,8 @@ class Selector {
     private:
         bool first = true; 
         sprite cursor;
+        bool slide_left = false;
+        bool slide_right = false;
 
     public:
         Selector(){}
@@ -13,6 +15,11 @@ class Selector {
             bitmap cur = load_bitmap("cursor", cursor);
             this->cursor = create_sprite(cur);
         }
+
+        auto get_slide_left() const -> const bool& { return this->slide_left; }
+        auto get_slide_right() const -> const bool& { return this->slide_right; }
+        auto set_slide_left(bool left) { slide_left = left; }
+        auto set_slide_right(bool right) { slide_right = right; }
 
         // Return the cursor sprite
         sprite get_cursor()
@@ -36,11 +43,13 @@ class Selector {
             {
                 if (key_typed(LEFT_KEY))
                 {
+                    slide_left = true;
                     button_node = button_node->getPrev();
                     highlight_center_button(button_node, "prev");
                 }
                 if (key_typed(RIGHT_KEY))
                 {
+                    slide_right = true;
                     button_node = button_node->getNext();
                     highlight_center_button(button_node, "next");
                 }
