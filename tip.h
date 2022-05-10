@@ -37,7 +37,9 @@ private:
     //Where the container will be anchored within the screen.
     int xOffset;
     int yOffset;
-    
+    chrono::time_point<chrono::steady_clock> startTime;
+    int duration;
+
     //Height of the container
     int containerHeight;
     //Width of the container
@@ -84,13 +86,14 @@ private:
     }
 public:
     Tip(){};
-    Tip(string text, bitmap image, int charsPerLine = 30, location loc = TOPCENTER)
+    Tip(string text, bitmap image, int duration = 3000, int charsPerLine = 30, location loc = TOPCENTER)
     {
         this->text = text;
         this->textLength = text.length();
         this->charsPerLine = charsPerLine;
         this->image = image;
         this->loc = loc;
+        this->duration = duration;
 
         //Initialise bitmap
         bmpWidth = bitmap_width(image);
@@ -107,7 +110,7 @@ public:
 
         CalculatePosition();
     };
-    Tip(string text, bitmap image, animation anim, drawing_options opt, int charsPerLine = 30, location loc = TOPCENTER)
+    Tip(string text, bitmap image, animation anim, drawing_options opt, int duration = 3000, int charsPerLine = 30, location loc = TOPCENTER)
     {
         this->text = text;
         this->textLength = text.length();
@@ -116,6 +119,7 @@ public:
         this->anim = anim;
         this->opt = opt;
         this->loc = loc;
+        this-> duration = duration;
 
         //Initialise bitmap
         bmpWidth = bitmap_cell_width(image);
@@ -136,6 +140,13 @@ public:
 
     void draw()
     {
+        //Initialise startTime upon first draw
+        if (startTime.time_since_epoch().count() == 0)
+            startTime = chrono::steady_clock::now();
+        //The tip has been visible for more than the specified duration, stop drawing
+        if (chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count() > 3000)
+            return;
+
         //Draw border rectangle
         //NOTE: Variable i is used to scale the rectangle, each function call, animating the border.
         fill_rectangle(rgba_color(0.0, 67.5, 75.7, 0.30), xOffset - BORDER_WIDTH, yOffset - BORDER_WIDTH, (containerWidth + (BORDER_WIDTH * 2)) / (i / 2), containerHeight + (BORDER_WIDTH * 2));
