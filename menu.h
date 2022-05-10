@@ -31,8 +31,6 @@ private:
     bool _program_exit;
     // Vector of buttons
     vector<Button*> btns;
-    // A selector
-    Selector select;
     // Vectore to store game images
     vector<string> game_images;
     // Menu grid
@@ -46,8 +44,27 @@ private:
     bool game_menu = true;
     // Handle for game window.
     HWND handle;
-
+    // Determines when game has started.
     bool _game_started = false;
+    // Starting position of button x.
+    const int position = 700;
+    // Increments x of sprite.
+    const int speed = 30;
+    // The positions of the sprites for slide.
+    int _pos1 = position;
+    int _pos2 = _pos1 - position;
+    int _pos3 = _pos2 - position;
+    int _pos4 = position * 2;
+    int _pos5 = position * 3;
+    // Hold the button sprites for slide.
+    sprite _new_button1;
+    sprite _new_button2;
+    sprite _new_button3;
+    // To determine direction of slide.
+    bool _menu_slide_left;
+    bool _menu_slide_right;
+    // Determines when sliding.
+    bool _menu_sliding = false;
 
 public:
     Menu(){}
@@ -62,6 +79,8 @@ public:
     // Getters
     auto get_buttons() const -> const vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
+    auto get_slide_left() const -> const bool { return this->_menu_slide_left;}
+    auto get_slide_right() const -> const bool { return this->_menu_slide_right;}
 
     // This function gets the game images from the config files and returns vector of game images.
     vector<string> get_game_sprites(vector<ConfigData> configs)
@@ -112,11 +131,24 @@ public:
     // Draw the game buttons to the window, using the carousel layout
     void update_carousel()
     {
-        if (this->button && !this->_in_game)
+        // If menu is sliding then clear the grid.
+        if (this->_menu_sliding)
         {
-            this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
-            this->_grid.UpdateCell(this->button->button, 2, 5, 1, false);
-            this->_grid.UpdateCell(this->button->getNext()->button, 2, 10, 1, false);
+            this->_grid.ClearGrid();
+        }
+        if (_selector_games_menu.get_slide_left() || _selector_games_menu.get_slide_right())
+        {
+            // Without this if statement there is a small jerk/crossover when sliding.
+            // Think it just provides a small delay between clearing and drawing grid?
+        }
+        else
+        {
+            if (this->button && !this->_in_game)
+            {
+                this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
+                this->_grid.UpdateCell(this->button->button, 2, 5, 1, false);
+                this->_grid.UpdateCell(this->button->getNext()->button, 2, 10, 1, false);
+            }
         }
     }
 
@@ -185,6 +217,16 @@ public:
     // Draw the background and call set game image.
     void draw_menu_page()
     {
+        // Wait for selector to key input to determine slide direction.
+        if (_selector_games_menu.get_slide_left() == true)
+        {
+            this->_menu_slide_left = true;
+        }
+        if (_selector_games_menu.get_slide_right() == true)
+        {
+            this->_menu_slide_right = true;
+        }
+
         carousel_handler();
 
         // if the game has ended, go back to games menu
@@ -198,6 +240,86 @@ public:
         this->_grid.DrawGrid();
         if (_overlayActive)
             draw_overlay(button->config);
+    }
+
+        // Method to update the sprite positions and draw sprite.
+    void update_slide(sprite button_sprite, int position)
+    {
+        // Show the base layer of sprite.
+        sprite_show_layer(button_sprite, 0);
+        // Set the x position of sprite.
+        sprite_set_x(button_sprite, position);
+        // draw sprite to screen.
+        draw_sprite(button_sprite);
+        // Updatse sprite.
+        update_sprite(button_sprite);
+    }
+
+    // Slide the game buttons on left key input.
+    void draw_update_slide_left()
+    {   
+        this->_menu_sliding = true;
+
+        // Get sprites of buttons on display.
+        this->_new_button1 = this->button->getNext()->button->btn();
+        this->_new_button2 = this->button->button->btn();
+        this->_new_button3 = this->button->getPrev()->button->btn();
+
+        // Increment the x position of sprite.
+        this->_pos1 += speed;
+        this->_pos2 += speed;
+        this->_pos3 += speed;
+      
+        // Update and draw sprite.
+        update_slide(this->_new_button1, this->_pos1);
+        update_slide(this->_new_button2, this->_pos2);
+        update_slide(this->_new_button3, this->_pos3);
+    
+        // If sprite reaches position.
+        if (this->_pos1 > 1300)
+        {
+            // Set selector bool back to false.
+            _selector_games_menu.set_slide_left(false);
+            this->_menu_sliding = false;
+            // Reset positions.
+            this->_pos1 = position;
+            this->_pos2 = this->_pos1 - position;
+            this->_pos3 = this->_pos2 - position;
+            this->_menu_slide_left = false;
+        }
+    }
+
+    // Slide the game buttons on right key input.
+    void draw_update_slide_right()
+    {
+        this->_menu_sliding = true;
+
+        // Get sprites of buttons on display.
+        this->_new_button1 = this->button->getPrev()->button->btn();
+        this->_new_button2 = this->button->button->btn();
+        this->_new_button3 = this->button->getNext()->button->btn();
+
+        // Decrease the x position of sprite.
+        this->_pos1 -= speed;
+        this->_pos4 -= speed;
+        this->_pos5 -= speed;
+
+        // Update and draw sprite.
+        update_slide(this->_new_button1, this->_pos1);
+        update_slide(this->_new_button2, this->_pos4);
+        update_slide(this->_new_button3, this->_pos5);
+
+        if (this->_pos1 <= 20)
+        {
+            // Set selector bool back to false.
+            _selector_games_menu.set_slide_right(false);
+            this->_menu_sliding = false;
+            // Reset positions.
+            this->_pos1 = position;
+            this->_pos4 = position * 2;
+            this->_pos5 = position * 3;
+            this->_menu_slide_right = false;     
+        }
     }
 
     void draw_overlay(ConfigData config)
