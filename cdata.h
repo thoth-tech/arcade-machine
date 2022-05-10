@@ -18,7 +18,7 @@ class ConfigData{
         string _title;
         /// The genre of this game
         string _genre;
-        /// The MPA rating of this game 
+        /// The MPA classification rating of this game 
         string _rating;
         /// Th author/creator of this game
         string _author;
@@ -26,6 +26,8 @@ class ConfigData{
         string _exe;
         /// The folder this game is inside
         string _folder;
+        /// A descritpion of the game 
+        string _description;
     public:
         // Default Constructor
         ConfigData(){}
@@ -50,6 +52,7 @@ class ConfigData{
         auto author()   const -> const string& { return _author;   }
         auto exe()      const -> const string& { return _exe;      }
         auto folder()   const -> const string& { return _folder;   }
+        auto description()   const -> const string& { return _description;   }
 
         /*
             Returns a file given the filepath
@@ -109,14 +112,15 @@ class ConfigData{
 
                 if(!data.empty())
                 {
-                    this->_repo = data[0];
-                    this->_language = data[1];
-                    this->_image = data[2];
-                    this->_title = data[3];
-                    this->_genre = data[4];
-                    this->_rating = data[5];
-                    this->_author = data[6];
-                    this->_exe = data[7];
+                    this->_title =       data[0];
+                    this->_author =      data[1];
+                    this->_genre =       data[2];
+                    this->_description = data[3];
+                    this->_rating =      data[4];
+                    this->_language =    data[5];
+                    this->_image =       data[6];
+                    this->_exe =         data[7];
+                    this->_repo =        data[8];
                 }
             }
         }
@@ -192,6 +196,7 @@ class ConfigData{
             write_line("Title = " + title());
             write_line("Author = " + author());
             write_line("Genre = " + genre());
+            write_line("Description = " + description());
             write_line("Rating = " + rating());
             write_line("Repo = " + repo());
             write_line("Language = " + language());
