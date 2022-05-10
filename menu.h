@@ -37,6 +37,7 @@ private:
     vector<string> game_images;
     // Menu grid
     Grid _grid;
+    Tip *tip;
     ButtonNode *button = nullptr;
     bool _overlayActive = false;
     /// Button Action 
@@ -107,6 +108,23 @@ public:
                 this->button->getPrev()->config = _games[i];
             }
         }
+    }
+
+    //Create the tip
+    void create_tip()
+    {
+        bitmap bmpTip = bitmap_named("information");
+        //Breakdown the sheet
+        bitmap_set_cell_details(bmpTip, 50, 50, 4, 3, 12);
+        //Load the animation script
+        animation_script info_script = load_animation_script("info-script", "information.txt");
+        //Create the animation
+        animation anim = create_animation(info_script, "rotate");
+        //Load the animation into options
+        drawing_options opt = option_with_animation(anim);
+        //Create the tip
+        string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
+        this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
     }
 
     // Draw the game buttons to the window, using the carousel layout
@@ -198,6 +216,7 @@ public:
         this->_grid.DrawGrid();
         if (_overlayActive)
             draw_overlay(button->config);
+        this->tip->draw();
     }
 
     void draw_overlay(ConfigData config)

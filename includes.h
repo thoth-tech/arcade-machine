@@ -23,6 +23,7 @@
 #include "cdata.h"
 #include "ButtonList.h"
 #include "selector.h"
+#include "tip.h"
 #include "splashscreen.h"
 #include "menu.h"
 #include "helper.h"
@@ -30,6 +31,3 @@
 #include "arcademachine.h"
 
 #endif
-
-
-

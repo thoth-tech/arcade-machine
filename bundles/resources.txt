@@ -21,6 +21,9 @@ BITMAP,backMenu,buttons/Red/Home.png
 // Cursors
 BITMAP,cursor,splashkit_cursor.png
 
+// Tip Icons
+BITMAP,information,information.png
+
 // Fonts
 FONT,font_btn,MindPlay.ttf
 FONT,font_title,Retroking.ttf
