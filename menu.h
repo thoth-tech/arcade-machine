@@ -122,7 +122,8 @@ public:
         //Load the animation into options
         drawing_options opt = option_with_animation(anim);
         //Create the tip
-        this->tip = new Tip("Use the left and right arrow keys to cycle through the carousel",bmpTip, anim, opt, 25);
+        string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
+        this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
     }
 
     // Draw the game buttons to the window, using the carousel layout
