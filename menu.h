@@ -135,6 +135,7 @@ public:
         if (this->_menu_sliding)
         {
             this->_grid.ClearGrid();
+            this->_overlayActive = false;
         }
         if (_selector_games_menu.get_slide_left() || _selector_games_menu.get_slide_right())
         {
