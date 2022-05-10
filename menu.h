@@ -38,7 +38,6 @@ private:
     // Menu grid
     Grid _grid;
     Tip *tip;
-    bool _tipActive = true;
     ButtonNode *button = nullptr;
     bool _overlayActive = false;
     /// Button Action 
