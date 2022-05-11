@@ -46,13 +46,13 @@ class Selector {
             {
                 if (slide_left == false && slide_right == false)
                 {
-                    if (key_typed(LEFT_KEY))
+                    if (key_typed(LEFT_KEY) && !key_typed(RIGHT_KEY))
                     {
                         slide_left = true;
                         button_node = button_node->getPrev();
                         highlight_center_button(button_node, "prev");
                     }
-                    if (key_typed(RIGHT_KEY))
+                    if (key_typed(RIGHT_KEY) && !key_typed(LEFT_KEY))
                     {
                         slide_right = true;
                         button_node = button_node->getNext();
