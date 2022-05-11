@@ -7,6 +7,7 @@ class Selector {
         sprite cursor;
         bool slide_left = false;
         bool slide_right = false;
+        bool game_menu;
 
     public:
         Selector(){}
@@ -32,12 +33,14 @@ class Selector {
         // This function returns a string
         ButtonNode* check_key_input(ButtonNode* button_node, bool game_menu = false)
         {
+            this->game_menu = game_menu;
+
             // highlight play button on start
             if (first == true) 
             {
                 highlight_first(button_node);
             }
-
+            
             // If it is the game menu only allow left/right arrows selection.
             if (game_menu == true)
             {
@@ -106,9 +109,13 @@ class Selector {
         {
             sprite currentSprite = button_node->button->_btn;
             sprite_toggle_layer_visible(currentSprite, 1);
+
             // set start location of cursor
-            sprite_set_x(this->cursor, sprite_x(button_node->button->btn()) - 200);
-            sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
+            if (!game_menu)
+            {
+                sprite_set_x(this->cursor, sprite_x(button_node->button->btn()) - 200);
+                sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
+            }
 
             first = false;
         }
