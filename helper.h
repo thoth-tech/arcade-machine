@@ -21,9 +21,7 @@ class Helper{
         // Method to find the game folder name to store in config class.
         string get_folder_name(string entryPath)
         {
-            ConfigData config;
-
-            unsigned lastPath = entryPath.find("\\", 8);
+            unsigned lastPath = entryPath.find("\\", 14);
             string dir = entryPath.substr(0, lastPath);
             unsigned findBackSlash = dir.find("\\");
             dir.replace(findBackSlash, 1, "/");
@@ -53,7 +51,7 @@ class Helper{
         // Create configs vector from config files.
         vector<ConfigData> config_data_list()
         {   
-            vector<string> files = get_config_files("./games");
+            vector<string> files = get_config_files("./games/games");
 
             vector<ConfigData> configs;
 
