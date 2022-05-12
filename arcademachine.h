@@ -283,7 +283,6 @@ class ArcadeMachine
                 fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
                 // Decrement i and alpha 
                 i--; alpha = alpha - 0.05;
-                write_line(to_string(alpha));
                 // If alpha is == 0, hold image for 1.5 seconds
                 if (abs(alpha - 0.0) < 1e-9)
                 {
