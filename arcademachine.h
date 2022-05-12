@@ -115,6 +115,14 @@ class ArcadeMachine
                 this->_mouse = mouse_position();
                 // Draw games menu
                 menu.draw_menu_page();
+
+                // Check for left or right input and call slide function.
+                if (menu.get_slide_left() == true)
+                    menu.draw_update_slide_left();
+
+                if (menu.get_slide_right() == true)
+                    menu.draw_update_slide_right();
+
                 // Check input
               //  this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
                 refresh_screen(60);

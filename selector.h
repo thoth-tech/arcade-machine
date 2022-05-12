@@ -5,6 +5,9 @@ class Selector {
     private:
         bool first = true; 
         sprite cursor;
+        bool slide_left = false;
+        bool slide_right = false;
+        bool game_menu;
 
     public:
         Selector(){}
@@ -13,6 +16,11 @@ class Selector {
             bitmap cur = load_bitmap("cursor", cursor);
             this->cursor = create_sprite(cur);
         }
+
+        auto get_slide_left() const -> const bool& { return this->slide_left; }
+        auto get_slide_right() const -> const bool& { return this->slide_right; }
+        auto set_slide_left(bool left) { slide_left = left; }
+        auto set_slide_right(bool right) { slide_right = right; }
 
         // Return the cursor sprite
         sprite get_cursor()
@@ -25,24 +33,31 @@ class Selector {
         // This function returns a string
         ButtonNode* check_key_input(ButtonNode* button_node, bool game_menu = false)
         {
+            this->game_menu = game_menu;
+
             // highlight play button on start
             if (first == true) 
             {
                 highlight_first(button_node);
             }
-
+            
             // If it is the game menu only allow left/right arrows selection.
             if (game_menu == true)
             {
-                if (key_typed(LEFT_KEY))
+                if (slide_left == false && slide_right == false)
                 {
-                    button_node = button_node->getPrev();
-                    highlight_center_button(button_node, "prev");
-                }
-                if (key_typed(RIGHT_KEY))
-                {
-                    button_node = button_node->getNext();
-                    highlight_center_button(button_node, "next");
+                    if (key_typed(LEFT_KEY) && !key_typed(RIGHT_KEY))
+                    {
+                        slide_left = true;
+                        button_node = button_node->getPrev();
+                        highlight_center_button(button_node, "prev");
+                    }
+                    if (key_typed(RIGHT_KEY) && !key_typed(LEFT_KEY))
+                    {
+                        slide_right = true;
+                        button_node = button_node->getNext();
+                        highlight_center_button(button_node, "next");
+                    }
                 }
             }
             // Else use up/down selection.
@@ -97,9 +112,13 @@ class Selector {
         {
             sprite currentSprite = button_node->button->_btn;
             sprite_toggle_layer_visible(currentSprite, 1);
+
             // set start location of cursor
-            sprite_set_x(this->cursor, sprite_x(button_node->button->btn()) - 200);
-            sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
+            if (!game_menu)
+            {
+                sprite_set_x(this->cursor, sprite_x(button_node->button->btn()) - 200);
+                sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
+            }
 
             first = false;
         }
