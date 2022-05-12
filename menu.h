@@ -48,6 +48,8 @@ private:
     bool _game_started = false;
     // Starting position of button x.
     const int position = 700;
+    // Position of button y.
+    const int _posY = 270;
     // Increments x of sprite.
     const int speed = 30;
     // The positions of the sprites for slide.
@@ -158,7 +160,6 @@ public:
     {
         /// Check for input in selector class.
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
-
         this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
 
         check_game_exit();
@@ -250,6 +251,8 @@ public:
         sprite_show_layer(button_sprite, 0);
         // Set the x position of sprite.
         sprite_set_x(button_sprite, position);
+        // Set the y position of sprite.
+        sprite_set_y(button_sprite, _posY);
         // draw sprite to screen.
         draw_sprite(button_sprite);
         // Updatse sprite.
