@@ -137,8 +137,8 @@ public:
         bitmap bmpTip = bitmap_named("information");
         //Breakdown the sheet
         bitmap_set_cell_details(bmpTip, 50, 50, 4, 3, 12);
-        //Load the animation script
-        animation_script info_script = load_animation_script("info-script", "information.txt");
+        //Fetch the animation script
+        animation_script info_script = animation_script_named("info-script");
         //Create the animation
         animation anim = create_animation(info_script, "rotate");
         //Load the animation into options

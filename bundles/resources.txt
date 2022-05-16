@@ -11,6 +11,10 @@ BITMAP,in_game_bgnd,backgrounds/arcade-screen-frame.png
 BITMAP,btn_play,buttons/btn_play.png
 BITMAP,btn_exit,buttons/btn_exit.png
 BITMAP,btn_opts,buttons/btn_options.png
+BITMAP,play_hghlt,buttons/btn_play_hghlt.png
+BITMAP,exit_hghlt,buttons/btn_exit_hghlt.png
+BITMAP,options_hghlt,buttons/btn_options_hghlt.png
+BITMAP,game_hghlt,buttons/btn_game_hghlt.png
 BITMAP,backCurrentGame,buttons/Red/Settings.png
 BITMAP,backGame_notSelected,buttons/Yellow/Settings.png
 BITMAP,changeSound,buttons/Red/Music On.png
@@ -39,6 +43,9 @@ MUSIC,music_mainmenu,main_menu.mp3
 MUSIC, 1, 1.mp3
 MUSIC, 2, 2.mp3
 MUSIC, 3, 3.mp3
+
+// Animations
+ANIM,info-script,information.txt
 
 // Artist Attribution
 // Main Menu Thoth Artwork by Nikolay Todorov (fineartamerica.com/profiles/nikolay-todorov)

@@ -244,9 +244,7 @@ class ArcadeMachine
             this->_menu_btns.push_back(exit);
 
             // Fetch menu background
-            const string image = path_to_resource("thoth", IMAGE_RESOURCE);
-            // Load menu background
-            bitmap thoth = load_bitmap("thoth", image);
+            bitmap thoth = bitmap_named("thoth");
             // Update grid cells with assets
             this->_grid.SetBackground(thoth);
 
