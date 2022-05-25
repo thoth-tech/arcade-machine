@@ -63,9 +63,6 @@ private:
     sprite _new_button1;
     sprite _new_button2;
     sprite _new_button3;
-    // To determine direction of slide.
-    bool _menu_slide_left;
-    bool _menu_slide_right;
     // Determines when sliding.
     bool _menu_sliding = false;
 
@@ -82,8 +79,6 @@ public:
     // Getters
     auto get_buttons() const -> const vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
-    auto get_slide_left() const -> const bool { return this->_menu_slide_left;}
-    auto get_slide_right() const -> const bool { return this->_menu_slide_right;}
 
     // This function gets the game images from the config files and returns vector of game images.
     vector<string> get_game_sprites(vector<ConfigData> configs)
@@ -155,15 +150,8 @@ public:
         if (this->_menu_sliding)
         {
             this->_grid.ClearGrid();
-            this->_overlayActive = false;
         }
-        if (_selector_games_menu.get_slide_left() || _selector_games_menu.get_slide_right())
-        {
-            // Without this if statement there is a small jerk/crossover when sliding.
-            // Think it just provides a small delay between clearing and drawing grid?
-        }
-        else
-        {
+        else {
             if (this->button && !this->_in_game)
             {
                 this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
@@ -192,9 +180,6 @@ public:
             {
                 if (_overlayActive)
                 {
-                    // Disable the arcade machine window.
-                    //EnableWindow(handle, false);
-
                     // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
@@ -221,16 +206,12 @@ public:
                     fade_music_out(1000);
                     // fade back in
                     fade(1, 0, 0.1);
-                    // Delay starting game to give time for arcade machine to disable input.
-                    //Sleep(200);
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
 
                     return;
                 }
-
                 _overlayActive = true;
-
             }
         }
     }
@@ -238,30 +219,27 @@ public:
     // Draw the background and call set game image.
     void draw_menu_page()
     {
-        // Wait for selector to key input to determine slide direction.
-        if (_selector_games_menu.get_slide_left() == true)
-        {
-            this->_menu_slide_left = true;
-        }
-        if (_selector_games_menu.get_slide_right() == true)
-        {
-            this->_menu_slide_right = true;
-        }
-
-        carousel_handler();
-
         // if the game has ended, go back to games menu
         if(!this->_in_game && this->_game_started)
         {
             this->_game_started = false;
             back_to_games_menu();
         }
-
-        update_carousel();
+        
         this->_grid.DrawGrid();
-        if (_overlayActive)
+        
+        // Wait for selector to key input to determine slide direction.
+        if (_selector_games_menu.get_slide_left())
+            draw_update_slide_left();
+        else if (_selector_games_menu.get_slide_right())
+            draw_update_slide_right();
+
+        if (_overlayActive && !_menu_sliding)
             draw_overlay(button->config);
         this->tip->draw();
+
+        update_carousel();
+        carousel_handler();
     }
 
     // Method to update the sprite positions and draw sprite.
@@ -309,7 +287,6 @@ public:
             this->_pos1 = position;
             this->_pos2 = this->_pos1 - position;
             this->_pos3 = this->_pos2 - position;
-            this->_menu_slide_left = false;
         }
     }
 
@@ -342,7 +319,6 @@ public:
             this->_pos1 = position;
             this->_pos4 = position * 2;
             this->_pos5 = position * 3;
-            this->_menu_slide_right = false;
         }
     }
 
