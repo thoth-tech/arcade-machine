@@ -39,6 +39,8 @@ private:
     int _cells;
     // Scale the bitmap to fill the cell
     bool _scaleToFit;
+    // Does the grid contain configured cells
+    bool _gridEmpty = true;
 
 public:
     // Constructor:
@@ -269,6 +271,7 @@ public:
     // Update a cell with a specified bitmap
     void UpdateCell(const bitmap &bmp, int row, int col, int span = 1, bool centre = true)
     {
+        _gridEmpty=false;
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
@@ -284,6 +287,7 @@ public:
     // Update a cell with a specified sprite
     void UpdateCell(const sprite &sprite, int row, int col, int span = 1, bool centre = true)
     {
+        _gridEmpty=false;
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
@@ -298,6 +302,7 @@ public:
     // Update a cell with a specified button
     void UpdateCell(Button *button, int row, int col, int span = 1, bool centre = true)
     {
+        _gridEmpty=false;
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
@@ -313,6 +318,7 @@ public:
     // Update all cells with a specified bitmap
     void UpdateAllCells(bitmap bmp, bool centre = true)
     {
+        _gridEmpty=false;
         // Iterate over all the cells
         for (size_t i = 0; i < _cells; i++)
         {
@@ -327,6 +333,7 @@ public:
     // Update all cells with a specified sprite
     void UpdateAllCells(sprite sprite, bool centre = true)
     {
+        _gridEmpty=false;
         // Iterate over all the cells
         for (size_t i = 0; i < _cells; i++)
         {
@@ -366,6 +373,8 @@ public:
     // Clear the grid
     void ClearGrid()
     {
+        if (_gridEmpty)
+            return;
         // Iterate over all the cells
         for (size_t i = 0; i < _cells; i++)
         {
@@ -376,5 +385,7 @@ public:
             _grid[i].span = 1;
             _grid[i].centre = true;
         }
+        // Grid is now empty
+        _gridEmpty = true;  
     }
 };
