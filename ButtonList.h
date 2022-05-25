@@ -7,14 +7,26 @@ private:
 public:
     Button *button;
     ConfigData config;
-    //Create a new node with the given data
+
+    /**
+     * @brief construct a new Button Node object
+     * 
+     * @param button the button to be stored in the node
+     */
     ButtonNode(Button *button)
     {
         this->button = button;
         this->next = this;
         this->prev = this;
     }
-    //Create a new node with the given data and link it
+
+    /**
+     * @brief construct a new Button Node object
+     * 
+     * @param button the button to be stored in the node
+     * @param next the next node
+     * @param prev the previous node
+     */
     ButtonNode(Button *button, ButtonNode *next, ButtonNode *prev)
     {
         this->button = button;
@@ -22,7 +34,11 @@ public:
         this->prev = prev;
     }
 
-    //Add a new node after this node
+    /**
+     * @brief add a node after the current node
+     * 
+     * @param button the button to be linked to the node
+     */
     void addAfter(ButtonNode *node)
     {
         node->next = this->next;
@@ -31,7 +47,11 @@ public:
         this->next = node;
     }
 
-    //Add a new node before this node
+    /**
+     * @brief add a node before the current node
+     * 
+     * @param button the button to be linked to the node
+     */
     void addBefore(ButtonNode *node)
     {
         node->next = this;
@@ -40,20 +60,31 @@ public:
         this->prev = node;
     }
 
-    //Remove this node from the list
+    /**
+     * @brief remove this node from the list
+     * 
+     */
     void remove()
     {
         this->prev->next = this->next;
         this->next->prev = this->prev;
     }
 
-    //Get the next node in the list
+    /**
+     * @brief get the next node in the list
+     * 
+     * @return ButtonNode* the next node in the list
+     */
     ButtonNode *getNext()
     {
         return this->next;
     }
-
-    //Get the previous node in the list
+    
+    /**
+     * @brief get the previous node in the list
+     * 
+     * @return ButtonNode* the previous node in the list
+     */
     ButtonNode *getPrev()
     {
         return this->prev;
