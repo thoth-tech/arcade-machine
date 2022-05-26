@@ -3,140 +3,399 @@ using namespace std;
 using std::vector;
 
 class Menu {
-    private:
-        string background = "games_dashboard";
-        // Vector to store the config data of each game
-        vector<ConfigData> _games;
-        // Contains info about newly created process and thread
-        PROCESS_INFORMATION processInfo;
-        // Unsigned int to store exit info
-        DWORD exit_code;
-        // Holds the game path of selected game
-        LPCSTR _gamePath;
-        // Holds the executable of selected game
-        LPSTR _gameExe;
-        // Holds the game directory of selected game
-        LPCSTR _gameDir;
-        // Used to find x centre of screen
-        double _center_x = 960;
-        // Used to fine y centre of screen
-        double _center_y = 540;
-        // Stores x of mouse position
-        double _x;
-        // Stores y of mouse position
-        double _y;
-        // Checks if game is running
-        bool _in_game = false;
-        // Checks if program has exited
-        bool _program_exit;
-        // Vector of buttons
-        vector<Button*> btns;
-        // A selector
-        Selector select;
-        // The action to take
-        string action;
-        // Vectore to store game images
+private:
+    string background = "games_dashboard";
+    // Vector to store the config data of each game
+    vector<ConfigData> _games;
+    // Contains info about newly created process and thread
+    PROCESS_INFORMATION processInfo;
+    // Unsigned int to store exit info
+    DWORD exit_code;
+    // Holds the game path of selected game
+    LPCSTR _gamePath;
+    // Holds the executable of selected game
+    LPSTR _gameExe;
+    // Holds the game directory of selected game
+    LPCSTR _gameDir;
+    // Used to find x centre of screen
+    double _center_x = 960;
+    // Used to fine y centre of screen
+    double _center_y = 540;
+    // Stores x of mouse position
+    double _x;
+    // Stores y of mouse position
+    double _y;
+    // Checks if game is running
+    bool _in_game = false;
+    // Checks if program has exited
+    bool _program_exit;
+    // Vector of buttons
+    vector<Button*> btns;
+    // Vectore to store game images
+    vector<string> game_images;
+    // Menu grid
+    Grid _grid;
+    Tip *tip;
+    ButtonNode *button = nullptr;
+    bool _overlayActive = false;
+    /// Button Action 
+    string _action;
+    Selector _selector_games_menu;
+    // Passes into Selector optional parameter.
+    bool game_menu = true;
+    // Handle for game window.
+    HWND handle;
+    // Determines when game has started.
+    bool _game_started = false;
+    // Starting position of button x.
+    const int position = 700;
+    // Position of button y.
+    const int _posY = 270;
+    // Increments x of sprite.
+    const int speed = 30;
+    // The positions of the sprites for slide.
+    int _pos1 = position;
+    int _pos2 = _pos1 - position;
+    int _pos3 = _pos2 - position;
+    int _pos4 = position * 2;
+    int _pos5 = position * 3;
+    // Hold the button sprites for slide.
+    sprite _new_button1;
+    sprite _new_button2;
+    sprite _new_button3;
+    // To determine direction of slide.
+    bool _menu_slide_left;
+    bool _menu_slide_right;
+    // Determines when sliding.
+    bool _menu_sliding = false;
+
+public:
+    Menu(){}
+
+    Menu(vector<ConfigData> configs)
+    {
+        this->_games = configs;
+        handle = FindWindowA(NULL, "arcade-machine");
+    }
+    ~Menu(){}
+
+    // Getters
+    auto get_buttons() const -> const vector<Button*> { return this->btns; }
+    bool get_overlay_state() { return _overlayActive; }
+    auto get_slide_left() const -> const bool { return this->_menu_slide_left;}
+    auto get_slide_right() const -> const bool { return this->_menu_slide_right;}
+
+    // This function gets the game images from the config files and returns vector of game images.
+    vector<string> get_game_sprites(vector<ConfigData> configs)
+    {
         vector<string> game_images;
 
-    public: 
-        Menu(){}
-
-        Menu(vector<ConfigData> configs) 
+        for (int i = 0; i < configs.size(); i++)
         {
-            this->_games = configs;
+            // Get image dir and image name from games vector.
+            string image = configs[i].folder() + "/" + configs[i].image();
+            game_images.push_back(image);
         }
-        ~Menu(){}
 
-        // This function gets the game images from the config files and returns vector of game images.
-        vector<string> get_game_sprites(vector<ConfigData> configs) 
+        return game_images;
+    }
+
+    void create_grid()
+    {
+        // Instantiate grid object
+        Grid grid(8, 14);
+        this->_grid = grid;
+        // Update the background
+        this->_grid.SetBackground(bitmap_named(this->background));
+    }
+
+    // This function creates the game buttons from the game images.
+    void create_buttons()
+    {
+        // Call function to get game images.
+        game_images = get_game_sprites(_games);
+
+        for (int i = 0; i < game_images.size(); i++)
         {
-            vector<string> game_images;
-
-            for (int i = 0; i < configs.size(); i++)
+            if (i == 0)
             {
-                // Get image dir and image name from games vector.
-                string image = configs[i].folder() + "/" + configs[i].image();
-                game_images.push_back(image);
+                this->button = new ButtonNode(new GameScreenButton(Button::GAME, game_images[0]));
+                this->button->config = _games[0];
             }
-
-            return game_images;
-        }
-
-        // This function creates the game buttons from the game images.
-        void get_buttons()
-        {
-            // Call function to get game images.
-            game_images = get_game_sprites(_games);
-            for (int i = 0; i < game_images.size(); i++)
+            else
             {
-                // Get each image
                 string image = game_images[i];
-                // Create new buttons
-                Button *button1 = new GameScreenButton(Button::GAME, image);
-                // Add to buttons array
-                this->btns.push_back(button1);
+                this->button->addBefore(new ButtonNode(new GameScreenButton(Button::GAME, image)));
+                this->button->getPrev()->config = _games[i];
             }
         }
+    }
 
-        // Draw the game image buttons on the window.  
-        void set_game_image()
+    //Create the tip
+    void create_tip()
+    {
+        bitmap bmpTip = bitmap_named("information");
+        //Breakdown the sheet
+        bitmap_set_cell_details(bmpTip, 50, 50, 4, 3, 12);
+        //Load the animation script
+        animation_script info_script = load_animation_script("info-script", "information.txt");
+        //Create the animation
+        animation anim = create_animation(info_script, "rotate");
+        //Load the animation into options
+        drawing_options opt = option_with_animation(anim);
+        //Create the tip
+        string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
+        this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
+    }
+
+    // Draw the game buttons to the window, using the carousel layout
+    void update_carousel()
+    {
+        // If menu is sliding then clear the grid.
+        if (this->_menu_sliding)
         {
-            // Instantiate grid object
-            Grid grid(6, 4);
-
-            if (this->btns.size() > 0)
+            this->_grid.ClearGrid();
+            this->_overlayActive = false;
+        }
+        if (_selector_games_menu.get_slide_left() || _selector_games_menu.get_slide_right())
+        {
+            // Without this if statement there is a small jerk/crossover when sliding.
+            // Think it just provides a small delay between clearing and drawing grid?
+        }
+        else
+        {
+            if (this->button && !this->_in_game)
             {
-                // Update the grid cells from the button array
-         //       grid.UpdateCell(this->btns[0], 1, 0);
-                grid.UpdateCell(this->btns[0], 1, 1);
-                grid.UpdateCell(this->btns[2], 1, 3);
-
-                // Draw grid to screen
-                grid.DrawGrid();
-                // Check for key input
-                this->action = select.check_key_input(this->btns);
+                this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
+                this->_grid.UpdateCell(this->button->button, 2, 5, 1, false);
+                this->_grid.UpdateCell(this->button->getNext()->button, 2, 10, 1, false);
             }
         }
+    }
 
-        // Draw the background and call set game image.
-        void draw_menu_page()
+    //Handle carousel input
+    void carousel_handler()
+    {
+        /// Check for input in selector class.
+        this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
+        this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
+
+        check_game_exit();
+
+        if (this->button)
         {
-            draw_bitmap(this->background, 0, 0);
-
-            set_game_image();
-        }
-
-        // Determine which game button object is clicked on and get the game info for start game.
-        void button_clicked(point_2d point)
-        {
-            for (int i = 0; i < game_images.size(); i++)
+            if (this->_action == "escape" && _overlayActive)
             {
-                if (sprite_at(this->btns[i]->btn(), point))
-                {
-                    // If the mouse is then clicked.
-                    if (mouse_clicked(LEFT_BUTTON))
-                    {
-                        // Get game path
-                        _gamePath = (_games[i].folder() + "/" + _games[i].exe()).c_str();
-                        // Get executable name
-                        _gameExe = strdup(_games[i].exe().c_str());
-                        // Get game directory
-                        _gameDir = _games[i].folder().c_str();
+                _overlayActive = false;
+            }
+            else if (this->_action == "return")
+            {
+                if (_overlayActive)
+                {   
+                    // Disable the arcade machine window.
+                    //EnableWindow(handle, false);
 
-                        // Set the center of the game
-                        this->_x = _center_x;
-                        this->_y = _center_y;
+                    // Get game path
+                    _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
+                    // Get executable name
+                    _gameExe = strdup(this->button->config.exe().c_str());
+                    // Get game directory
+                    _gameDir = this->button->config.folder().c_str();
 
-                        // Call method to open game executable
-                        start_game(_gamePath, _gameExe, _gameDir);
-                        return;
-                    }
+                    // Set the center of the game
+                    this->_x = _center_x;
+                    this->_y = _center_y;
+                    
+                    // fade screen 
+                    fade_to_black();
+                    // fill with black
+                    fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
+                    // clear grid
+                    this->_grid.ClearGrid();
+                    // set new background
+                    this->_grid.SetBackground(bitmap_named("in_game_bgnd"));
+                    //turn off overlay
+                    this->_overlayActive = false;
+                    // turn off menu music
+                    fade_music_out(1000);
+                    // fade back in
+                    fade_back_in();
+                    // Delay starting game to give time for arcade machine to disable input.
+                    //Sleep(200);
+                    // Call method to open game executable
+                    start_game(_gamePath, _gameExe, _gameDir);
+                    
+                    return;
                 }
+
+                _overlayActive = true;
+                
             }
         }
+    }
 
-        // Start up the chosen game using CreateProcessA.
-        void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
+    // Draw the background and call set game image.
+    void draw_menu_page()
+    {
+        // Wait for selector to key input to determine slide direction.
+        if (_selector_games_menu.get_slide_left() == true)
+        {
+            this->_menu_slide_left = true;
+        }
+        if (_selector_games_menu.get_slide_right() == true)
+        {
+            this->_menu_slide_right = true;
+        }
+
+        carousel_handler();
+
+        // if the game has ended, go back to games menu
+        if(!this->_in_game && this->_game_started) 
+        { 
+            this->_game_started = false; 
+            back_to_games_menu(); 
+        }
+        
+        update_carousel();
+        this->_grid.DrawGrid();
+        if (_overlayActive)
+            draw_overlay(button->config);
+        this->tip->draw();
+    }
+
+        // Method to update the sprite positions and draw sprite.
+    void update_slide(sprite button_sprite, int position)
+    {
+        // Show the base layer of sprite.
+        sprite_show_layer(button_sprite, 0);
+        // Set the x position of sprite.
+        sprite_set_x(button_sprite, position);
+        // Set the y position of sprite.
+        sprite_set_y(button_sprite, _posY);
+        // draw sprite to screen.
+        draw_sprite(button_sprite);
+        // Updatse sprite.
+        update_sprite(button_sprite);
+    }
+
+    // Slide the game buttons on left key input.
+    void draw_update_slide_left()
+    {   
+        this->_menu_sliding = true;
+
+        // Get sprites of buttons on display.
+        this->_new_button1 = this->button->getNext()->button->btn();
+        this->_new_button2 = this->button->button->btn();
+        this->_new_button3 = this->button->getPrev()->button->btn();
+
+        // Increment the x position of sprite.
+        this->_pos1 += speed;
+        this->_pos2 += speed;
+        this->_pos3 += speed;
+      
+        // Update and draw sprite.
+        update_slide(this->_new_button1, this->_pos1);
+        update_slide(this->_new_button2, this->_pos2);
+        update_slide(this->_new_button3, this->_pos3);
+    
+        // If sprite reaches position.
+        if (this->_pos1 > 1300)
+        {
+            // Set selector bool back to false.
+            _selector_games_menu.set_slide_left(false);
+            this->_menu_sliding = false;
+            // Reset positions.
+            this->_pos1 = position;
+            this->_pos2 = this->_pos1 - position;
+            this->_pos3 = this->_pos2 - position;
+            this->_menu_slide_left = false;
+        }
+    }
+
+    // Slide the game buttons on right key input.
+    void draw_update_slide_right()
+    {
+        this->_menu_sliding = true;
+
+        // Get sprites of buttons on display.
+        this->_new_button1 = this->button->getPrev()->button->btn();
+        this->_new_button2 = this->button->button->btn();
+        this->_new_button3 = this->button->getNext()->button->btn();
+
+        // Decrease the x position of sprite.
+        this->_pos1 -= speed;
+        this->_pos4 -= speed;
+        this->_pos5 -= speed;
+
+        // Update and draw sprite.
+        update_slide(this->_new_button1, this->_pos1);
+        update_slide(this->_new_button2, this->_pos4);
+        update_slide(this->_new_button3, this->_pos5);
+
+        if (this->_pos1 <= 20)
+        {
+            // Set selector bool back to false.
+            _selector_games_menu.set_slide_right(false);
+            this->_menu_sliding = false;
+            // Reset positions.
+            this->_pos1 = position;
+            this->_pos4 = position * 2;
+            this->_pos5 = position * 3;
+            this->_menu_slide_right = false;     
+        }
+    }
+
+    void draw_overlay(ConfigData config)
+    {
+        int x_offset = (current_window_width() / 2) + (current_window_width() / 14);
+        int y_start = current_window_height() / 6;
+        int y_offset = current_window_height() / 40;
+
+        fill_rectangle(rgba_color(0.0, 0.0, 0.0, 0.8), (current_window_width() / 2), 0, (current_window_width() / 2), current_window_height());
+        draw_text(config.title(), COLOR_WHITE, "font_title", y_offset * 3, x_offset, y_start);
+        y_start += y_offset * 3;
+        draw_text("Author: " + config.author(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (1 * y_offset));
+        draw_text("Genre: " + config.genre(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (2 * y_offset));
+        draw_text("Language: " + config.language(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (3 * y_offset));
+        draw_text("Rating: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
+        draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
+    }
+
+    //Attempts to find a window and bring it to focus, if it exists.
+    //Returns true if successful, false if not.
+    bool FocusWindow(string windowName, int timeout = 2000)
+    {
+        LPCSTR gameWindow =  windowName.c_str();
+        HWND gameWindowHandle = NULL;
+
+        int timeElapsed;
+        auto startTime = chrono::steady_clock::now();
+
+        //Find the window handle
+        do {
+            gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
+            timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+            Sleep(250);
+        }
+        while (gameWindowHandle == NULL && timeElapsed <= timeout);
+
+        //Maximise the Window
+        if (gameWindowHandle != NULL)
+        {   
+            ShowWindow(gameWindowHandle, SW_SHOWMAXIMIZED);
+            return true;
+        }
+        else
+        {
+            write_line("Unable to find gameWindow Handle");
+            return false;
+        }
+    }
+
+    // Start up the chosen game using CreateProcessA.
+    void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
+    {
+        if (!this->_in_game)
         {
             // Additional info
             STARTUPINFOA startupInfo;
@@ -156,37 +415,84 @@ class Menu {
                 FALSE,                  // Set handle inheritance to FALSE
                 NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
                 NULL,                    // Use parent's environment block
-                gameDirectory,           // Use parent's starting directory 
+                gameDirectory,           // Use parent's starting directory
                 &startupInfo,            // Pointer to STARTUPINFO structure
                 &processInfo           // Pointer to PROCESS_INFORMATION structure
             );
-
+            
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
+            
+            string windowName = gameExe;
+            //Remove the extension from the application name (.exe)
+            windowName = windowName.substr(0, windowName.find("."));
+            //Focus the window
+            FocusWindow(windowName);
 
             this->_in_game = true;
-        }
+        }   
+    }
 
-        // Method to keep the mouse positioned within the game window.
-        void move_mouse_position(point_2d mousePoint)
+    // Method to keep the mouse positioned within the game window.
+    void check_game_exit()
+    {
+        if (this->_in_game == true)
         {
-            if (this->_in_game == true)
+            this->_game_started = true;
+            // Check if game has been exited.
+            this->_program_exit = GetExitCodeProcess(processInfo.hProcess, &exit_code);
+            if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
             {
-                // Check if game has been exited.
-                this->_program_exit = GetExitCodeProcess(processInfo.hProcess, &exit_code);
-                if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
-                {
-                    this->_in_game = false;
-                }
-                // If game is not exited, keep the mouse pointer in the game window.
-                int mouse_x = mousePoint.x;
-                int mouse_y = mousePoint.y;
-                if (mousePoint.x > this->_x || mousePoint.x < this->_x || mousePoint.y > this->_y || mousePoint.y < this->_y)
-                {
-                    move_mouse(_center_x, _center_y);
-                    this->_x = mouse_x;
-                    this->_y = mouse_y;
-                }
+                this->_in_game = false;
+                // Enable to arcade-machine window again.
+                //EnableWindow(handle, true);
             }
         }
+    }
+
+    // fade back to regualr games menu
+    void back_to_games_menu()
+    {
+        fade_to_black();
+        fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
+        this->_grid.SetBackground(bitmap_named("games_dashboard"));
+        fade_back_in();
+    }
+
+    // fade screen to black
+    void fade_to_black()
+    {
+        // Set fade increment (opacity)
+        double alpha = 0.0;
+
+        do
+        {
+            clear_screen();
+            this->_grid.DrawGrid();
+            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alpha), 0, 0, 1920, 1080);
+            alpha = alpha + 0.1;
+            refresh_screen(60);
+            Sleep(50);
+
+        } while (alpha < 1.0);
+    }
+    
+    // fade screen back from black
+    void fade_back_in()
+    {
+        // Set fade increment (opacity)
+        double alpha = 1.0;
+
+        do
+        {
+            clear_screen();
+            this->_grid.DrawGrid();
+            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alpha), 0, 0, 1920, 1080);
+            alpha = alpha - 0.1;
+            refresh_screen(60);
+            Sleep(50);
+
+        } while (alpha > 0.0);
+
+    }
 
 };

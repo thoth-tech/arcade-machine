@@ -1,4 +1,4 @@
-// Button Class
+ // Button Class
 #define WIDTH 1920
 #define HEIGHT 1080
 #define X_CELL 120
@@ -9,9 +9,10 @@ using std::vector;
 
 class Button{
     public:
+        /// This buttons ID
         int _id;
         /// This buttons bitmap
-        bitmap _pic;
+        //bitmap _pic;
         /// This buttons sprite
         sprite _btn;
         /// This buttons position in the window as point_2d in pixels (x,y)
@@ -27,30 +28,40 @@ class Button{
         // This buttons hightlight bitmap
         bitmap _hghlt;
         // This buttons hightlight layer
-        string _hightlight;
+        string _highlight;
         // This buttons image path
         string _image_path;
     
         // Getters:
-        auto id() const -> const int& { return _id; }
-        auto pic() const -> const bitmap& { return _pic; }
-        auto btn() const -> const sprite& { return _btn; }
+        auto id()       const -> const int&      { return _id;       }
+        //auto pic()      const -> const bitmap&   { return _pic;      }
+        auto btn()      const -> const sprite&   { return _btn;      }
         auto location() const -> const point_2d& { return _location; }
-        auto x() const -> const int& { return _x; }
-        auto y() const -> const int& { return _y; }
-        auto centre_x() const -> const int& { return _centre_x; }
-        auto centre_y() const -> const int& { return _centre_y; }
-        auto color() const -> const string& { return _color; }
+        auto x()        const -> const int&      { return _x;        }
+        auto y()        const -> const int&      { return _y;        }
+        auto centre_x() const -> const int&      { return _centre_x; }
+        auto centre_y() const -> const int&      { return _centre_y; }
+        auto color()    const -> const string&   { return _color;    }
+        // Setters
+        void set_x(const int &x){ this->_x = x; }
+        void set_y(const int &y){ this->_y = y; }
 
         // Enumeration of button options
         enum Color
         {
             PLAY,
             EXIT,
-            OPTIONS, 
+            OPTS, 
             GAME,
-            HOME
-
+            HOME,
+            MUSIC,
+            GAMELIST,
+            MENU,
+            BACKGAME,
+            SOUNDSETTING,
+            MENUSETTING,
+            HOMERETURN,
+            GAMERETURN
         };
 
         // Default Constructor
@@ -62,11 +73,11 @@ class Button{
             // button color
             this->_color = btn_color(c);
             // load button color image
-            this->_pic = load_bitmap(to_string(c), this->_color);
+            //this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
-            this->_btn = create_sprite(this->_pic);
+            this->_btn = create_sprite(this->_color);
             // add hightlight layer to sprite
-            sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
+            sprite_add_layer(this->_btn, this->_hghlt, this->_highlight);
             // scale the sprite
             sprite_set_scale(this->_btn, scale);
             // get the centre points of the sprite 
@@ -77,15 +88,13 @@ class Button{
         // Second Overloaded Constructor
         // Calculates the position in the window
         Button(Color c, float x, float y, float scale = 1)
-        {
+        { 
             // button color
             this->_color = btn_color(c);
-            // load button color image
-            this->_pic = load_bitmap(to_string(c), this->_color);
             // create sprite from image
-            this->_btn = create_sprite(this->_pic);
+            this->_btn = create_sprite(this->_color);
             // add hightlight layer to sprite
-            sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
+            sprite_add_layer(this->_btn, this->_hghlt, this->_highlight);
             // get the centre points of the sprite 
             this->_centre_x = sprite_width(this->_btn) /2;
             this->_centre_y = sprite_height(this->_btn)/2;
@@ -105,29 +114,25 @@ class Button{
         {
             // button color
             this->_color = btn_color(c);
+            // create bitmap from string
+            //this->_pic = load_bitmap(image, image);
             // create sprite from image
             this->_btn = create_sprite(image);
             // add hightlight layer to sprite
-            sprite_add_layer(this->_btn, this->_hghlt, this->_hightlight);
+            sprite_add_layer(this->_btn, this->_hghlt, this->_highlight);
             // scale the sprite
             sprite_set_scale(this->_btn, scale);
+            // get the centre points of the sprite 
+            this->_centre_x = sprite_width(this->_btn) /2;
+            this->_centre_y = sprite_height(this->_btn)/2;
         }
 
+        // Destructor
         ~Button(){}
 
         virtual void btn_image(string image) = 0;
         virtual void draw_button() = 0;
-        virtual string action() = 0;
-        
-
-        void draw_screen_guides()
-        {
-            draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.5 , 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.25, HEIGHT*0.5 , 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.75, HEIGHT*0.5 , 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.25, 3);
-            draw_circle(COLOR_BLACK, WIDTH*0.5 , HEIGHT*0.75, 3);                                    
-        }
+        virtual string action(string keyinput = "") = 0;
 
         /// 
         string btn_color(Color c)
@@ -137,28 +142,47 @@ class Button{
             {
                 case PLAY:
                     _hghlt = load_bitmap("play_hghlt", filepath + "btn_play_hghlt.png");
-                    _hightlight = "play_hightlight";
-                    return filepath + "btn_play.png";
+                    _highlight = "play_highlight";
+                    return "btn_play";
                     break;
                 case EXIT:
                     _hghlt = load_bitmap("exit_hghlt", filepath + "btn_exit_hghlt.png");
-                    _hightlight = "exit_hightlight";
-                    return filepath + "btn_exit.png";
+                    _highlight = "exit_highlight";
+                    return "btn_exit";
                     break;
-                case OPTIONS:
+                case OPTS:
                     _hghlt = load_bitmap("options_hghlt", filepath + "btn_options_hghlt.png");
-                    _hightlight = "options_hightlight";
-                    return filepath + "btn_options.png";
+                    _highlight = "options_highlight";
+                    return "btn_opts";
                     break;
                 case GAME:
                     _hghlt = load_bitmap("game_hghlt", filepath + "btn_game_hghlt.png");
-                    _hightlight = "game_hightlight";
+                    _highlight = "game_highlight";
                     return "";
                 case HOME:
                     return filepath + "Gray/home.png";
                     break;
+
+                case SOUNDSETTING:
+                    _hghlt=load_bitmap("soundSetting_hghlt",filepath+"Yellow/Music On.png");
+                    _highlight="soundSetting_highlight";
+                    return "sound_notSelected";
+
+                case MENUSETTING:
+                    _hghlt=load_bitmap("",filepath+"Yellow");
+                    _highlight="yellow_highlight";
+                    return "menuSetting_notSelected";
+                case HOMERETURN:
+                    _hghlt=load_bitmap("",filepath+"Yellow");
+                    _highlight="yellow_highlight";
+                    return "backMenu_notSelected";
+                case GAMERETURN:
+                    _hghlt=load_bitmap("",filepath+"Yellow");
+                    _highlight="yellow_highlight";
+                    return "backGame_notSelected";
+
                 default:
-                    return filepath + "btn_play.png";
+                    return "btn_play";
                     break;
             }
         }
@@ -168,12 +192,10 @@ class Button{
 
 class MenuButton : public Button{
     public:
-        //MenuButton(){}
         MenuButton(Color c, float scale = 1) : Button(c, scale){}
         MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
-        ~MenuButton(){}
 
-        string action()
+        string action(string keyinput = "")
         {
             if (this->color() == btn_color(Button::PLAY))
             {
@@ -187,18 +209,18 @@ class MenuButton : public Button{
                 write_line("Exit");
                 return "exit";
             }
-            if (this->color() == btn_color(Button::OPTIONS))
+            if (this->color() == btn_color(Button::OPTS))
             {
                 // go to this screen
                 write_line("Options");
                 return "options";
             }
-            return "";
+            return keyinput;
         }
 
+        // Draw button to screen
         void draw_button()
         {
-            // draw button to screen
             draw_sprite(this->_btn);
         }
 
@@ -207,15 +229,16 @@ class MenuButton : public Button{
 };
 
 class GameScreenButton : public Button{
-    private: 
-
     public:
-        GameScreenButton(Color c, string image, float scale = 1) : Button(c, image, scale){}
-        ~GameScreenButton(){}
+        // Reg constructor
+        GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
 
-        string action()
+        GameScreenButton(Color c, string s, float scale = 1) : Button(c, s, scale){}
+        GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
+
+        string action(string keyinput = "")
         {
-            return "";
+            return keyinput;
         }
 
         void btn_image(string image)
@@ -223,11 +246,31 @@ class GameScreenButton : public Button{
             this->_color = image;
         }
 
+        // draw button to screen
         void draw_button()
         {
-            // draw button to screen
             draw_sprite(this->_btn);
         }
+};
+class OptionScreenButton:public Button{
+    public:
+        OptionScreenButton(Color c, float scale = 1) : Button(c, scale){}
+        OptionScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
+        string action(string keyinput = "")
+            {
+                return keyinput;
+            }
+
+            void btn_image(string image)
+            {
+                this->_color = image;
+            }
+
+            // draw button to screen
+            void draw_button()
+            {
+                draw_sprite(this->_btn);
+            }
 };
 
 

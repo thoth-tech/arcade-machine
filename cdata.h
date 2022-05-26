@@ -6,16 +6,28 @@ using std::vector;
 
 class ConfigData{
     private:
+        /// This configs ID
         int _id;
+        /// The repository
         string _repo;
+        /// This programming language this game was written in 
         string _language;
+        /// The thumbnail image of this game  
         string _image;
+        /// The title of this game
         string _title;
+        /// The genre of this game
         string _genre;
+        /// The MPA classification rating of this game 
         string _rating;
+        /// Th author/creator of this game
         string _author;
+        /// The path to the executable of this game
         string _exe;
+        /// The folder this game is inside
         string _folder;
+        /// A descritpion of the game 
+        string _description;
     public:
         // Default Constructor
         ConfigData(){}
@@ -30,18 +42,21 @@ class ConfigData{
         auto set_id(int &i) { _id = i; }
         auto set_folder(string &dir) { _folder = dir; }
         // Getters:
-        auto id() const -> const int& { return _id; }
-        auto repo() const -> const string& { return _repo; }
+        auto id()       const -> const int&    { return _id;       }
+        auto repo()     const -> const string& { return _repo;     }
         auto language() const -> const string& { return _language; }
-        auto image() const -> const string& { return _image; }
-        auto title() const -> const string& { return _title; }
-        auto genre() const -> const string& { return _genre; }
-        auto rating() const -> const string& { return _rating; }
-        auto author() const -> const string& { return _author; }
-        auto exe() const -> const string& { return _exe; }
-        auto folder() const -> const string& { return _folder; }
+        auto image()    const -> const string& { return _image;    }
+        auto title()    const -> const string& { return _title;    }
+        auto genre()    const -> const string& { return _genre;    }
+        auto rating()   const -> const string& { return _rating;   }
+        auto author()   const -> const string& { return _author;   }
+        auto exe()      const -> const string& { return _exe;      }
+        auto folder()   const -> const string& { return _folder;   }
+        auto description()   const -> const string& { return _description;   }
 
-        // Open a file
+        /*
+            Returns a file given the filepath
+        */
         ifstream open_file(string file)
         {
             ifstream config_file;
@@ -57,6 +72,9 @@ class ConfigData{
             return config_file;
         }
 
+        /*
+            Returns an array of data from a text file
+        */        
         vector<string> read_txt(ifstream file)
         {
             vector<string> config_items;
@@ -72,6 +90,39 @@ class ConfigData{
             }
             
             return config_items;
+        }
+
+        /*
+            Populates this config data with the data from the given array
+        */  
+        void collect_config_data(vector<string> configs = vector<string>())
+        {
+            smatch sm;
+            vector<string> data;
+
+            if (configs.size() > 0)
+            {
+                for (int i = 0; i < configs.size(); i++)
+                {
+                    const string s = configs[i];
+
+                    if(regex_search(s.begin(), s.end(), sm, regex(".*=(.*)")))
+                        data.push_back(sm[1]);
+                }
+
+                if(!data.empty())
+                {
+                    this->_title =       data[0];
+                    this->_author =      data[1];
+                    this->_genre =       data[2];
+                    this->_description = data[3];
+                    this->_rating =      data[4];
+                    this->_language =    data[5];
+                    this->_image =       data[6];
+                    this->_exe =         data[7];
+                    this->_repo =        data[8];
+                }
+            }
         }
 
         json read_json(string filepath)
@@ -92,43 +143,9 @@ class ConfigData{
             this->_exe = json_read_string(json_configs, "exe");
         }
 
-        void collect_config_data(vector<string> configs = vector<string>())
-        {
-            smatch sm;
-            vector<string> data;
-
-            if (configs.size() > 0)
-            {
-                for (int i = 0; i < configs.size(); i++)
-                {
-                    const string s = configs[i];
-
-                    if(regex_search(s.begin(), s.end(), sm, regex(".*=(.*)")))
-                        data.push_back(sm[1]);
-                }
-
-                if(!data.empty())
-                {
-                    this->_repo = data[0];
-                    this->_language = data[1];
-                    this->_image = data[2];
-                    this->_title = data[3];
-                    this->_genre = data[4];
-                    this->_rating = data[5];
-                    this->_author = data[6];
-                    this->_exe = data[7];
-                }
-            }
-        }
-
-        bool game_exists()
-        {
-            bool exists = false;
-
-            return exists;
-        }
-
-        // Clone or pull using Git commands
+        /*
+            Clones a git repository given the URL and proposed directory name
+        */
         bool get_from_git(string url, const char* dir)
         {
             struct stat info;
@@ -179,6 +196,7 @@ class ConfigData{
             write_line("Title = " + title());
             write_line("Author = " + author());
             write_line("Genre = " + genre());
+            write_line("Description = " + description());
             write_line("Rating = " + rating());
             write_line("Repo = " + repo());
             write_line("Language = " + language());

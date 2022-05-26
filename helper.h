@@ -21,9 +21,7 @@ class Helper{
         // Method to find the game folder name to store in config class.
         string get_folder_name(string entryPath)
         {
-            ConfigData config;
-
-            unsigned lastPath = entryPath.find("\\", 8);
+            unsigned lastPath = entryPath.find("\\", 14);
             string dir = entryPath.substr(0, lastPath);
             unsigned findBackSlash = dir.find("\\");
             dir.replace(findBackSlash, 1, "/");
@@ -53,7 +51,7 @@ class Helper{
         // Create configs vector from config files.
         vector<ConfigData> config_data_list()
         {   
-            vector<string> files = get_config_files("./games");
+            vector<string> files = get_config_files("./games/games");
 
             vector<ConfigData> configs;
 
@@ -173,42 +171,6 @@ class Helper{
                 process_events();
                 clear_screen();
                 refresh_screen(60);
-            }
-        }
-
-        /* 
-            Draws the Thoth Tech company logo to screen and
-            incremently fills the screen white to animate fading
-        */
-        void play_intro()
-        {
-            // Create new splashscreen with Thoth Tech logo
-            Splashscreen intro_thothtech("intro_thothtech");
-            // Set fade increment (opacity)
-            double alpha = 1.0;
-            // Set iterations
-            int i = 50;
-            // Play sound effect 
-            play_sound_effect("intro");
-            
-            // Do this until iterations finish
-            while(i != 0)
-            {
-                // Draw Thoth Tech company logo
-                intro_thothtech.draw_title_page();
-                // Fill screen with white at alpha value (opacity)
-                fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
-                // Decrement i and alpha 
-                i--; alpha = alpha - 0.05;
-                // If alpha is == 0, hold image for 1.5 seconds
-                if (abs(alpha - 0.0) < 1e-9)
-                    Sleep(1500);
-                    /* After this has happened, the alpha value will continue into the negatives
-                       The colour function continues to accept negative alpha values, 
-                       effectively creating a fade out animation for the remainder of the while loop
-                    */
-                refresh_screen();
-                Sleep(50);
             }
         }
 };
