@@ -1,10 +1,10 @@
-#include "includes.h"
+#include "Includes.h"
 
 using namespace std;
 
 // Define screen size (in pixels)
-//#define WIDTH  1920
-//#define HEIGHT 1080
+#define WIDTH  1920
+#define HEIGHT 1080
 
 int main()
 {
