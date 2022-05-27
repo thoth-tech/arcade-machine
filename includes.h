@@ -18,7 +18,7 @@
 #include <Windows.h>
 
 // Custom classes
-#include "buttons.h"
+#include "Button.h"
 #include "gridlayout.h"
 #include "ConfigData.h"
 #include "ButtonList.h"
