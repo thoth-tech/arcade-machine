@@ -20,7 +20,7 @@
 // Custom classes
 #include "buttons.h"
 #include "gridlayout.h"
-#include "cdata.h"
+#include "ConfigData.h"
 #include "ButtonList.h"
 #include "selector.h"
 #include "tip.h"
