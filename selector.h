@@ -3,10 +3,15 @@ using namespace std;
 
 class Selector {
     private:
-        bool first = true; 
+        // Checks first button.
+        bool first = true;
+        // Splashscreen cursor sprite. 
         sprite cursor;
+        // Checks if game menu currently sliding left.
         bool slide_left = false;
+        // Checks if game menu currently sliding right.
         bool slide_right = false;
+        // Checks if current button is from game menu.
         bool game_menu;
 
     public:
@@ -17,6 +22,7 @@ class Selector {
             this->cursor = create_sprite(cur);
         }
 
+        // Properties used to detect if game menu slide is occurring.
         auto get_slide_left() const -> const bool& { return this->slide_left; }
         auto get_slide_right() const -> const bool& { return this->slide_right; }
         auto set_slide_left(bool left) { slide_left = left; }
@@ -28,14 +34,18 @@ class Selector {
             return this->cursor;
         }
 
-        // Function to check which key is currently pressed and call correct method.
-        // Key states ensure the functions only get called once per key press.
-        // This function returns a string
+        /**
+         * @brief Checks key input, determining whether from game menu or splashscreen and updates that button.
+         * 
+         * @param button_node The current button that is selected.
+         * @param game_menu Checking if from game menu.
+         * @return ButtonNode* 
+         */
         ButtonNode* check_key_input(ButtonNode* button_node, bool game_menu = false)
         {
             this->game_menu = game_menu;
 
-            // highlight play button on start
+            // Highlight play button on start.
             if (first == true) 
             {
                 highlight_first(button_node);
@@ -44,39 +54,50 @@ class Selector {
             // If it is the game menu only allow left/right arrows selection.
             if (game_menu == true)
             {
+                // Check to ensure menu isn't currently sliding.
                 if (slide_left == false && slide_right == false)
                 {
+                    // Slide left.
                     if (key_typed(LEFT_KEY) && !key_typed(RIGHT_KEY))
                     {
                         slide_left = true;
+                        // Previous button becomes current button.
                         button_node = button_node->getPrev();
-                        highlight_center_button(button_node, "prev");
+                        // Highlight the center/current button.
+                        highlight_button(button_node, "prev");
                     }
+                    // Slide right.
                     if (key_typed(RIGHT_KEY) && !key_typed(LEFT_KEY))
                     {
                         slide_right = true;
+                        // Next button becomes current button.
                         button_node = button_node->getNext();
-                        highlight_center_button(button_node, "next");
+                        // Highlight the center/current button.
+                        highlight_button(button_node, "next");
                     }
                 }
             }
             // Else use up/down selection.
             else if (game_menu == false)
             {
+                // Move the selector up.
                 if (key_typed(UP_KEY))
                 {
-                    write_line(button_node->getPrev()->button->color());
+                    // Previous button becomes current button.
                     button_node = button_node->getPrev();
-                    highlight_center_button(button_node, "prev");
+                    // Highlight the current button.
+                    highlight_button(button_node, "prev");
                     // move cursor
                     sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
                 }
+                // Move the selector down.
                 if (key_typed(DOWN_KEY))
                 {
-                    write_line(button_node->getNext()->button->color());
+                    // next button becomes current button.
                     button_node = button_node->getNext();
-                    highlight_center_button(button_node, "next");
-                    // move cursor
+                    // Highlight the current button.
+                    highlight_button(button_node, "next");
+                    // Move cursor.
                     sprite_set_y(this->cursor, sprite_y(button_node->button->btn()));
                 }
             }
@@ -84,22 +105,29 @@ class Selector {
             return button_node;
         }
 
-        // Check for return key input.
+        /**
+         * @brief Checks for selection of a button.
+         * 
+         * @param button_node The current button that is selected.
+         * @param game_menu Check if selection is coming from game menu.
+         * @return ** string 
+         */
         string check_for_selection(ButtonNode* button_node, bool game_menu = false)
         {
+            // If selection not from game menu.
             if (game_menu == false)
             {
-                // Enter key returns the action of the selected button
+                // Return key returns the action of the selected button.
                 if(key_typed(RETURN_KEY)) 
                     return button_node->button->action();
             }
             else
             {
-                // Enter key returns the action of the selected button
+                // Return key returns the action of the selected button.
                 if(key_typed(RETURN_KEY)) 
                      return button_node->button->action("return");
 
-                // Esc key returns the action of the selected button
+                // Escape key returns the action of the selected button.
                 if(key_typed(ESCAPE_KEY)) 
                     return button_node->button->action("escape");
             }
@@ -107,13 +135,20 @@ class Selector {
             return "";
         }
 
-        // Highlights the first button upon page load.
+        /**
+         * @brief Highlights the first button upon page load.
+         * 
+         * @param button_node The current selected button.
+         * @return ** void 
+         */
         void highlight_first(ButtonNode* button_node)
         {
+            // Get the current buttons sprite.
             sprite currentSprite = button_node->button->_btn;
+            // Toggle on the highlight layer.
             sprite_toggle_layer_visible(currentSprite, 1);
 
-            // set start location of cursor
+            // Set start location of cursor.
             if (!game_menu)
             {
                 sprite_set_x(this->cursor, sprite_x(button_node->button->btn()) - 200);
@@ -123,24 +158,31 @@ class Selector {
             first = false;
         }
 
-        // Highlights the selected button.
-        void highlight_center_button(ButtonNode* button_node, string direction)
+        /**
+         * @brief Highlights the current selected button.
+         * 
+         * @param button_node The current button.
+         * @param direction The direction the selector is moving.
+         * @return ** void 
+         */
+        void highlight_button(ButtonNode* button_node, string direction)
         {
-            sprite oldSprite;
+            // Sprite to store the previous sprite.
+            sprite prev_sprite;
 
             // Get current sprite.
-            sprite currentSprite = button_node->button->_btn;
+            sprite current_sprite = button_node->button->_btn;
 
             // Toggle current sprites highlight layer.
-            sprite_toggle_layer_visible(currentSprite, 1);
+            sprite_toggle_layer_visible(current_sprite, 1);
 
             // Get previous sprite by checking direction of movement.
             if (direction == "prev")
-                oldSprite = button_node->getNext()->button->btn();
+                prev_sprite = button_node->getNext()->button->btn();
             else if (direction == "next")
-                oldSprite = button_node->getPrev()->button->btn();
+                prev_sprite = button_node->getPrev()->button->btn();
 
             // Toggle previous sprite highlight layer off.
-            sprite_toggle_layer_visible(oldSprite, 1);
+            sprite_toggle_layer_visible(prev_sprite, 1);
         }
 };
