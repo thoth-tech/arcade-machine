@@ -51,16 +51,16 @@ class ConfigData{
         auto set_id(int &i) { _id = i; }
         auto set_folder(string &dir) { _folder = dir; }
         // Getters:
-        auto id()       const -> const int&    { return _id;       }
-        auto repo()     const -> const string& { return _repo;     }
-        auto language() const -> const string& { return _language; }
-        auto image()    const -> const string& { return _image;    }
-        auto title()    const -> const string& { return _title;    }
-        auto genre()    const -> const string& { return _genre;    }
-        auto rating()   const -> const string& { return _rating;   }
-        auto author()   const -> const string& { return _author;   }
-        auto exe()      const -> const string& { return _exe;      }
-        auto folder()   const -> const string& { return _folder;   }
+        auto id()            const -> const int&    { return _id;            }
+        auto repo()          const -> const string& { return _repo;          }
+        auto language()      const -> const string& { return _language;      }
+        auto image()         const -> const string& { return _image;         }
+        auto title()         const -> const string& { return _title;         }
+        auto genre()         const -> const string& { return _genre;         }
+        auto rating()        const -> const string& { return _rating;        }
+        auto author()        const -> const string& { return _author;        }
+        auto exe()           const -> const string& { return _exe;           }
+        auto folder()        const -> const string& { return _folder;        }
         auto description()   const -> const string& { return _description;   }
 
         /**
@@ -130,15 +130,15 @@ class ConfigData{
 
                 if(!data.empty())
                 {
-                    this->_title =       data[0];
-                    this->_author =      data[1];
-                    this->_genre =       data[2];
+                    this->_title       = data[0];
+                    this->_author      = data[1];
+                    this->_genre       = data[2];
                     this->_description = data[3];
-                    this->_rating =      data[4];
-                    this->_language =    data[5];
-                    this->_image =       data[6];
-                    this->_exe =         data[7];
-                    this->_repo =        data[8];
+                    this->_rating      = data[4];
+                    this->_language    = data[5];
+                    this->_image       = data[6];
+                    this->_exe         = data[7];
+                    this->_repo        = data[8];
                 }
             }
         }
@@ -155,16 +155,21 @@ class ConfigData{
             return config_items;
         }
 
+        /**
+         * @brief Add json strings to data object
+         * 
+         * @param json_configs 
+         */
         void collect_json_data(json json_configs = {})
         {
-            this->_repo = json_read_string(json_configs, "repo");
+            this->_repo     = json_read_string(json_configs, "repo");
             this->_language = json_read_string(json_configs, "language");
-            this->_image = json_read_string(json_configs, "image");
-            this->_title = json_read_string(json_configs, "title");
-            this->_genre = json_read_string(json_configs, "genre");
-            this->_rating = json_read_string(json_configs, "rating");
-            this->_author = json_read_string(json_configs, "author");
-            this->_exe = json_read_string(json_configs, "exe");
+            this->_image    = json_read_string(json_configs, "image");
+            this->_title    = json_read_string(json_configs, "title");
+            this->_genre    = json_read_string(json_configs, "genre");
+            this->_rating   = json_read_string(json_configs, "rating");
+            this->_author   = json_read_string(json_configs, "author");
+            this->_exe      = json_read_string(json_configs, "exe");
         }
 
         /**
