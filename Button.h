@@ -1,18 +1,18 @@
-// Button Class
-#define WIDTH 1920
-#define HEIGHT 1080
-#define X_CELL 120
-#define Y_CELL 135
-
 using namespace std;
 using std::vector;
 
+/**
+ * @brief Abstract Button Class
+ * 
+ * This abstract class is the base class for all derived classes
+ * Contains three overloaded contructors and three virtual methods 
+ */
 class Button{
     public:
         /// This buttons ID
         int _id;
         /// This buttons bitmap
-        //bitmap _pic;
+        bitmap _pic;
         /// This buttons sprite
         sprite _btn;
         /// This buttons position in the window as point_2d in pixels (x,y)
@@ -25,16 +25,16 @@ class Button{
         int _centre_y;
         /// This buttons color 
         string _color;
-        // This buttons hightlight bitmap
+        /// This buttons hightlight bitmap
         bitmap _hghlt;
-        // This buttons hightlight layer
+        /// This buttons hightlight layer
         string _highlight;
-        // This buttons image path
+        /// This buttons image path
         string _image_path;
     
-        // Getters:
+        /// Getters:
         auto id()       const -> const int&      { return _id;       }
-        //auto pic()      const -> const bitmap&   { return _pic;      }
+        auto pic()      const -> const bitmap&   { return _pic;      }
         auto btn()      const -> const sprite&   { return _btn;      }
         auto location() const -> const point_2d& { return _location; }
         auto x()        const -> const int&      { return _x;        }
@@ -42,12 +42,16 @@ class Button{
         auto centre_x() const -> const int&      { return _centre_x; }
         auto centre_y() const -> const int&      { return _centre_y; }
         auto color()    const -> const string&   { return _color;    }
-        // Setters
-        void set_id(int id){ this->_id = id; }
-        void set_x(const int &x){ this->_x = x; }
-        void set_y(const int &y){ this->_y = y; }
 
-        // Enumeration of button options
+        /// Setters
+        void set_id(int id)     { this->_id = id; }
+        void set_x(const int &x){ this->_x  = x;  }
+        void set_y(const int &y){ this->_y  = y;  }
+
+        /**
+         * @brief Enumeration of button types
+         * 
+         */
         enum Color
         {
             PLAY,
@@ -60,7 +64,13 @@ class Button{
         // Default Constructor
         Button(){}
 
-        // First Overloaded Constructor
+        /**
+         * @brief First Overloaded Constructor
+         * 
+         * @param c button type / color
+         * @param scale size multiplier
+         * 
+         */
         Button(Color c, float scale = 1)
         {
             // button color
@@ -78,9 +88,18 @@ class Button{
             this->_centre_y = sprite_height(this->_btn)/2;
         }
         
-        // Second Overloaded Constructor
-        // Calculates the position in the window
-        Button(Color c, float x, float y, float scale = 1)
+        /**
+         * @brief Second Overloaded Constructor
+         * Calculates the position in the window
+         * 
+         * @param c button type / color
+         * @param x intended x-axis position in window
+         * @param y intended y-axis position in window
+         * @param x_cell size of cell x-dimension 
+         * @param y_cell size of cell y-dimension
+         * @param scale size multiplier
+         */
+        Button(Color c, float x, float y, int x_cell, int y_cell, float scale = 1)
         { 
             // button color
             this->_color = btn_color(c);
@@ -92,7 +111,7 @@ class Button{
             this->_centre_x = sprite_width(this->_btn) /2;
             this->_centre_y = sprite_height(this->_btn)/2;
             // store the intended location 
-            this->_x = x * X_CELL; _y = y * Y_CELL;
+            this->_x = x * x_cell; _y = y * y_cell;
             // set button sprite centre point to intended location
             sprite_set_x(this->_btn, this->_x - this->_centre_x);
             sprite_set_y(this->_btn, this->_y - this->_centre_y);
@@ -102,7 +121,14 @@ class Button{
             sprite_set_scale(this->_btn, scale);
         }
 
-        // Third Overloaded Constructor
+        /**
+         * @brief Third Overloaded Constructor
+         * Calculates the position in the window
+         * 
+         * @param c button type / color
+         * @param image bitmap name
+         * @param scale size multiplier
+         */
         Button(Color c, string image, float scale = 1)
         {
             // button color
@@ -123,11 +149,17 @@ class Button{
         // Destructor
         ~Button(){}
 
+        // Virtual fucntions
         virtual void btn_image(string image) = 0;
         virtual void draw_button() = 0;
         virtual string action(string keyinput = "") = 0;
 
-        /// 
+        /**
+         * @brief Gets the filepath to the requested color (image) 
+         * 
+         * @param c 
+         * @return * string 
+         */
         string btn_color(Color c)
         {
             string filepath = "buttons/";
@@ -160,15 +192,20 @@ class Button{
                     break;
             }
         }
-
-
 };
 
 class MenuButton : public Button{
     public:
+        // First constructor
         MenuButton(Color c, float scale = 1) : Button(c, scale){}
-        MenuButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
 
+        /**
+         * @brief The action of this button
+         * Called when the selector receives input for this button
+         * 
+         * @param keyinput 
+         * @return string
+         */
         string action(string keyinput = "")
         {
             if (this->color() == btn_color(Button::PLAY))
@@ -192,7 +229,11 @@ class MenuButton : public Button{
             return keyinput;
         }
 
-        // Draw button to screen
+        /**
+         * @brief Draws button to screen
+         * 
+         * @return * void 
+         */
         void draw_button()
         {
             draw_sprite(this->_btn);
@@ -204,12 +245,17 @@ class MenuButton : public Button{
 
 class GameScreenButton : public Button{
     public:
-        // Reg constructor
+        // First constructor
         GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
-
+        // Third constructor
         GameScreenButton(Color c, string s, float scale = 1) : Button(c, s, scale){}
-        GameScreenButton(Color c, float x, float y, float scale = 1) : Button(c, x, y, scale){}
 
+        /**
+         * @brief returns the action 
+         * 
+         * @param keyinput 
+         * @return string 
+         */
         string action(string keyinput = "")
         {
             return keyinput;
