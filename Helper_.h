@@ -1,6 +1,3 @@
-// Helper class
-// Any generic functions can go here
-
 namespace fs = std::experimental::filesystem;
 using namespace std;
 using std::vector;
@@ -8,6 +5,11 @@ using std::vector;
 // To test txt configs, change to "config"
 #define CONFIG_DIR "config"
 
+/**
+ * @brief Helper class
+ * Any generic functions can go here
+ * 
+ */
 class Helper{
     public:
         char* string_to_char(string str)

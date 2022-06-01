@@ -1,4 +1,3 @@
-// Arcade Machine Class
 using namespace std;
 using std::vector;
 
@@ -6,10 +5,10 @@ using std::vector;
 #define ROWS 7
 #define COLS 15
 
-/* 
-    This class handles the creation of the
-    Arcade Machine itself
-*/
+/**
+ * @brief This class handles the creation of the Arcade Machine itself
+ * 
+ */
 class ArcadeMachine
 {
     private:

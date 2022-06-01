@@ -26,8 +26,8 @@
 #include "tip.h"
 #include "splashscreen.h"
 #include "menu.h"
-#include "helper.h"
+#include "Helper.h"
 #include "option.h"
-#include "arcademachine.h"
+#include "ArcadeMachine.h"
 
 #endif
