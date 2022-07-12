@@ -36,7 +36,7 @@ private:
     // Stores information for each cell (bitmap, span)
     cell *_grid;
     // Number of cells
-    int _cells;
+    int _cells = 0;
     // Scale the bitmap to fill the cell
     bool _scaleToFit;
     // Does the grid contain configured cells
@@ -468,5 +468,63 @@ public:
         }
         // Grid is now empty
         _gridEmpty = true;  
+    }
+    /**
+     * @brief Find the nearest cells row/col from x, y coordinates
+     * 
+     * @param x x-coordinate (px)
+     * @param y y-coordinate (px)
+     * @return point_2d 
+     */
+     point_2d FindCellfromLoc(int x, int y)
+    {
+        int rowNum;
+        // Selected row is out of bounds
+        int yOffset = current_window_height() / _rows;
+        int runningSum = 0;
+        for (int i = 0; i < _rows; i++)
+        {
+            if (y >= runningSum && y < runningSum + yOffset)
+            {
+                rowNum = i;
+            }
+            runningSum += yOffset;
+        }
+        int xOffset;
+        if (_useColsArray)
+            xOffset = (current_window_width() / _colsArray[rowNum]);
+        else
+            xOffset = (current_window_width()/_cols);
+        runningSum = 0;
+        int colNum;
+        for (int i = 0; i < _cols; i++)
+        {
+            if (x >= runningSum && x < runningSum  + xOffset)
+            {
+                colNum = i;
+            }
+            runningSum += xOffset;
+        }
+        point_2d point;
+        point.x = colNum;
+        point.y = rowNum;
+        return point;
+    }
+
+    /**
+     * @brief Clear the cell
+     * 
+     */
+   void ClearCell(int row, int col)
+    {
+        // Gets the index of the cell
+        int cellNum = FindCell(row, col);
+        // Clear cell
+        _grid[cellNum].cellType = EMPTY;
+        _grid[cellNum].sprite = NULL;
+        _grid[cellNum].bmp = NULL;
+        _grid[cellNum].button = NULL;
+        _grid[cellNum].span = 1;
+        _grid[cellNum].centre = true;
     }
 };
