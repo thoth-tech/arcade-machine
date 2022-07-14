@@ -192,9 +192,6 @@ public:
             {
                 if (_overlayActive)
                 {   
-                    // Disable the arcade machine window.
-                    //EnableWindow(handle, false);
-
                     // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
@@ -220,8 +217,6 @@ public:
                     fade_music_out(1000);
                     // fade back in
                     fade_back_in();
-                    // Delay starting game to give time for arcade machine to disable input.
-                    //Sleep(200);
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
                     
@@ -263,7 +258,13 @@ public:
         this->tip->draw();
     }
 
-        // Method to update the sprite positions and draw sprite.
+    /**
+     * @brief Method to update the sprite positions and draw sprite.
+     * 
+     * @param button_sprite The buttons sprite.
+     * @param position The position to move the sprite.
+     * @return ** void 
+     */
     void update_slide(sprite button_sprite, int position)
     {
         // Show the base layer of sprite.
@@ -278,7 +279,11 @@ public:
         update_sprite(button_sprite);
     }
 
-    // Slide the game buttons on left key input.
+    /**
+     * @brief Slide the game buttons on left key input.
+     * 
+     * @return ** void 
+     */
     void draw_update_slide_left()
     {   
         this->_menu_sliding = true;
@@ -312,7 +317,11 @@ public:
         }
     }
 
-    // Slide the game buttons on right key input.
+    /**
+     * @brief Slide the game buttons on right key input.
+     * 
+     * @return ** void 
+     */
     void draw_update_slide_right()
     {
         this->_menu_sliding = true;
@@ -393,6 +402,14 @@ public:
     }
 
     // Start up the chosen game using CreateProcessA.
+    /**
+     * @brief Starts up the selected game by starting a new process.
+     * 
+     * @param gamePath The filepath of the game to open.
+     * @param gameExe The executable of the game.
+     * @param gameDirectory // The directory of the game.
+     * @return ** void 
+     */
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
         if (!this->_in_game)
@@ -432,7 +449,11 @@ public:
         }   
     }
 
-    // Method to keep the mouse positioned within the game window.
+    /**
+     * @brief Waits for game to exit.
+     * 
+     * @return ** void 
+     */
     void check_game_exit()
     {
         if (this->_in_game == true)
@@ -443,8 +464,6 @@ public:
             if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
             {
                 this->_in_game = false;
-                // Enable to arcade-machine window again.
-                //EnableWindow(handle, true);
             }
         }
     }
