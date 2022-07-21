@@ -80,7 +80,12 @@ public:
     auto get_buttons() const -> const vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
 
-    // This function gets the game images from the config files and returns vector of game images.
+    /** 
+     * @brief Gets the game images from the config files and returns vector of game images.
+     * 
+     * @param configs Vector of config data.
+     * @return vector of game images.
+     */
     vector<string> get_game_sprites(vector<ConfigData> configs)
     {
         vector<string> game_images;
@@ -95,6 +100,10 @@ public:
         return game_images;
     }
 
+
+    /**
+     * @brief Create a grid object
+     */
     void create_grid()
     {
         // Instantiate grid object
@@ -104,7 +113,10 @@ public:
         this->_grid.SetBackground(bitmap_named(this->background));
     }
 
-    // This function creates the game buttons from the game images.
+    /**
+     * @brief Create a list of games.
+     * 
+     */
     void create_buttons()
     {
         // Call function to get game images.
@@ -126,7 +138,9 @@ public:
         }
     }
 
-    //Create the tip
+    /** 
+     * @brief create a tip to display to the user.
+     */
     void create_tip()
     {
         bitmap bmpTip = bitmap_named("information");
@@ -143,7 +157,9 @@ public:
         this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
     }
 
-    // Draw the game buttons to the window, using the carousel layout
+    /**
+     * @brief draw the game buttons to the window, using the carousel layout
+     */
     void update_carousel()
     {
         // If menu is sliding then clear the grid.
@@ -161,7 +177,9 @@ public:
         }
     }
 
-    //Handle carousel input
+    /**
+     * @brief handle carousel input
+     */
     void carousel_handler()
     {
         /// Check for input in selector class.
@@ -216,7 +234,9 @@ public:
         }
     }
 
-    // Draw the background and call set game image.
+    /**
+     * @brief draw the menu page
+     */
     void draw_menu_page()
     {
         // if the game has ended, go back to games menu
@@ -335,7 +355,11 @@ public:
             this->_pos5 = position * 3;
         }
     }
-
+    /**
+     * @brief Draw an overlay over the game, using data from the config.
+     * 
+     * @param config the game config.
+     */
     void draw_overlay(ConfigData config)
     {
         int x_offset = (current_window_width() / 2) + (current_window_width() / 14);
@@ -352,8 +376,13 @@ public:
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
     }
 
-    //Attempts to find a window and bring it to focus, if it exists.
-    //Returns true if successful, false if not.
+    /**
+     * @brief  Find the game window and bring it to focus, if it exists
+     * 
+     * @param windowName the name of the window
+     * @param timeout time in ms to search for the window
+     * @return true/false if window was found.
+     */
     bool FocusWindow(string windowName, int timeout = 2000)
     {
         LPCSTR gameWindow =  windowName.c_str();
@@ -429,8 +458,8 @@ public:
             this->_in_game = true;
         }
     }
-
-    /**
+   
+   /**
      * @brief Waits for game to exit.
      * 
      * @return ** void 
@@ -449,7 +478,9 @@ public:
         }
     }
 
-    // fade back to regualr games menu
+    /** 
+     * @brief Fade back to games menu
+     */
     void back_to_games_menu()
     {
         // fade to black
@@ -460,10 +491,13 @@ public:
         fade(1, 0, 0.1);
     }
 
-    // Creates a fading effect.
-    // alphaStart: The starting alpha value.
-    // alphaEnd: The ending alpha value.
-    // alphaStep: The alpha value to increment/decrement by.
+    /**
+     * @brief Creates a fading effect
+     * 
+     * @param alphaStart The starting alpha value.
+     * @param alphaEnd The ending alpha value.
+     * @param alphaStep The alpha value to increment/decrement by.
+     */
     void fade(double alphaStart, double alphaEnd, double alphaStep)
     {
         if (alphaStart > alphaEnd)
@@ -481,7 +515,7 @@ public:
             // Update the alpha value.
             alphaStart += alphaStep;
             refresh_screen(60);
-            Sleep(50);
+            sleep(50);
         }
     }
 };
