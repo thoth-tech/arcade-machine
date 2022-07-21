@@ -194,6 +194,11 @@ class Button{
         }
 };
 
+/**
+ * @brief Buttons created for the main opening Menu Screen
+ * 
+ * Derived from abstract Button class
+ */
 class MenuButton : public Button{
     public:
         // First constructor
@@ -243,6 +248,11 @@ class MenuButton : public Button{
         void btn_image(string image) { }
 };
 
+/**
+ * @brief Buttons created for Game Screen Menu
+ * 
+ * Derived from abstract Button class
+ */
 class GameScreenButton : public Button{
     public:
         // First constructor
