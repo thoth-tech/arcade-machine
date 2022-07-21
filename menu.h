@@ -515,7 +515,7 @@ public:
             // Update the alpha value.
             alphaStart += alphaStep;
             refresh_screen(60);
-            sleep(50);
+            Sleep(50);
         }
     }
 };
