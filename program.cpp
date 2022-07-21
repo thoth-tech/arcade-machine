@@ -2,10 +2,6 @@
 
 using namespace std;
 
-// Define screen size (in pixels)
-#define WIDTH  1920
-#define HEIGHT 1080
-
 int main()
 {
     // Load all resources
