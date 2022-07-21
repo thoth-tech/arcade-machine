@@ -7,11 +7,17 @@ using std::vector;
 
 /**
  * @brief Helper class
- * Any generic functions can go here
+ * This class has been added to house orphan functions 
  * 
  */
 class Helper{
     public:
+        /**
+         * @brief Convert a string to a char array
+         * 
+         * @param str String to convert to char
+         * @return char* 
+         */
         char* string_to_char(string str)
         {
             int n = str.length();
@@ -20,7 +26,12 @@ class Helper{
             return *name;
         }
 
-        // Method to find the game folder name to store in config class.
+        /**
+         * @brief Find the game folder name to store in config class.
+         * 
+         * @param entryPath 
+         * @return * string 
+         */
         string get_folder_name(string entryPath)
         {
             unsigned lastPath = entryPath.find("\\", 14);
@@ -31,7 +42,12 @@ class Helper{
             return dir;
         }
 
-        // Method to find the config files in the games directory.
+        /**
+         * @brief Find the config files in the games directory.
+         * 
+         * @param dir The games directory
+         * @return * vector<string> 
+         */
         vector<string> get_config_files(string dir)
         {
             vector<string> files;
@@ -50,7 +66,11 @@ class Helper{
             return files;
         }
 
-        // Create configs vector from config files.
+        /**
+         * @brief Create configs vector from config files
+         * 
+         * @return * vector<ConfigData> 
+         */
         vector<ConfigData> config_data_list()
         {   
             vector<string> files = get_config_files("./games/games");
@@ -83,6 +103,11 @@ class Helper{
             return configs;
         }
         
+        /**
+         * @brief To be used in conjuntion with GridLayoutExample
+         * 
+         * @param grid 
+         */
         void ResetScreen(Grid grid)
         {
             process_events();
@@ -92,7 +117,11 @@ class Helper{
             refresh_screen();
             delay(1000);
         }
-
+        
+        /**
+         * @brief To test the grid layout 
+         * 
+         */
         void GridLayoutExample()
         {
             bitmap testBitmap = load_bitmap("test", "appContainer.png");
