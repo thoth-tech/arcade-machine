@@ -1,6 +1,3 @@
-using namespace std;
-using std::vector;
-
 // Define number of rows and columns in grid
 #define ROWS 7
 #define COLS 15

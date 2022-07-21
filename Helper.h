@@ -1,6 +1,4 @@
 namespace fs = std::experimental::filesystem;
-using namespace std;
-using std::vector;
 
 // To test txt configs, change to "config"
 #define CONFIG_DIR "config"
