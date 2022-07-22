@@ -38,7 +38,7 @@ private:
     Tip *tip;
     ButtonNode *button = nullptr;
     bool _overlayActive = false;
-    /// Button Action 
+    /// Button Action
     string _action;
     Selector _selector_games_menu;
     // Passes into Selector optional parameter.
@@ -63,9 +63,6 @@ private:
     sprite _new_button1;
     sprite _new_button2;
     sprite _new_button3;
-    // To determine direction of slide.
-    bool _menu_slide_left;
-    bool _menu_slide_right;
     // Determines when sliding.
     bool _menu_sliding = false;
 
@@ -82,10 +79,13 @@ public:
     // Getters
     auto get_buttons() const -> const vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
-    auto get_slide_left() const -> const bool { return this->_menu_slide_left;}
-    auto get_slide_right() const -> const bool { return this->_menu_slide_right;}
 
-    // This function gets the game images from the config files and returns vector of game images.
+    /** 
+     * @brief Gets the game images from the config files and returns vector of game images.
+     * 
+     * @param configs Vector of config data.
+     * @return vector of game images.
+     */
     vector<string> get_game_sprites(vector<ConfigData> configs)
     {
         vector<string> game_images;
@@ -100,6 +100,10 @@ public:
         return game_images;
     }
 
+
+    /**
+     * @brief Create a grid object
+     */
     void create_grid()
     {
         // Instantiate grid object
@@ -109,7 +113,10 @@ public:
         this->_grid.SetBackground(bitmap_named(this->background));
     }
 
-    // This function creates the game buttons from the game images.
+    /**
+     * @brief Create a list of games.
+     * 
+     */
     void create_buttons()
     {
         // Call function to get game images.
@@ -131,14 +138,16 @@ public:
         }
     }
 
-    //Create the tip
+    /** 
+     * @brief create a tip to display to the user.
+     */
     void create_tip()
     {
         bitmap bmpTip = bitmap_named("information");
         //Breakdown the sheet
         bitmap_set_cell_details(bmpTip, 50, 50, 4, 3, 12);
-        //Load the animation script
-        animation_script info_script = load_animation_script("info-script", "information.txt");
+        //Fetch the animation script
+        animation_script info_script = animation_script_named("info-script");
         //Create the animation
         animation anim = create_animation(info_script, "rotate");
         //Load the animation into options
@@ -148,22 +157,17 @@ public:
         this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
     }
 
-    // Draw the game buttons to the window, using the carousel layout
+    /**
+     * @brief draw the game buttons to the window, using the carousel layout
+     */
     void update_carousel()
     {
         // If menu is sliding then clear the grid.
         if (this->_menu_sliding)
         {
             this->_grid.ClearGrid();
-            this->_overlayActive = false;
         }
-        if (_selector_games_menu.get_slide_left() || _selector_games_menu.get_slide_right())
-        {
-            // Without this if statement there is a small jerk/crossover when sliding.
-            // Think it just provides a small delay between clearing and drawing grid?
-        }
-        else
-        {
+        else {
             if (this->button && !this->_in_game)
             {
                 this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
@@ -173,7 +177,9 @@ public:
         }
     }
 
-    //Handle carousel input
+    /**
+     * @brief handle carousel input
+     */
     void carousel_handler()
     {
         /// Check for input in selector class.
@@ -191,7 +197,7 @@ public:
             else if (this->_action == "return")
             {
                 if (_overlayActive)
-                {   
+                {
                     // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
@@ -202,9 +208,10 @@ public:
                     // Set the center of the game
                     this->_x = _center_x;
                     this->_y = _center_y;
-                    
-                    // fade screen 
-                    fade_to_black();
+
+                    // fade to black
+                    fade(0, 1, 0.1);
+
                     // fill with black
                     fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
                     // clear grid
@@ -216,46 +223,43 @@ public:
                     // turn off menu music
                     fade_music_out(1000);
                     // fade back in
-                    fade_back_in();
+                    fade(1, 0, 0.1);
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
-                    
+
                     return;
                 }
-
                 _overlayActive = true;
-                
             }
         }
     }
 
-    // Draw the background and call set game image.
+    /**
+     * @brief draw the menu page
+     */
     void draw_menu_page()
     {
-        // Wait for selector to key input to determine slide direction.
-        if (_selector_games_menu.get_slide_left() == true)
-        {
-            this->_menu_slide_left = true;
-        }
-        if (_selector_games_menu.get_slide_right() == true)
-        {
-            this->_menu_slide_right = true;
-        }
-
-        carousel_handler();
-
         // if the game has ended, go back to games menu
-        if(!this->_in_game && this->_game_started) 
-        { 
-            this->_game_started = false; 
-            back_to_games_menu(); 
+        if(!this->_in_game && this->_game_started)
+        {
+            this->_game_started = false;
+            back_to_games_menu();
         }
         
-        update_carousel();
         this->_grid.DrawGrid();
-        if (_overlayActive)
+        
+        // Wait for selector to key input to determine slide direction.
+        if (_selector_games_menu.get_slide_left())
+            draw_update_slide_left();
+        else if (_selector_games_menu.get_slide_right())
+            draw_update_slide_right();
+
+        if (_overlayActive && !_menu_sliding)
             draw_overlay(button->config);
         this->tip->draw();
+
+        update_carousel();
+        carousel_handler();
     }
 
     /**
@@ -285,7 +289,7 @@ public:
      * @return ** void 
      */
     void draw_update_slide_left()
-    {   
+    {
         this->_menu_sliding = true;
 
         // Get sprites of buttons on display.
@@ -297,12 +301,12 @@ public:
         this->_pos1 += speed;
         this->_pos2 += speed;
         this->_pos3 += speed;
-      
+
         // Update and draw sprite.
         update_slide(this->_new_button1, this->_pos1);
         update_slide(this->_new_button2, this->_pos2);
         update_slide(this->_new_button3, this->_pos3);
-    
+
         // If sprite reaches position.
         if (this->_pos1 > 1300)
         {
@@ -313,7 +317,6 @@ public:
             this->_pos1 = position;
             this->_pos2 = this->_pos1 - position;
             this->_pos3 = this->_pos2 - position;
-            this->_menu_slide_left = false;
         }
     }
 
@@ -350,10 +353,13 @@ public:
             this->_pos1 = position;
             this->_pos4 = position * 2;
             this->_pos5 = position * 3;
-            this->_menu_slide_right = false;     
         }
     }
-
+    /**
+     * @brief Draw an overlay over the game, using data from the config.
+     * 
+     * @param config the game config.
+     */
     void draw_overlay(ConfigData config)
     {
         int x_offset = (current_window_width() / 2) + (current_window_width() / 14);
@@ -370,8 +376,13 @@ public:
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
     }
 
-    //Attempts to find a window and bring it to focus, if it exists.
-    //Returns true if successful, false if not.
+    /**
+     * @brief  Find the game window and bring it to focus, if it exists
+     * 
+     * @param windowName the name of the window
+     * @param timeout time in ms to search for the window
+     * @return true/false if window was found.
+     */
     bool FocusWindow(string windowName, int timeout = 2000)
     {
         LPCSTR gameWindow =  windowName.c_str();
@@ -390,7 +401,7 @@ public:
 
         //Maximise the Window
         if (gameWindowHandle != NULL)
-        {   
+        {
             ShowWindow(gameWindowHandle, SW_SHOWMAXIMIZED);
             return true;
         }
@@ -401,7 +412,6 @@ public:
         }
     }
 
-    // Start up the chosen game using CreateProcessA.
     /**
      * @brief Starts up the selected game by starting a new process.
      * 
@@ -436,9 +446,9 @@ public:
                 &startupInfo,            // Pointer to STARTUPINFO structure
                 &processInfo           // Pointer to PROCESS_INFORMATION structure
             );
-            
+
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
-            
+
             string windowName = gameExe;
             //Remove the extension from the application name (.exe)
             windowName = windowName.substr(0, windowName.find("."));
@@ -446,10 +456,10 @@ public:
             FocusWindow(windowName);
 
             this->_in_game = true;
-        }   
+        }
     }
-
-    /**
+   
+   /**
      * @brief Waits for game to exit.
      * 
      * @return ** void 
@@ -468,50 +478,44 @@ public:
         }
     }
 
-    // fade back to regualr games menu
+    /** 
+     * @brief Fade back to games menu
+     */
     void back_to_games_menu()
     {
-        fade_to_black();
+        // fade to black
+        fade(0, 1, 0.1);
         fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
         this->_grid.SetBackground(bitmap_named("games_dashboard"));
-        fade_back_in();
+        // fade to normal
+        fade(1, 0, 0.1);
     }
 
-    // fade screen to black
-    void fade_to_black()
+    /**
+     * @brief Creates a fading effect
+     * 
+     * @param alphaStart The starting alpha value.
+     * @param alphaEnd The ending alpha value.
+     * @param alphaStep The alpha value to increment/decrement by.
+     */
+    void fade(double alphaStart, double alphaEnd, double alphaStep)
     {
-        // Set fade increment (opacity)
-        double alpha = 0.0;
+        if (alphaStart > alphaEnd)
+            alphaStep = -abs(alphaStep);
+        // Calculate the number of steps required to complete the fade.
+        double difference = abs(alphaEnd - alphaStart);
+        int steps = difference / abs(alphaStep);
 
-        do
+        for (int i = 0; i < steps; i++)
         {
             clear_screen();
             this->_grid.DrawGrid();
-            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alpha), 0, 0, 1920, 1080);
-            alpha = alpha + 0.1;
+            // Alpha value manipulates to the opacity of the rectangle.
+            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alphaStart), 0, 0, 1920, 1080);
+            // Update the alpha value.
+            alphaStart += alphaStep;
             refresh_screen(60);
             Sleep(50);
-
-        } while (alpha < 1.0);
+        }
     }
-    
-    // fade screen back from black
-    void fade_back_in()
-    {
-        // Set fade increment (opacity)
-        double alpha = 1.0;
-
-        do
-        {
-            clear_screen();
-            this->_grid.DrawGrid();
-            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alpha), 0, 0, 1920, 1080);
-            alpha = alpha - 0.1;
-            refresh_screen(60);
-            Sleep(50);
-
-        } while (alpha > 0.0);
-
-    }
-
 };

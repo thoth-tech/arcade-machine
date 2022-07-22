@@ -18,7 +18,7 @@ class Selector {
         Selector(){}
         Selector(const string &cursor)
         {
-            bitmap cur = load_bitmap("cursor", cursor);
+            bitmap cur = bitmap_named("cursor");
             this->cursor = create_sprite(cur);
         }
 

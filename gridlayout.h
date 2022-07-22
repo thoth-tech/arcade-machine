@@ -36,15 +36,22 @@ private:
     // Stores information for each cell (bitmap, span)
     cell *_grid;
     // Number of cells
-    int _cells;
+    int _cells = 0;
     // Scale the bitmap to fill the cell
     bool _scaleToFit;
+    // Does the grid contain configured cells
+    bool _gridEmpty = true;
 
 public:
     // Constructor:
     // Default Constructor
     Grid(){}
-    // Fixed number of columns
+    /**
+     * Construct a new grid object with a fixed number of columns/rows
+     * @param rows number of rows
+     * @param cols number of columns
+     * @param scaleToFit scale the image to fill the cell
+     */
     Grid(int rows, int cols, bool scaleToFit = false)
     {
         _scaleToFit = scaleToFit;
@@ -55,7 +62,13 @@ public:
         // Initialise the grid
         _grid = new cell[_cells];
     }
-    // Dynamic number of columns per row
+    /**
+     * @brief Construct a new Grid object with a dynamic number of columns per row
+     * 
+     * @param rows number of rows
+     * @param colsArray array of columns per row
+     * @param scaleToFit scale the image to fill the cell
+     */
     Grid(int rows, int colsArray[], bool scaleToFit = false)
     {
         // Add check to ensure that the length of colsArray matches the number of rows
@@ -73,19 +86,33 @@ public:
         _grid = new cell[_cells];
     }
 
-    // Update the background of the screen
+    /**
+     * @brief Set the background
+     * 
+     * @param bmp bitmap to use as background
+     */
     void SetBackground(bitmap bmp)
     {
         _background = bmp;
     }
 
-    // Calculate the bitmap scaling factor, returns options
+    /**
+     * @brief Calculate the bitmap scaling factor
+     * 
+     * @param bmp bitmap to scale
+     * @param cellWidth width of the cell
+     * @param cellHeight height of the cell
+     * @return drawing_options options
+     */
     drawing_options BitmapScaleOpt(int bmpWidth, int bmpHeight, double cellWidth, double cellHeight, int span)
     {
         return option_scale_bmp((cellWidth / bmpWidth) * span, cellHeight / bmpHeight);
     }
 
-    // Draw the cell boundaries, to help with placement
+    /**
+     * @brief Draw the cell boundaries, to help with placement
+     * 
+     */
     void DrawCells()
     {
         // Vertical offset between each cell
@@ -118,7 +145,10 @@ public:
         }
     }
 
-    // Draw the items
+    /**
+     * @brief Draw the items in the grid
+     * 
+     */
     void DrawGrid()
     {
         if (_background)
@@ -218,7 +248,13 @@ public:
         }
     }
 
-    // Find a cell in the grid using row/col
+    /**
+     * @brief Find a cell in the grid using row/col
+     * 
+     * @param row row of the cell
+     * @param col column of the cell
+     * @return int index of the cell
+     */
     int FindCell(int row, int col)
     {
         int cellNum = 0;
@@ -260,15 +296,30 @@ public:
         return cellNum;
     }
 
-    // Get a cell from the grid using row/col
+    /**
+     * @brief Get a cell from the grid using row/col
+     * 
+     * @param row row of the cell
+     * @param col column of the cell
+     * @return cell* pointer to the cell
+     */
     cell GetCell(int row, int col)
     {
         return _grid[FindCell(row, col)];
     }
 
-    // Update a cell with a specified bitmap
+    /**
+     * @brief Update a cell with a specified bitmap
+     * 
+     * @param bmp bitmap to update the cell with
+     * @param row row of the cell
+     * @param col column of the cell
+     * @param span number of columns the bitmap spans
+     * @param centre whether the bitmap should be centered
+     */
     void UpdateCell(const bitmap &bmp, int row, int col, int span = 1, bool centre = true)
     {
+        _gridEmpty=false;
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
@@ -281,9 +332,18 @@ public:
         _grid[cellNum].centre = centre;
     }
 
-    // Update a cell with a specified sprite
+    /**
+     * @brief Update a cell with a specified sprite
+     * 
+     * @param sprite sprite to update the cell with
+     * @param row row of the cell
+     * @param col column of the cell
+     * @param span number of columns the sprite spans
+     * @param centre whether the sprite should be centered
+     */
     void UpdateCell(const sprite &sprite, int row, int col, int span = 1, bool centre = true)
     {
+        _gridEmpty=false;
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
@@ -295,9 +355,19 @@ public:
         _grid[cellNum].span = span;
         _grid[cellNum].centre = centre;
     }
-    // Update a cell with a specified button
+
+    /**
+     * @brief Update a cell with a specified button
+     * 
+     * @param button button to update the cell with
+     * @param row row of the cell
+     * @param col column of the cell
+     * @param span number of columns the button spans
+     * @param centre whether the button should be centered
+     */
     void UpdateCell(Button *button, int row, int col, int span = 1, bool centre = true)
     {
+        _gridEmpty=false;
         // Stores the index of the cell
         int cellNum = FindCell(row, col);
         // Selected row is out of bounds
@@ -310,9 +380,15 @@ public:
         _grid[cellNum].centre = centre;
     }
 
-    // Update all cells with a specified bitmap
+    /**
+     * @brief Update all cells with a specified bitmap
+     * 
+     * @param bmp bitmap to update the cells with
+     * @param centre whether the bitmaps should be centered
+     */
     void UpdateAllCells(bitmap bmp, bool centre = true)
     {
+        _gridEmpty=false;
         // Iterate over all the cells
         for (size_t i = 0; i < _cells; i++)
         {
@@ -324,9 +400,15 @@ public:
         }
     }
 
-    // Update all cells with a specified sprite
+    /**
+     * @brief Update all cells with a specified sprite
+     * 
+     * @param sprite sprite to update the cells with
+     * @param centre whether the sprites should be centered
+     */
     void UpdateAllCells(sprite sprite, bool centre = true)
     {
+        _gridEmpty=false;
         // Iterate over all the cells
         for (size_t i = 0; i < _cells; i++)
         {
@@ -338,7 +420,10 @@ public:
         }
     }
 
-    // Draw the layout to console, used for testing
+    /**
+     * @brief Log the dimensions of the cells to console
+     * 
+     */
     void DrawLayout()
     {
         int colWidth = 0;
@@ -363,9 +448,14 @@ public:
         }
     }
 
-    // Clear the grid
+    /**
+     * @brief Clear the grid
+     * 
+     */
     void ClearGrid()
     {
+        if (_gridEmpty)
+            return;
         // Iterate over all the cells
         for (size_t i = 0; i < _cells; i++)
         {
@@ -376,5 +466,65 @@ public:
             _grid[i].span = 1;
             _grid[i].centre = true;
         }
+        // Grid is now empty
+        _gridEmpty = true;  
+    }
+    /**
+     * @brief Find the nearest cells row/col from x, y coordinates
+     * 
+     * @param x x-coordinate (px)
+     * @param y y-coordinate (px)
+     * @return point_2d 
+     */
+     point_2d FindCellfromLoc(int x, int y)
+    {
+        int rowNum;
+        // Selected row is out of bounds
+        int yOffset = current_window_height() / _rows;
+        int runningSum = 0;
+        for (int i = 0; i < _rows; i++)
+        {
+            if (y >= runningSum && y < runningSum + yOffset)
+            {
+                rowNum = i;
+            }
+            runningSum += yOffset;
+        }
+        int xOffset;
+        if (_useColsArray)
+            xOffset = (current_window_width() / _colsArray[rowNum]);
+        else
+            xOffset = (current_window_width()/_cols);
+        runningSum = 0;
+        int colNum;
+        for (int i = 0; i < _cols; i++)
+        {
+            if (x >= runningSum && x < runningSum  + xOffset)
+            {
+                colNum = i;
+            }
+            runningSum += xOffset;
+        }
+        point_2d point;
+        point.x = colNum;
+        point.y = rowNum;
+        return point;
+    }
+
+    /**
+     * @brief Clear the cell
+     * 
+     */
+   void ClearCell(int row, int col)
+    {
+        // Gets the index of the cell
+        int cellNum = FindCell(row, col);
+        // Clear cell
+        _grid[cellNum].cellType = EMPTY;
+        _grid[cellNum].sprite = NULL;
+        _grid[cellNum].bmp = NULL;
+        _grid[cellNum].button = NULL;
+        _grid[cellNum].span = 1;
+        _grid[cellNum].centre = true;
     }
 };
