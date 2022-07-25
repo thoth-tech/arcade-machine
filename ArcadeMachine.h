@@ -3,8 +3,8 @@
 #define COLS 15
 
 /**
- * @brief This class handles the creation of the Arcade Machine itself
- * 
+ * @brief ArcadeMachine class
+ * Handles the high level arcade machine behaviour
  */
 class ArcadeMachine
 {
@@ -71,8 +71,10 @@ class ArcadeMachine
         auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; }
 
         /**
-            Starts the Main Menu
-        */
+         * @brief Starts the Main Menu
+         * 
+         * @return ** void 
+         */
         void main_menu()
         {
             while (1)
@@ -86,8 +88,10 @@ class ArcadeMachine
         }
 
         /**
-            Starts the Games Menu
-        */
+         * @brief Starts the Games Menu
+         * 
+         * @return ** void 
+         */
         void games_menu()
         {
             // Instantiate new menu
@@ -111,14 +115,6 @@ class ArcadeMachine
                 this->_mouse = mouse_position();
                 // Draw games menu
                 menu.draw_menu_page();
-
-                // Check for left or right input and call slide function.
-                if (menu.get_slide_left() == true)
-                    menu.draw_update_slide_left();
-
-                if (menu.get_slide_right() == true)
-                    menu.draw_update_slide_right();
-
                 // Check input
               //  this->_action = this->_selector_games_menu.check_key_input(this->_games_btns);
                 refresh_screen(60);
@@ -126,8 +122,10 @@ class ArcadeMachine
         }
 
         /**
-            Starts the Options Menu
-        */
+         * @brief Starts the Options Menu
+         * 
+         * @return ** void 
+         */
         void options_menu()
         {
             Option options;
@@ -162,7 +160,7 @@ class ArcadeMachine
         }
         
         /**
-            Checks for buttons clicked
+            @brief Checks for buttons clicked
 
             @param point The mouse pointer location on screen
         */
@@ -191,8 +189,10 @@ class ArcadeMachine
         }
 
         /**
-            Draws the Main Menu
-        */
+         * @brief Draws the Main Menu
+         * 
+         * @return ** void 
+         */
         void draw_main_menu() 
         {
             // Get mouse position
@@ -220,8 +220,10 @@ class ArcadeMachine
         }
 
         /**
-            Prepares the Main Menu
-        */
+         * @brief Prepares the Main Menu
+         * 
+         * @return ** void 
+         */
         void prepare_main_menu()
         {
             // Get the data from the config files.
@@ -240,9 +242,7 @@ class ArcadeMachine
             this->_menu_btns.push_back(exit);
 
             // Fetch menu background
-            const string image = path_to_resource("thoth", IMAGE_RESOURCE);
-            // Load menu background
-            bitmap thoth = load_bitmap("thoth", image);
+            bitmap thoth = bitmap_named("thoth");
             // Update grid cells with assets
             this->_grid.SetBackground(thoth);
 
@@ -261,7 +261,7 @@ class ArcadeMachine
         }
 
         /** 
-            Draws a Splashscreen, plays a sound and
+            @brief Draws a Splashscreen, plays a sound and
             incremently fills the screen white to animate fading
 
             @param screen The Splashscreen to draw to screen
@@ -303,9 +303,11 @@ class ArcadeMachine
         }
 
         /**
-            Draws the Splashkit Productions logo to the screen and 
+         * @brief Draws the Splashkit Productions logo to the screen and 
             fetches new games from Git repo
-        */
+         * 
+         * @return ** void 
+         */
         void intro_splashkit()
         {
             // Pull the most recent version of the arcade-games repo.
@@ -320,16 +322,20 @@ class ArcadeMachine
         }
 
         /**
-            Print config data to console
-        */
+         * @brief Print config data to console
+         * 
+         * @return ** void 
+         */
         void print_configs()
         {
             this->_config.print_config_data();
         }
 
         /**
-            Abort this application
-        */
+         * @brief Abort this application
+         * 
+         * @return ** void 
+         */
         void exit_program()
         {
             exit(EXIT_SUCCESS);

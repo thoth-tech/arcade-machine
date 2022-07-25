@@ -163,22 +163,22 @@ class Button{
             switch(c)
             {
                 case PLAY:
-                    _hghlt = load_bitmap("play_hghlt", filepath + "btn_play_hghlt.png");
+                    _hghlt = bitmap_named("play_hghlt");
                     _highlight = "play_highlight";
                     return "btn_play";
                     break;
                 case EXIT:
-                    _hghlt = load_bitmap("exit_hghlt", filepath + "btn_exit_hghlt.png");
+                    _hghlt = bitmap_named("exit_hghlt");
                     _highlight = "exit_highlight";
                     return "btn_exit";
                     break;
                 case OPTS:
-                    _hghlt = load_bitmap("options_hghlt", filepath + "btn_options_hghlt.png");
+                    _hghlt = bitmap_named("options_hghlt");
                     _highlight = "options_highlight";
                     return "btn_opts";
                     break;
                 case GAME:
-                    _hghlt = load_bitmap("game_hghlt", filepath + "btn_game_hghlt.png");
+                    _hghlt = bitmap_named("game_hghlt");
                     _highlight = "game_highlight";
                     return "";
                 case HOME:

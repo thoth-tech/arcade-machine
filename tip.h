@@ -52,7 +52,10 @@ private:
 
     int i = 30;
 
-    //Calculate the positioning of the container
+    /**
+     * @brief calculate the positioning of the container
+     * 
+     */
     void CalculatePosition()
     {
         switch (loc)
@@ -86,6 +89,15 @@ private:
     }
 public:
     Tip(){};
+    /**
+     * @brief Construct a new Tip object
+     * 
+     * @param text the text to be displayed
+     * @param image the image to be displayed
+     * @param duration the duration of the tip
+     * @param charsPerLine the number of characters per line
+     * @param loc the location of the container
+     */
     Tip(string text, bitmap image, int duration = 3000, int charsPerLine = 30, location loc = TOPCENTER)
     {
         this->text = text;
@@ -110,6 +122,17 @@ public:
 
         CalculatePosition();
     };
+    /**
+     * @brief Construct a new Tip object
+     * 
+     * @param text the text to be displayed 
+     * @param image the image to be displayed
+     * @param anim the animation to be displayed
+     * @param opt the drawing options for the bitmap
+     * @param duration the duration of the tip
+     * @param charsPerLine the number of characters per line
+     * @param loc the location of the container
+     */
     Tip(string text, bitmap image, animation anim, drawing_options opt, int duration = 3000, int charsPerLine = 30, location loc = TOPCENTER)
     {
         this->text = text;
@@ -137,7 +160,11 @@ public:
         CalculatePosition();
     };
     ~Tip();
-
+    
+    /**
+     * @brief draw the tip
+     * 
+     */
     void draw()
     {
         //Initialise startTime upon first draw
