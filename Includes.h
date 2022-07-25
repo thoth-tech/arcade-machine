@@ -18,16 +18,16 @@
 #include <Windows.h>
 
 // Custom classes
-#include "buttons.h"
+#include "Button.h"
 #include "gridlayout.h"
-#include "cdata.h"
+#include "ConfigData.h"
 #include "ButtonList.h"
 #include "selector.h"
 #include "tip.h"
 #include "splashscreen.h"
 #include "menu.h"
-#include "helper.h"
+#include "Helper.h"
 #include "option.h"
-#include "arcademachine.h"
+#include "ArcadeMachine.h"
 
 #endif
