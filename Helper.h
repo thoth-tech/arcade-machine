@@ -32,11 +32,8 @@ class Helper{
          */
         string get_folder_name(string entryPath)
         {
-            unsigned lastPath = entryPath.find("\\", 14);
-            string dir = entryPath.substr(0, lastPath);
-            unsigned findBackSlash = dir.find("\\");
-            dir.replace(findBackSlash, 1, "/");
-
+            string dir  = fs::path(entryPath).remove_filename().generic_string();
+            std::cout << "Game-Directory Path: " << dir << "\n";
             return dir;
         }
 
@@ -54,10 +51,8 @@ class Helper{
             {
                 if (entry.path().filename() == "config.txt")
                 {
-                    std::cout << entry << '\n';
-                    files.push_back(entry.path().string());
-                    cout << entry.path().string() << endl;
-                    string path = entry.path().string();
+                    std::cout << "Game-Config Path: " << entry.path().generic_string() << "\n";
+                    files.push_back(entry.path().generic_string());
                 }
             }
 
