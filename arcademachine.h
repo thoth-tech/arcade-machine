@@ -79,7 +79,7 @@ class ArcadeMachine
         */
         void main_menu()
         {
-            while (1)
+            while (! quit_requested())
             {
                 process_events();
                 clear_screen();
