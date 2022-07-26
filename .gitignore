@@ -1,3 +1,5 @@
 .vscode/
 logs/
 **/*.log
+a.out
+**/*.plist
