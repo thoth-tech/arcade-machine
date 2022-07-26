@@ -1,14 +1,9 @@
 #include "includes.h"
 
-using namespace std;
-
-// Define screen size (in pixels)
-//#define WIDTH  1920
-//#define HEIGHT 1080
-
 int main()
 {
     // Load all resources
+    set_resources_path("resources/");
     load_resource_bundle("bundle", "resources.txt");
 
     // Instantiate Arcade Machine
