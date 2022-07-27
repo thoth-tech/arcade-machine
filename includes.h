@@ -1,6 +1,12 @@
 #ifndef INCLUDE_H
 #define INCLUDE_H
 
+#ifdef _WIN32
+#define ARCADE_MACHINE_PATH_SEP "\\"
+#else
+#define ARCADE_MACHINE_PATH_SEP "/"
+#endif
+
 // Includes
 #include <stdlib.h>
 #include <iostream>
