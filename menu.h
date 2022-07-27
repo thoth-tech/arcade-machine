@@ -1,3 +1,4 @@
+#include "GameData.h"
 
 using namespace std;
 using std::vector;
@@ -66,6 +67,9 @@ private:
     // Determines when sliding.
     bool _menu_sliding = false;
 
+    // Creates a new game data object.
+    GameData *m_newGame = new GameData;
+
 public:
     Menu(){}
 
@@ -80,9 +84,9 @@ public:
     auto get_buttons() const -> const vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
 
-    /** 
+    /**
      * @brief Gets the game images from the config files and returns vector of game images.
-     * 
+     *
      * @param configs Vector of config data.
      * @return vector of game images.
      */
@@ -115,7 +119,7 @@ public:
 
     /**
      * @brief Create a list of games.
-     * 
+     *
      */
     void create_buttons()
     {
@@ -138,7 +142,7 @@ public:
         }
     }
 
-    /** 
+    /**
      * @brief create a tip to display to the user.
      */
     void create_tip()
@@ -186,7 +190,9 @@ public:
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
         this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
 
-        check_game_exit();
+
+
+        check_game_exit(m_newGame);
 
         if (this->button)
         {
@@ -227,6 +233,12 @@ public:
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
 
+                    string gameName = this->button->config.title();
+                    int startTime = time(0);
+
+                    m_newGame->setGameName(gameName);
+                    m_newGame->setStartTime(startTime);
+
                     return;
                 }
                 _overlayActive = true;
@@ -245,9 +257,9 @@ public:
             this->_game_started = false;
             back_to_games_menu();
         }
-        
+
         this->_grid.DrawGrid();
-        
+
         // Wait for selector to key input to determine slide direction.
         if (_selector_games_menu.get_slide_left())
             draw_update_slide_left();
@@ -264,10 +276,10 @@ public:
 
     /**
      * @brief Method to update the sprite positions and draw sprite.
-     * 
+     *
      * @param button_sprite The buttons sprite.
      * @param position The position to move the sprite.
-     * @return ** void 
+     * @return ** void
      */
     void update_slide(sprite button_sprite, int position)
     {
@@ -285,8 +297,8 @@ public:
 
     /**
      * @brief Slide the game buttons on left key input.
-     * 
-     * @return ** void 
+     *
+     * @return ** void
      */
     void draw_update_slide_left()
     {
@@ -322,8 +334,8 @@ public:
 
     /**
      * @brief Slide the game buttons on right key input.
-     * 
-     * @return ** void 
+     *
+     * @return ** void
      */
     void draw_update_slide_right()
     {
@@ -357,7 +369,7 @@ public:
     }
     /**
      * @brief Draw an overlay over the game, using data from the config.
-     * 
+     *
      * @param config the game config.
      */
     void draw_overlay(ConfigData config)
@@ -378,7 +390,7 @@ public:
 
     /**
      * @brief  Find the game window and bring it to focus, if it exists
-     * 
+     *
      * @param windowName the name of the window
      * @param timeout time in ms to search for the window
      * @return true/false if window was found.
@@ -414,11 +426,11 @@ public:
 
     /**
      * @brief Starts up the selected game by starting a new process.
-     * 
+     *
      * @param gamePath The filepath of the game to open.
      * @param gameExe The executable of the game.
      * @param gameDirectory // The directory of the game.
-     * @return ** void 
+     * @return ** void
      */
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
@@ -458,13 +470,13 @@ public:
             this->_in_game = true;
         }
     }
-   
+
    /**
      * @brief Waits for game to exit.
-     * 
-     * @return ** void 
+     *
+     * @return ** void
      */
-    void check_game_exit()
+    void check_game_exit(GameData *newGame)
     {
         if (this->_in_game == true)
         {
@@ -474,11 +486,24 @@ public:
             if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
             {
                 this->_in_game = false;
+
+                int endTime = time(0);
+
+                // ToDo: Collect player rating and highscore achieved.
+
+                int rating = 0;
+                int highScore = 0;
+
+                m_newGame->setRating(rating);
+                m_newGame->setHighScore(highScore);
+                m_newGame->setEndTime(endTime);
+
+                m_newGame->writeData();
             }
         }
     }
 
-    /** 
+    /**
      * @brief Fade back to games menu
      */
     void back_to_games_menu()
@@ -493,7 +518,7 @@ public:
 
     /**
      * @brief Creates a fading effect
-     * 
+     *
      * @param alphaStart The starting alpha value.
      * @param alphaEnd The ending alpha value.
      * @param alphaStep The alpha value to increment/decrement by.
