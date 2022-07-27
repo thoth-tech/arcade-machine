@@ -17,7 +17,7 @@ class cell
 public:
     item cellType = EMPTY;
     bitmap bmp = NULL;
-    sprite sprite = NULL;
+    sprite spr = NULL;
     Button *button;
     int span = 1;
     bool centre = true;
@@ -216,10 +216,10 @@ public:
                             write("ScaleToFit: Feature not currently available with use of sprites.\n");
                         if (_grid[index].centre)
                         {
-                            x = x + (((xOffset * _grid[index].span) - sprite_width(_grid[index].sprite)) / 2);
-                            y = y + ((yOffset - sprite_height(_grid[index].sprite)) / 2);
+                            x = x + (((xOffset * _grid[index].span) - sprite_width(_grid[index].spr)) / 2);
+                            y = y + ((yOffset - sprite_height(_grid[index].spr)) / 2);
                         }
-                        draw_sprite(_grid[index].sprite, x, y);
+                        draw_sprite(_grid[index].spr, x, y);
                         break;
                     case BTN:
                         if (_scaleToFit)
@@ -328,7 +328,7 @@ public:
         // Selected row is out of bounds
         // Update the cell
         _grid[cellNum].cellType = BMP;
-        _grid[cellNum].sprite = NULL;
+        _grid[cellNum].spr = NULL;
         _grid[cellNum].bmp = bmp;
         _grid[cellNum].button = NULL;
         _grid[cellNum].span = span;
@@ -352,7 +352,7 @@ public:
         // Selected row is out of bounds
         // Update the cell
         _grid[cellNum].cellType = SPT;
-        _grid[cellNum].sprite = sprite;
+        _grid[cellNum].spr = sprite;
         _grid[cellNum].bmp = NULL;
         _grid[cellNum].button = NULL;
         _grid[cellNum].span = span;
@@ -376,7 +376,7 @@ public:
         // Selected row is out of bounds
         // Update the cell
         _grid[cellNum].cellType = BTN;
-        _grid[cellNum].sprite = NULL;
+        _grid[cellNum].spr = NULL;
         _grid[cellNum].bmp = NULL;
         _grid[cellNum].button = button;
         _grid[cellNum].span = span;
@@ -397,7 +397,7 @@ public:
         {
             // Update bitmap
             _grid[i].cellType = BMP;
-            _grid[i].sprite = NULL;
+            _grid[i].spr = NULL;
             _grid[i].bmp = bmp;
             _grid[i].centre = centre;
         }
@@ -417,7 +417,7 @@ public:
         {
             // Update bitmap
             _grid[i].cellType = SPT;
-            _grid[i].sprite = sprite;
+            _grid[i].spr = sprite;
             _grid[i].bmp = NULL;
             _grid[i].centre = centre;
         }
@@ -464,7 +464,7 @@ public:
         {
             // Reset cell to default
             _grid[i].cellType = EMPTY;
-            _grid[i].sprite = NULL;
+            _grid[i].spr = NULL;
             _grid[i].bmp = NULL;
             _grid[i].span = 1;
             _grid[i].centre = true;
@@ -524,7 +524,7 @@ public:
         int cellNum = FindCell(row, col);
         // Clear cell
         _grid[cellNum].cellType = EMPTY;
-        _grid[cellNum].sprite = NULL;
+        _grid[cellNum].spr = NULL;
         _grid[cellNum].bmp = NULL;
         _grid[cellNum].button = NULL;
         _grid[cellNum].span = 1;

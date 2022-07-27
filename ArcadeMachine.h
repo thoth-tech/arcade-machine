@@ -1,11 +1,15 @@
+// Arcade Machine Class
+using namespace std;
+using std::vector;
+
 // Define number of rows and columns in grid
 #define ROWS 7
 #define COLS 15
 
-/**
- * @brief ArcadeMachine class
- * Handles the high level arcade machine behaviour
- */
+/* 
+    This class handles the creation of the
+    Arcade Machine itself
+*/
 class ArcadeMachine
 {
     private:
@@ -71,13 +75,11 @@ class ArcadeMachine
         auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; }
 
         /**
-         * @brief Starts the Main Menu
-         * 
-         * @return ** void 
-         */
+            Starts the Main Menu
+        */
         void main_menu()
         {
-            while (1)
+            while (! quit_requested())
             {
                 process_events();
                 clear_screen();
@@ -88,10 +90,8 @@ class ArcadeMachine
         }
 
         /**
-         * @brief Starts the Games Menu
-         * 
-         * @return ** void 
-         */
+            Starts the Games Menu
+        */
         void games_menu()
         {
             // Instantiate new menu
@@ -122,10 +122,8 @@ class ArcadeMachine
         }
 
         /**
-         * @brief Starts the Options Menu
-         * 
-         * @return ** void 
-         */
+            Starts the Options Menu
+        */
         void options_menu()
         {
             Option options;
@@ -160,7 +158,7 @@ class ArcadeMachine
         }
         
         /**
-            @brief Checks for buttons clicked
+            Checks for buttons clicked
 
             @param point The mouse pointer location on screen
         */
@@ -189,10 +187,8 @@ class ArcadeMachine
         }
 
         /**
-         * @brief Draws the Main Menu
-         * 
-         * @return ** void 
-         */
+            Draws the Main Menu
+        */
         void draw_main_menu() 
         {
             // Get mouse position
@@ -220,10 +216,8 @@ class ArcadeMachine
         }
 
         /**
-         * @brief Prepares the Main Menu
-         * 
-         * @return ** void 
-         */
+            Prepares the Main Menu
+        */
         void prepare_main_menu()
         {
             // Get the data from the config files.
@@ -261,7 +255,7 @@ class ArcadeMachine
         }
 
         /** 
-            @brief Draws a Splashscreen, plays a sound and
+            Draws a Splashscreen, plays a sound and
             incremently fills the screen white to animate fading
 
             @param screen The Splashscreen to draw to screen
@@ -291,23 +285,27 @@ class ArcadeMachine
                 if (abs(alpha - 0.0) < 1e-9)
                 {
                     play_sound_effect(sound2);
+
+#ifdef _WIN32
                     Sleep(2000);
                     /*  After this has happened, the alpha value will continue into the negatives
                         The colour function continues to accept negative alpha values, 
                         effectively creating a fade out animation for the remainder of the while loop
                     */
+#endif
                 }
                 refresh_screen(60);
+
+#ifdef _WIN32
                 Sleep(50);
+#endif
             }
         }
 
         /**
-         * @brief Draws the Splashkit Productions logo to the screen and 
+            Draws the Splashkit Productions logo to the screen and 
             fetches new games from Git repo
-         * 
-         * @return ** void 
-         */
+        */
         void intro_splashkit()
         {
             // Pull the most recent version of the arcade-games repo.
@@ -322,20 +320,16 @@ class ArcadeMachine
         }
 
         /**
-         * @brief Print config data to console
-         * 
-         * @return ** void 
-         */
+            Print config data to console
+        */
         void print_configs()
         {
             this->_config.print_config_data();
         }
 
         /**
-         * @brief Abort this application
-         * 
-         * @return ** void 
-         */
+            Abort this application
+        */
         void exit_program()
         {
             exit(EXIT_SUCCESS);

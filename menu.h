@@ -7,6 +7,8 @@ private:
     string background = "games_dashboard";
     // Vector to store the config data of each game
     vector<ConfigData> _games;
+
+#ifdef _WIN32
     // Contains info about newly created process and thread
     PROCESS_INFORMATION processInfo;
     // Unsigned int to store exit info
@@ -17,6 +19,8 @@ private:
     LPSTR _gameExe;
     // Holds the game directory of selected game
     LPCSTR _gameDir;
+#endif
+
     // Used to find x centre of screen
     double _center_x = 960;
     // Used to fine y centre of screen
@@ -43,8 +47,12 @@ private:
     Selector _selector_games_menu;
     // Passes into Selector optional parameter.
     bool game_menu = true;
+
+#ifdef _WIN32
     // Handle for game window.
     HWND handle;
+#endif
+
     // Determines when game has started.
     bool _game_started = false;
     // Starting position of button x.
@@ -72,7 +80,10 @@ public:
     Menu(vector<ConfigData> configs)
     {
         this->_games = configs;
+
+#ifdef _WIN32
         handle = FindWindowA(NULL, "arcade-machine");
+#endif
     }
     ~Menu(){}
 
@@ -186,7 +197,9 @@ public:
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
         this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
 
+#ifdef _WIN32
         check_game_exit();
+#endif
 
         if (this->button)
         {
@@ -198,12 +211,14 @@ public:
             {
                 if (_overlayActive)
                 {
+#ifdef _WIN32
                     // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
                     _gameExe = strdup(this->button->config.exe().c_str());
                     // Get game directory
                     _gameDir = this->button->config.folder().c_str();
+#endif
 
                     // Set the center of the game
                     this->_x = _center_x;
@@ -224,8 +239,11 @@ public:
                     fade_music_out(1000);
                     // fade back in
                     fade(1, 0, 0.1);
+
+#ifdef _WIN32
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
+#endif
 
                     return;
                 }
@@ -376,6 +394,7 @@ public:
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
     }
 
+#ifdef _WIN32
     /**
      * @brief  Find the game window and bring it to focus, if it exists
      * 
@@ -410,8 +429,11 @@ public:
             write_line("Unable to find gameWindow Handle");
             return false;
         }
+        return true;
     }
+#endif
 
+#ifdef _WIN32
     /**
      * @brief Starts up the selected game by starting a new process.
      * 
@@ -458,7 +480,9 @@ public:
             this->_in_game = true;
         }
     }
+#endif
    
+#ifdef _WIN32
    /**
      * @brief Waits for game to exit.
      * 
@@ -477,6 +501,7 @@ public:
             }
         }
     }
+#endif
 
     /** 
      * @brief Fade back to games menu
@@ -515,7 +540,10 @@ public:
             // Update the alpha value.
             alphaStart += alphaStep;
             refresh_screen(60);
+
+#ifdef _WIN32
             Sleep(50);
+#endif
         }
     }
 };
