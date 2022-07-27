@@ -15,7 +15,10 @@
 #include <string>
 #include <chrono>
 //#include <json/json.h>
+
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 // Custom classes
 #include "buttons.h"
