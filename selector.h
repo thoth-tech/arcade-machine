@@ -3,15 +3,15 @@ using namespace std;
 
 class Selector {
     private:
-        // Checks first button.
+        /// Checks first button.
         bool first = true;
-        // Splashscreen cursor sprite. 
+        /// Splashscreen cursor sprite. 
         sprite cursor;
-        // Checks if game menu currently sliding left.
+        /// Checks if game menu currently sliding left.
         bool slide_left = false;
-        // Checks if game menu currently sliding right.
+        /// Checks if game menu currently sliding right.
         bool slide_right = false;
-        // Checks if current button is from game menu.
+        /// Checks if current button is from game menu.
         bool game_menu;
 
     public:

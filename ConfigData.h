@@ -1,9 +1,10 @@
-// ConfigData Class
-// Parses the data from config text files to an object
-
 using namespace std;
 using std::vector;
 
+/**
+ * @brief Parses the configuration data from config.txt files to a data object
+ * 
+ */
 class ConfigData{
     private:
         /// This configs ID
@@ -29,10 +30,18 @@ class ConfigData{
         /// A descritpion of the game 
         string _description;
     public:
-        // Default Constructor
+        /**
+         * @brief Default Constructor
+         * 
+         * @return A new Config Data object
+         */
         ConfigData(){}
 
-        // Overloaded Constructor
+        /**
+         * @brief Construct a new Config Data object
+         * 
+         * @param config_file The config.txt file
+         */
         ConfigData(string config_file)
         {
             collect_config_data(read_txt(open_file(config_file)));
@@ -42,21 +51,24 @@ class ConfigData{
         auto set_id(int &i) { _id = i; }
         auto set_folder(string &dir) { _folder = dir; }
         // Getters:
-        auto id()       const -> const int&    { return _id;       }
-        auto repo()     const -> const string& { return _repo;     }
-        auto language() const -> const string& { return _language; }
-        auto image()    const -> const string& { return _image;    }
-        auto title()    const -> const string& { return _title;    }
-        auto genre()    const -> const string& { return _genre;    }
-        auto rating()   const -> const string& { return _rating;   }
-        auto author()   const -> const string& { return _author;   }
-        auto exe()      const -> const string& { return _exe;      }
-        auto folder()   const -> const string& { return _folder;   }
+        auto id()            const -> const int&    { return _id;            }
+        auto repo()          const -> const string& { return _repo;          }
+        auto language()      const -> const string& { return _language;      }
+        auto image()         const -> const string& { return _image;         }
+        auto title()         const -> const string& { return _title;         }
+        auto genre()         const -> const string& { return _genre;         }
+        auto rating()        const -> const string& { return _rating;        }
+        auto author()        const -> const string& { return _author;        }
+        auto exe()           const -> const string& { return _exe;           }
+        auto folder()        const -> const string& { return _folder;        }
         auto description()   const -> const string& { return _description;   }
 
-        /*
-            Returns a file given the filepath
-        */
+        /**
+         * @brief Generic open file function 
+         * 
+         * @param file The config.txt file
+         * @return A file as ifstream object
+         */
         ifstream open_file(string file)
         {
             ifstream config_file;
@@ -72,9 +84,12 @@ class ConfigData{
             return config_file;
         }
 
-        /*
-            Returns an array of data from a text file
-        */        
+        /**
+         * @brief Reads the contents of a file, ignoring comments indicated by '#'
+         * 
+         * @param file The ifstream object
+         * @return An array of data from a text file
+         */
         vector<string> read_txt(ifstream file)
         {
             vector<string> config_items;
@@ -92,9 +107,12 @@ class ConfigData{
             return config_items;
         }
 
-        /*
-            Populates this config data with the data from the given array
-        */  
+        /**
+         * @brief Populates this config data with the data from the given array
+         * 
+         * @param configs a vector of strings
+         * @return * void
+         */
         void collect_config_data(vector<string> configs = vector<string>())
         {
             smatch sm;
@@ -112,40 +130,56 @@ class ConfigData{
 
                 if(!data.empty())
                 {
-                    this->_title =       data[0];
-                    this->_author =      data[1];
-                    this->_genre =       data[2];
+                    this->_title       = data[0];
+                    this->_author      = data[1];
+                    this->_genre       = data[2];
                     this->_description = data[3];
-                    this->_rating =      data[4];
-                    this->_language =    data[5];
-                    this->_image =       data[6];
-                    this->_exe =         data[7];
-                    this->_repo =        data[8];
+                    this->_rating      = data[4];
+                    this->_language    = data[5];
+                    this->_image       = data[6];
+                    this->_exe         = data[7];
+                    this->_repo        = data[8];
                 }
             }
         }
 
+        /**
+         * @brief Parses a json filepath as string to json object
+         * 
+         * @param filepath 
+         * @return json 
+         */
         json read_json(string filepath)
         {
             json config_items = json_from_file(filepath);
             return config_items;
         }
 
+        /**
+         * @brief Add json strings to data object
+         * 
+         * @param json_configs 
+         */
         void collect_json_data(json json_configs = {})
         {
-            this->_repo = json_read_string(json_configs, "repo");
+            this->_repo     = json_read_string(json_configs, "repo");
             this->_language = json_read_string(json_configs, "language");
-            this->_image = json_read_string(json_configs, "image");
-            this->_title = json_read_string(json_configs, "title");
-            this->_genre = json_read_string(json_configs, "genre");
-            this->_rating = json_read_string(json_configs, "rating");
-            this->_author = json_read_string(json_configs, "author");
-            this->_exe = json_read_string(json_configs, "exe");
+            this->_image    = json_read_string(json_configs, "image");
+            this->_title    = json_read_string(json_configs, "title");
+            this->_genre    = json_read_string(json_configs, "genre");
+            this->_rating   = json_read_string(json_configs, "rating");
+            this->_author   = json_read_string(json_configs, "author");
+            this->_exe      = json_read_string(json_configs, "exe");
         }
 
-        /*
-            Clones a git repository given the URL and proposed directory name
-        */
+        /**
+         * @brief Clones a git repository given the URL and proposed directory name
+         * 
+         * @param url git repository url
+         * @param dir directory to clone to
+         * @return true 
+         * @return false 
+         */
         bool get_from_git(string url, const char* dir)
         {
             struct stat info;
@@ -160,6 +194,11 @@ class ConfigData{
             return true;
         }
 
+        /**
+         * @brief Change the name of a directory
+         * 
+         * @param dir directory to change the name of
+         */
         void rename_dir(const char* dir)
         {
             string error;
@@ -176,6 +215,11 @@ class ConfigData{
             }
         }
 
+        /**
+         * @brief Delete a directory
+         * 
+         * @param dir name of direcotry to delete
+         */
         void delete_dir(string dir)
         {
             string error;
@@ -187,7 +231,11 @@ class ConfigData{
                 cerr << error << endl;
             }
         }
-
+        
+        /**
+         * @brief Print the data contained in this object
+         * 
+         */
         void print_config_data()
         {
             string i = to_string(id());
