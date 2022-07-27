@@ -73,6 +73,9 @@ private:
     // Determines when sliding.
     bool _menu_sliding = false;
 
+    // Creates a new game data object.
+    GameData *m_newGame = new GameData;
+
 public:
     Menu(){}
 
@@ -243,6 +246,11 @@ public:
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
 #endif
+                    string gameName = this->button->config.title();
+                    int startTime = time(0);
+
+                    m_newGame->setGameName(gameName);
+                    m_newGame->setStartTime(startTime);
 
                     return;
                 }
@@ -497,6 +505,19 @@ public:
             if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
             {
                 this->_in_game = false;
+
+                int endTime = time(0);
+
+                // ToDo: Collect player rating and highscore achieved.
+
+                int rating = 0;
+                int highScore = 0;
+
+                m_newGame->setRating(rating);
+                m_newGame->setHighScore(highScore);
+                m_newGame->setEndTime(endTime);
+
+                m_newGame->writeData();
             }
         }
     }
