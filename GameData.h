@@ -2,10 +2,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "splashkit.h"
 
 using namespace std;
 
-string GAME_DATA_PATH = "data/gameData.csv";
+string DATA_BASE_NAME = "GameData";
+string DATA_BASE_FILE_NAME = "gameData";
+string TABLE_NAME = "gameData";
 
 class GameData {
     private:
@@ -43,53 +46,65 @@ class GameData {
         int getRating() {return m_rating;}
         int getHighScore() {return m_highScore;}
 
-        // Write data to a csv file
-        void writeData(){
-            ofstream myFile;
-            myFile.open(GAME_DATA_PATH, ios::app);
-            myFile << m_gameName << "," << m_startTime << "," << m_endTime << "," << m_rating << "," << m_highScore << endl;
-            myFile.close();
+        // Creates a new table if it doesn't exist
+        // Writes the data to the table
+        void writeData() {
+            database db = open_database(DATA_BASE_NAME, DATA_BASE_FILE_NAME);
+
+            string createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (gameName TEXT, startTime INT, endTime INT, rating INT, highScore INT)";
+
+            query_result result = run_sql(db, createTable);
+
+            cout << query_success(result) << endl;
+
+            string query = "INSERT INTO " + TABLE_NAME + " (gameName, startTime, endTime, rating, highScore) VALUES ('" + m_gameName + "', " + to_string(m_startTime) + ", " + to_string(m_endTime) + ", " + to_string(m_rating) + ", " + to_string(m_highScore) + ");";
+
+            query_result res = run_sql(DATA_BASE_NAME, query);
+
+            if (query_success(res)) {
+                cout << "Successfully inserted data" << endl;
+            } else {
+                cout << "Failed to insert data" << endl;
+            }
+
+            free_database(db);
         }
 
-        // Read data from a csv file
-        // Returns a vector of GameData objects
+        // Returns all data from the database as a vector of GameData objects
+        vector<GameData> readData() {
+            database db = open_database(DATA_BASE_NAME, DATA_BASE_FILE_NAME);
 
-        vector<GameData> readData(){
-            ifstream myFile;
-            myFile.open(GAME_DATA_PATH);
-
-            string line;
             vector<GameData> data;
 
-            while(getline(myFile, line, '\n')) {
-                string delimiter = ",";
-                vector<string> result = splitString(line, delimiter);
+            string query = "SELECT * FROM  " + TABLE_NAME + ";";
 
-                string gameName = result[0];
-                int startTime = stoi(result[1]);
-                int endTime = stoi(result[2]);
-                int rating = stoi(result[3]);
-                int highScore = stoi(result[4]);
+            query_result res = run_sql(db, query);
 
-                data.push_back(GameData(gameName, startTime, endTime, rating, highScore));
+            while (has_row(res)) {
+                vector<string> row = get_current_row_strings(res);
+                string gameName = row[0];
+                int startTime = stoi(row[1]);
+                int endTime = stoi(row[2]);
+                int rating = stoi(row[3]);
+                int highScore = stoi(row[4]);
+
+                GameData newGame(gameName, startTime, endTime, rating, highScore);
+                data.push_back(newGame);
+
+                if (!get_next_row(res)) {
+                    break;
+                }
             }
+            free_database(db);
             return data;
         }
 
-        // Split a string into a vector of strings using a delimiter
-        vector<string> splitString (string input, string delimiter) {
-            size_t startPosition = 0, endPosition, delimiterLength = delimiter.length();
-            string token;
-            vector<string> result;
-
-            while ((endPosition = input.find (delimiter, startPosition)) != string::npos) {
-                token = input.substr (startPosition, endPosition - startPosition);
-                startPosition = endPosition + delimiterLength;
-                result.push_back (token);
+        // Returns the current row as a vector of strings
+        vector<string> get_current_row_strings(query_result res) {
+            vector<string> row;
+            for (int i = 0; i < query_column_count(res); i++) {
+                row.push_back(query_column_for_string(res, i));
             }
-
-            result.push_back (input.substr (startPosition));
-            return result;
+            return row;
         }
-
 };
