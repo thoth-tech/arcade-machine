@@ -46,8 +46,13 @@ class GameData {
         int getRating() {return m_rating;}
         int getHighScore() {return m_highScore;}
 
+
         // Creates a new table if it doesn't exist
-        // Writes the data to the table
+        // Writes the objects data to the table
+
+        // Useage:
+        // GameData data = GameData("gameName", startTime, endTime, rating, highScore);
+        // data.writeData();
         void writeData() {
             database db = open_database(DATA_BASE_NAME, DATA_BASE_FILE_NAME);
 
@@ -73,7 +78,12 @@ class GameData {
             free_database(db);
         }
 
+
         // Returns all data from the database as a vector of GameData objects
+
+        // Useage:
+        // GameData gameData = GameData();
+        // vector<GameData> data = gameData.readData();
         vector<GameData> readData() {
             database db = open_database(DATA_BASE_NAME, DATA_BASE_FILE_NAME);
 
@@ -91,6 +101,7 @@ class GameData {
 
             while (has_row(res)) {
                 vector<string> row = get_current_row_strings(res);
+
                 string gameName = row[0];
                 int startTime = stoi(row[1]);
                 int endTime = stoi(row[2]);
