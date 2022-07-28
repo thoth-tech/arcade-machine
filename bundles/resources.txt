@@ -32,6 +32,7 @@ BITMAP,information,information.png
 FONT,font_btn,MindPlay.ttf
 FONT,font_title,Retroking.ttf
 FONT,font_text,Roboto-Regular.ttf
+FONT,font_star,Stars.ttf
 
 // Sounds
 SOUND,intro_thoth,intro1.wav

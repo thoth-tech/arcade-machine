@@ -397,8 +397,12 @@ public:
         draw_text("Author: " + config.author(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (1 * y_offset));
         draw_text("Genre: " + config.genre(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (2 * y_offset));
         draw_text("Language: " + config.language(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (3 * y_offset));
-        draw_text("Rating: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
+        draw_text("Classification: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
+        draw_text("Rating: ", COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (6 * y_offset));
+        string rating = string(3, 'J');
+        rating += string(5-rating.size(),'I');
+        draw_text(rating, COLOR_WHITE, "font_star", y_offset+10, x_offset + 90,  y_start + (6 * y_offset));
     }
 
 #ifdef _WIN32
