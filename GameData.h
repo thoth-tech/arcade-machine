@@ -53,20 +53,23 @@ class GameData {
 
             string createTable = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (gameName TEXT, startTime INT, endTime INT, rating INT, highScore INT)";
 
-            query_result result = run_sql(db, createTable);
+            query_result res = run_sql(db, createTable);
 
-            cout << query_success(result) << endl;
+            if (query_success(res)) {
+                cout << "Successfully created table or table already exists" << endl;
+            } else {
+                cout << "Failed to create table" << endl;
+            }
 
             string query = "INSERT INTO " + TABLE_NAME + " (gameName, startTime, endTime, rating, highScore) VALUES ('" + m_gameName + "', " + to_string(m_startTime) + ", " + to_string(m_endTime) + ", " + to_string(m_rating) + ", " + to_string(m_highScore) + ");";
 
-            query_result res = run_sql(DATA_BASE_NAME, query);
+            res = run_sql(DATA_BASE_NAME, query);
 
             if (query_success(res)) {
                 cout << "Successfully inserted data" << endl;
             } else {
                 cout << "Failed to insert data" << endl;
             }
-
             free_database(db);
         }
 
@@ -79,6 +82,12 @@ class GameData {
             string query = "SELECT * FROM  " + TABLE_NAME + ";";
 
             query_result res = run_sql(db, query);
+
+            if (query_success(res)) {
+                cout << "Successfully retrieved data" << endl;
+            } else {
+                cout << "Failed to retrieve data" << endl;
+            }
 
             while (has_row(res)) {
                 vector<string> row = get_current_row_strings(res);
