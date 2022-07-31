@@ -5,6 +5,7 @@ using namespace std;
 int main()
 {
     // Load all resources
+    set_resources_path("resources" ARCADE_MACHINE_PATH_SEP);
     load_resource_bundle("bundle", "resources.txt");
 
     // Instantiate Arcade Machine

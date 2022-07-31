@@ -18,6 +18,9 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#define ARCADE_MACHINE_PATH_SEP "\\"
+#else
+#define ARCADE_MACHINE_PATH_SEP "/"
 #endif
 
 // Custom classes
