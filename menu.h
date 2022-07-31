@@ -414,7 +414,7 @@ public:
         do {
             gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
             timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
-            Sleep(250);
+            delay(250);
         }
         while (gameWindowHandle == NULL && timeElapsed <= timeout);
 
@@ -541,9 +541,7 @@ public:
             alphaStart += alphaStep;
             refresh_screen(60);
 
-#ifdef _WIN32
-            Sleep(50);
-#endif
+            delay(50);
         }
     }
 };
