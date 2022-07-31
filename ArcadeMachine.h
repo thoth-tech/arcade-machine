@@ -282,13 +282,15 @@ class ArcadeMachine
                 // Decrement i and alpha 
                 i--; alpha = alpha - 0.05;
                 // If alpha is == 0, hold image for 1.5 seconds
-
                 if (abs(alpha - 0.0) < 1e-9)
                 {
                     play_sound_effect(sound2);
                     delay(2000);
+                    /*  After this has happened, the alpha value will continue into the negatives
+                        The colour function continues to accept negative alpha values, 
+                        effectively creating a fade out animation for the remainder of the while loop
+                    */
                 }
-
                 refresh_screen(60);
                 delay(50);
             }
