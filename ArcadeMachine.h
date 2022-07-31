@@ -1,4 +1,5 @@
 // Arcade Machine Class
+#include "Includes.h"
 using namespace std;
 using std::vector;
 
