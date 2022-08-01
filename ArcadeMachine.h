@@ -299,19 +299,15 @@ class ArcadeMachine
                 {
                     play_sound_effect(sound2);
 
-#ifdef _WIN32
-                    Sleep(2000);
+                    delay(2000);
                     /*  After this has happened, the alpha value will continue into the negatives
                         The colour function continues to accept negative alpha values, 
                         effectively creating a fade out animation for the remainder of the while loop
                     */
-#endif
                 }
                 refresh_screen(60);
 
-#ifdef _WIN32
-                Sleep(50);
-#endif
+                delay(50);
             }
         }
 

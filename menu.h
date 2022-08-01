@@ -4,13 +4,15 @@
 #include "tip.h"
 #include "selector.h"
 
+#define USE_WINAPI_FUNCTIONS 0
+
 class Menu {
 private:
     std::string background = "games_dashboard";
     // Vector to store the config data of each game
     std::vector<ConfigData> _games;
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
     // Contains info about newly created process and thread
     PROCESS_INFORMATION processInfo;
     // Unsigned int to store exit info
@@ -50,7 +52,7 @@ private:
     // Passes into Selector optional parameter.
     bool game_menu = true;
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
     // Handle for game window.
     HWND handle;
 #endif
@@ -83,7 +85,7 @@ public:
     {
         this->_games = configs;
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
         handle = FindWindowA(NULL, "arcade-machine");
 #endif
     }
@@ -199,7 +201,7 @@ public:
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
         this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
         check_game_exit();
 #endif
 
@@ -213,7 +215,7 @@ public:
             {
                 if (_overlayActive)
                 {
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
                     // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
@@ -242,7 +244,7 @@ public:
                     // fade back in
                     fade(1, 0, 0.1);
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
 #endif
@@ -396,7 +398,7 @@ public:
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
     }
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
     /**
      * @brief  Find the game window and bring it to focus, if it exists
      * 
@@ -416,7 +418,7 @@ public:
         do {
             gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
             timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
-            Sleep(250);
+            delay(250);
         }
         while (gameWindowHandle == NULL && timeElapsed <= timeout);
 
@@ -435,7 +437,7 @@ public:
     }
 #endif
 
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
     /**
      * @brief Starts up the selected game by starting a new process.
      * 
@@ -484,7 +486,7 @@ public:
     }
 #endif
    
-#ifdef _WIN32
+#if USE_WINAPI_FUNCTIONS
    /**
      * @brief Waits for game to exit.
      * 
@@ -543,9 +545,7 @@ public:
             alphaStart += alphaStep;
             refresh_screen(60);
 
-#ifdef _WIN32
-            Sleep(50);
-#endif
+            delay(50);
         }
     }
 };
