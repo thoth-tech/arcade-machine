@@ -4,7 +4,9 @@
 #include "tip.h"
 #include "selector.h"
 
-#define USE_WINAPI_FUNCTIONS 0
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 class Menu {
 private:
@@ -12,7 +14,7 @@ private:
     // Vector to store the config data of each game
     std::vector<ConfigData> _games;
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
     // Contains info about newly created process and thread
     PROCESS_INFORMATION processInfo;
     // Unsigned int to store exit info
@@ -52,7 +54,7 @@ private:
     // Passes into Selector optional parameter.
     bool game_menu = true;
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
     // Handle for game window.
     HWND handle;
 #endif
@@ -85,7 +87,7 @@ public:
     {
         this->_games = configs;
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
         handle = FindWindowA(NULL, "arcade-machine");
 #endif
     }
@@ -201,7 +203,7 @@ public:
         this->button = this->_selector_games_menu.check_key_input(this->button, game_menu);
         this->_action = this->_selector_games_menu.check_for_selection(this->button, game_menu);
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
         check_game_exit();
 #endif
 
@@ -215,7 +217,7 @@ public:
             {
                 if (_overlayActive)
                 {
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
                     // Get game path
                     _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
                     // Get executable name
@@ -244,7 +246,7 @@ public:
                     // fade back in
                     fade(1, 0, 0.1);
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
 #endif
@@ -398,7 +400,7 @@ public:
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
     }
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
     /**
      * @brief  Find the game window and bring it to focus, if it exists
      * 
@@ -437,7 +439,7 @@ public:
     }
 #endif
 
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
     /**
      * @brief Starts up the selected game by starting a new process.
      * 
@@ -486,7 +488,7 @@ public:
     }
 #endif
    
-#if USE_WINAPI_FUNCTIONS
+#ifdef _WIN32
    /**
      * @brief Waits for game to exit.
      * 
