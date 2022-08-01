@@ -1,3 +1,6 @@
+#ifndef ARCADE_MACHINE_TIP_H
+#define ARCADE_MACHINE_TIP_H
+
 // Font size
 #define FONT_SIZE 20
 // Width of the border
@@ -37,7 +40,7 @@ private:
     //Where the container will be anchored within the screen.
     int xOffset;
     int yOffset;
-    chrono::time_point<chrono::steady_clock> startTime;
+    std::chrono::time_point<std::chrono::steady_clock> startTime;
     int duration;
 
     //Height of the container
@@ -169,9 +172,9 @@ public:
     {
         //Initialise startTime upon first draw
         if (startTime.time_since_epoch().count() == 0)
-            startTime = chrono::steady_clock::now();
+            startTime = std::chrono::steady_clock::now();
         //The tip has been visible for more than the specified duration, stop drawing
-        if (chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count() > 3000)
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count() > 3000)
             return;
 
         //Draw border rectangle
@@ -194,3 +197,5 @@ public:
             update_animation(anim);
     }
 };
+
+#endif

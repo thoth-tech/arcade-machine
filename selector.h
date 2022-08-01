@@ -1,3 +1,5 @@
+#ifndef ARCADE_MACHINE_SELECTOR_H
+#define ARCADE_MACHINE_SELECTOR_H
 
 using namespace std;
 
@@ -186,3 +188,5 @@ class Selector {
             sprite_toggle_layer_visible(prev_sprite, 1);
         }
 };
+
+#endif
