@@ -22,15 +22,15 @@
 
 // Custom classes
 #include "Button.h"
-#include "gridlayout.h"
+#include "GridLayout.h"
 #include "ConfigData.h"
 #include "ButtonList.h"
-#include "selector.h"
-#include "tip.h"
-#include "splashscreen.h"
-#include "menu.h"
+#include "Selector.h"
+#include "Tip.h"
+#include "Splashscreen.h"
+#include "Menu.h"
 #include "Helper.h"
-#include "option.h"
+#include "Option.h"
 #include "ArcadeMachine.h"
 
 #endif
