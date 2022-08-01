@@ -298,7 +298,6 @@ class ArcadeMachine
                 if (abs(alpha - 0.0) < 1e-9)
                 {
                     play_sound_effect(sound2);
-
                     delay(2000);
                     /*  After this has happened, the alpha value will continue into the negatives
                         The colour function continues to accept negative alpha values, 
@@ -306,7 +305,6 @@ class ArcadeMachine
                     */
                 }
                 refresh_screen(60);
-
                 delay(50);
             }
         }
