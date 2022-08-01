@@ -1,3 +1,6 @@
+#ifndef ARCADE_MACHINE_HELPER_H
+#define ARCADE_MACHINE_HELPER_H
+
 #include <experimental/filesystem>
 
 namespace fs = std::experimental::filesystem;
@@ -200,3 +203,5 @@ class Helper{
             }
         }
 };
+
+#endif

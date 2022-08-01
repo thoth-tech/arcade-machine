@@ -1,3 +1,6 @@
+#ifndef ARCADE_MACHINE_MENU_H
+#define ARCADE_MACHINE_MENU_H
+
 #include "tip.h"
 #include "selector.h"
 
@@ -546,3 +549,5 @@ public:
         }
     }
 };
+
+#endif

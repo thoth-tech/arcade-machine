@@ -1,3 +1,6 @@
+#ifndef ARCADE_MACHINE_H
+#define ARCADE_MACHINE_H
+
 // Arcade Machine Class
 #include "Button.h"
 #include "ButtonList.h"
@@ -345,3 +348,5 @@ class ArcadeMachine
             exit(EXIT_SUCCESS);
         }
 };
+
+#endif
