@@ -1,12 +1,11 @@
-
-using namespace std;
-using std::vector;
+#include "tip.h"
+#include "selector.h"
 
 class Menu {
 private:
-    string background = "games_dashboard";
+    std::string background = "games_dashboard";
     // Vector to store the config data of each game
-    vector<ConfigData> _games;
+    std::vector<ConfigData> _games;
 
 #ifdef _WIN32
     // Contains info about newly created process and thread
@@ -34,16 +33,16 @@ private:
     // Checks if program has exited
     bool _program_exit;
     // Vector of buttons
-    vector<Button*> btns;
+    std::vector<Button*> btns;
     // Vectore to store game images
-    vector<string> game_images;
+    std::vector<std::string> game_images;
     // Menu grid
     Grid _grid;
     Tip *tip;
     ButtonNode *button = nullptr;
     bool _overlayActive = false;
     /// Button Action
-    string _action;
+    std::string _action;
     Selector _selector_games_menu;
     // Passes into Selector optional parameter.
     bool game_menu = true;
@@ -77,7 +76,7 @@ private:
 public:
     Menu(){}
 
-    Menu(vector<ConfigData> configs)
+    Menu(std::vector<ConfigData> configs)
     {
         this->_games = configs;
 
@@ -88,7 +87,7 @@ public:
     ~Menu(){}
 
     // Getters
-    auto get_buttons() const -> const vector<Button*> { return this->btns; }
+    auto get_buttons() const -> const std::vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
 
     /** 
@@ -97,14 +96,14 @@ public:
      * @param configs Vector of config data.
      * @return vector of game images.
      */
-    vector<string> get_game_sprites(vector<ConfigData> configs)
+    std::vector<std::string> get_game_sprites(std::vector<ConfigData> configs)
     {
-        vector<string> game_images;
+        std::vector<std::string> game_images;
 
         for (int i = 0; i < configs.size(); i++)
         {
             // Get image dir and image name from games vector.
-            string image = configs[i].folder() + "/" + configs[i].image();
+            std::string image = configs[i].folder() + "/" + configs[i].image();
             game_images.push_back(image);
         }
 
@@ -142,7 +141,7 @@ public:
             }
             else
             {
-                string image = game_images[i];
+                std::string image = game_images[i];
                 this->button->addBefore(new ButtonNode(new GameScreenButton(Button::GAME, image)));
                 this->button->getPrev()->config = _games[i];
             }
@@ -164,7 +163,7 @@ public:
         //Load the animation into options
         drawing_options opt = option_with_animation(anim);
         //Create the tip
-        string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
+        std::string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
         this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
     }
 
@@ -402,7 +401,7 @@ public:
      * @param timeout time in ms to search for the window
      * @return true/false if window was found.
      */
-    bool FocusWindow(string windowName, int timeout = 2000)
+    bool FocusWindow(std::string windowName, int timeout = 2000)
     {
         LPCSTR gameWindow =  windowName.c_str();
         HWND gameWindowHandle = NULL;
@@ -471,7 +470,7 @@ public:
 
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
-            string windowName = gameExe;
+            std::string windowName = gameExe;
             //Remove the extension from the application name (.exe)
             windowName = windowName.substr(0, windowName.find("."));
             //Focus the window
