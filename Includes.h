@@ -21,16 +21,16 @@
 #endif
 
 // Custom classes
-#include "buttons.h"
-#include "gridlayout.h"
-#include "cdata.h"
+#include "Button.h"
+#include "GridLayout.h"
+#include "ConfigData.h"
 #include "ButtonList.h"
-#include "selector.h"
-#include "tip.h"
-#include "splashscreen.h"
-#include "menu.h"
-#include "helper.h"
-#include "option.h"
-#include "arcademachine.h"
+#include "Selector.h"
+#include "Tip.h"
+#include "Splashscreen.h"
+#include "Menu.h"
+#include "Helper.h"
+#include "Option.h"
+#include "ArcadeMachine.h"
 
 #endif

@@ -1,3 +1,6 @@
+// Define screen size (in pixels)
+#define WIDTH  1920
+#define HEIGHT 1080
 
 void write(std::string text);
 
