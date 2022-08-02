@@ -1,8 +1,8 @@
 #ifndef ARCADE_MACHINE_MENU_H
 #define ARCADE_MACHINE_MENU_H
 
-#include "tip.h"
-#include "selector.h"
+#include "Tip.h"
+#include "Selector.h"
 
 #ifdef _WIN32
 #include <Windows.h>
