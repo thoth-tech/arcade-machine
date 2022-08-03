@@ -1,3 +1,9 @@
+#ifndef ARCADE_MACHINE_BUTTON_H
+#define ARCADE_MACHINE_BUTTON_H
+
+#include <string>
+#include "splashkit.h"
+
 /**
  * @brief Abstract Button Class
  * 
@@ -21,13 +27,13 @@ class Button{
         /// This buttons centre point offset height in pixels
         int _centre_y;
         /// This buttons color 
-        string _color;
+        std::string _color;
         /// This buttons hightlight bitmap
         bitmap _hghlt;
         /// This buttons hightlight layer
-        string _highlight;
+        std::string _highlight;
         /// This buttons image path
-        string _image_path;
+        std::string _image_path;
     
         /// Getters:
         auto id()       const -> const int&      { return _id;       }
@@ -38,7 +44,7 @@ class Button{
         auto y()        const -> const int&      { return _y;        }
         auto centre_x() const -> const int&      { return _centre_x; }
         auto centre_y() const -> const int&      { return _centre_y; }
-        auto color()    const -> const string&   { return _color;    }
+        auto color()    const -> const std::string&   { return _color;    }
 
         /// Setters
         void set_id(int id)     { this->_id = id; }
@@ -126,7 +132,7 @@ class Button{
          * @param image bitmap name
          * @param scale size multiplier
          */
-        Button(Color c, string image, float scale = 1)
+        Button(Color c, std::string image, float scale = 1)
         {
             // button color
             this->_color = btn_color(c);
@@ -147,9 +153,9 @@ class Button{
         ~Button(){}
 
         // Virtual fucntions
-        virtual void btn_image(string image) = 0;
+        virtual void btn_image(std::string image) = 0;
         virtual void draw_button() = 0;
-        virtual string action(string keyinput = "") = 0;
+        virtual std::string action(std::string keyinput = "") = 0;
 
         /**
          * @brief Gets the filepath to the requested color (image) 
@@ -157,9 +163,9 @@ class Button{
          * @param c 
          * @return * string 
          */
-        string btn_color(Color c)
+        std::string btn_color(Color c)
         {
-            string filepath = "buttons/";
+            std::string filepath = "buttons/";
             switch(c)
             {
                 case PLAY:
@@ -208,7 +214,7 @@ class MenuButton : public Button{
          * @param keyinput 
          * @return string
          */
-        string action(string keyinput = "")
+        std::string action(std::string keyinput = "")
         {
             if (this->color() == btn_color(Button::PLAY))
             {
@@ -241,8 +247,8 @@ class MenuButton : public Button{
             draw_sprite(this->_btn);
         }
 
-        void get_button_image(string image) {};
-        void btn_image(string image) { }
+        void get_button_image(std::string image) {};
+        void btn_image(std::string image) { }
 };
 
 /**
@@ -255,7 +261,7 @@ class GameScreenButton : public Button{
         // First constructor
         GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
         // Third constructor
-        GameScreenButton(Color c, string s, float scale = 1) : Button(c, s, scale){}
+        GameScreenButton(Color c, std::string s, float scale = 1) : Button(c, s, scale){}
 
         /**
          * @brief returns the action 
@@ -263,12 +269,12 @@ class GameScreenButton : public Button{
          * @param keyinput 
          * @return string 
          */
-        string action(string keyinput = "")
+        std::string action(std::string keyinput = "")
         {
             return keyinput;
         }
 
-        void btn_image(string image)
+        void btn_image(std::string image)
         {
             this->_color = image;
         }
@@ -280,5 +286,4 @@ class GameScreenButton : public Button{
         }
 };
 
-
-
+#endif
