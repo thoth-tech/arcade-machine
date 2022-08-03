@@ -1,3 +1,8 @@
+#ifndef ARCADE_MACHINE_BUTTON_LIST_H
+#define ARCADE_MACHINE_BUTTON_LIST_H
+
+#include "ConfigData.h"
+
 class ButtonNode
 {
 private:
@@ -90,3 +95,5 @@ public:
         return this->prev;
     }
 };
+
+#endif

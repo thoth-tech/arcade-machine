@@ -1,6 +1,19 @@
+#ifndef ARCADE_MACHINE_H
+#define ARCADE_MACHINE_H
+
 // Arcade Machine Class
-using namespace std;
-using std::vector;
+#include "Button.h"
+#include "ButtonList.h"
+#include "ConfigData.h"
+#include "gridlayout.h"
+#include "Helper.h"
+#include "menu.h"
+#include "option.h"
+#include "splashscreen.h"
+#include "selector.h"
+#include "splashkit.h"
+#include <string>
+#include <vector>
 
 // Define number of rows and columns in grid
 #define ROWS 7
@@ -18,11 +31,11 @@ class ArcadeMachine
         /// Instance of ConfigData
         ConfigData _config;
         /// Vector of ConfigData
-        vector<ConfigData> _configs;
+        std::vector<ConfigData> _configs;
         /// Vector of MenuButtons
-        vector<Button*> _menu_btns;
+        std::vector<Button*> _menu_btns;
         /// Vector of GameScreenButtons
-        vector<Button*> _game_btns;
+        std::vector<Button*> _game_btns;
         /// Thoth Tech Company intro
         Splashscreen _intro_thoth_tech;
         /// Arcade Machine Team intro
@@ -38,7 +51,7 @@ class ArcadeMachine
         /// Mouse pointer
         point_2d _mouse;
         /// Button Action 
-        string _action;
+        std::string _action;
         /// Play clicked
         bool _play_clicked = false;
         /// Turn menu music on/off
@@ -262,7 +275,7 @@ class ArcadeMachine
             @param sound1 (optional) The first sound to play
             @param sound2 (optional) The second sound to play 
         */
-        void intro_animation(Splashscreen screen, string sound1 = "", string sound2 = "")
+        void intro_animation(Splashscreen screen, std::string sound1 = "", std::string sound2 = "")
         {
             // Set fade increment (opacity)
             double alpha = 1.0;
@@ -329,3 +342,5 @@ class ArcadeMachine
             exit(EXIT_SUCCESS);
         }
 };
+
+#endif
