@@ -122,7 +122,6 @@ class ConfigData{
         void collect_config_data(std::vector<std::string> configs = std::vector<std::string>())
         {
             std::smatch sm;
-            std::vector<std::string> data;
 
             if (configs.size() > 0)
             {
@@ -130,21 +129,21 @@ class ConfigData{
                 {
                     const std::string s = configs[i];
 
-                    if(std::regex_search(s.begin(), s.end(), sm, std::regex(".*=(.*)")))
-                        data.push_back(sm[1]);
-                }
-
-                if(!data.empty())
-                {
-                    this->_title       = data[0];
-                    this->_author      = data[1];
-                    this->_genre       = data[2];
-                    this->_description = data[3];
-                    this->_rating      = data[4];
-                    this->_language    = data[5];
-                    this->_image       = data[6];
-                    this->_exe         = data[7];
-                    this->_repo        = data[8];
+                    if(std::regex_search(s.begin(), s.end(), sm, std::regex("(.*)=(.*)")))
+                    {
+                        for (int i = 1; i < sm.size(); i++)
+                        {
+                            if (sm[1] == "title")       this->_title = sm[2]; 
+                            if (sm[1] == "author")      this->_author = sm[2];
+                            if (sm[1] == "genre")       this->_genre = sm[2];
+                            if (sm[1] == "description") this->_description = sm[2];
+                            if (sm[1] == "rating")      this->_rating = sm[2];
+                            if (sm[1] == "language")    this->_language = sm[2];
+                            if (sm[1] == "image")       this->_image = sm[2];
+                            if (sm[1] == "executable")  this->_exe = sm[2];
+                            if (sm[1] == "repository")  this->_repo = sm[2];
+                        }
+                    }
                 }
             }
         }
