@@ -1,4 +1,4 @@
-#include "ArcadeMachine.h"
+#include "include/ArcadeMachine.h"
 
 using namespace std;
 
