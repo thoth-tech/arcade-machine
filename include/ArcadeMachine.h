@@ -11,12 +11,12 @@
 #include "Button.h"
 #include "ButtonList.h"
 #include "ConfigData.h"
-#include "gridlayout.h"
+#include "GridLayout.h"
 #include "Helper.h"
-#include "menu.h"
-#include "option.h"
-#include "splashscreen.h"
-#include "selector.h"
+#include "Menu.h"
+#include "Option.h"
+#include "Splashscreen.h"
+#include "Selector.h"
 #include "splashkit.h"
 #include <string>
 #include <vector>
