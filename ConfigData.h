@@ -131,17 +131,17 @@ class ConfigData{
 
                     if(std::regex_search(s.begin(), s.end(), sm, std::regex("(.*)=(.*)")))
                     {
-                        for (int i = 1; i < sm.size(); i++)
+                        for (int i = 0; i < sm.size() - 1; i++)
                         {
-                            if (sm[1] == "title")       this->_title = sm[2]; 
-                            if (sm[1] == "author")      this->_author = sm[2];
-                            if (sm[1] == "genre")       this->_genre = sm[2];
-                            if (sm[1] == "description") this->_description = sm[2];
-                            if (sm[1] == "rating")      this->_rating = sm[2];
-                            if (sm[1] == "language")    this->_language = sm[2];
-                            if (sm[1] == "image")       this->_image = sm[2];
-                            if (sm[1] == "executable")  this->_exe = sm[2];
-                            if (sm[1] == "repository")  this->_repo = sm[2];
+                            if      (sm[1] == "title")       this->_title = sm[2]; 
+                            else if (sm[1] == "author")      this->_author = sm[2];
+                            else if (sm[1] == "genre")       this->_genre = sm[2];
+                            else if (sm[1] == "description") this->_description = sm[2];
+                            else if (sm[1] == "rating")      this->_rating = sm[2];
+                            else if (sm[1] == "language")    this->_language = sm[2];
+                            else if (sm[1] == "image")       this->_image = sm[2];
+                            else if (sm[1] == "executable")  this->_exe = sm[2];
+                            else if (sm[1] == "repository")  this->_repo = sm[2];
                         }
                     }
                 }
