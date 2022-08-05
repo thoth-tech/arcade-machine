@@ -1,6 +1,12 @@
 #ifndef ARCADE_MACHINE_H
 #define ARCADE_MACHINE_H
 
+#ifdef _WIN32
+#define ARCADE_MACHINE_PATH_SEP "\\"
+#else
+#define ARCADE_MACHINE_PATH_SEP "/"
+#endif
+
 // Arcade Machine Class
 #include "Button.h"
 #include "ButtonList.h"
