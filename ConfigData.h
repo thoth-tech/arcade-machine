@@ -6,6 +6,7 @@
 #include <vector>
 #include <regex>
 #include <fstream>
+#include <cstring>
 
 /**
  * @brief Parses the configuration data from config.txt files to a data object
