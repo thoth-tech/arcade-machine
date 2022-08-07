@@ -4,6 +4,7 @@
 #include "Tip.h"
 #include "Selector.h"
 #include "GameData.h"
+#include "Database.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -14,6 +15,7 @@ private:
     std::string background = "games_dashboard";
     // Vector to store the config data of each game
     std::vector<ConfigData> _games;
+    Database *_db;
 
 #ifdef _WIN32
     // Contains info about newly created process and thread
@@ -85,11 +87,15 @@ private:
     GameData *m_newGame = new GameData;
 
 public:
-    Menu(){}
+    Menu(){
+        this->_db = new Database();
+    }
 
     Menu(std::vector<ConfigData> configs)
     {
         this->_games = configs;
+        this->_db = new Database();
+
 
 #ifdef _WIN32
         handle = FindWindowA(NULL, "arcade-machine");
@@ -142,19 +148,21 @@ public:
     {
         // Call function to get game images.
         game_images = get_game_sprites(_games);
-
+        GameData gameStats;
         for (int i = 0; i < game_images.size(); i++)
         {
             if (i == 0)
             {
                 this->button = new ButtonNode(new GameScreenButton(Button::GAME, game_images[0]));
                 this->button->config = _games[0];
+                this->button->stats = gameStats.getStats(this->_db, _games[0].title());
             }
             else
             {
                 std::string image = game_images[i];
                 this->button->addBefore(new ButtonNode(new GameScreenButton(Button::GAME, image)));
                 this->button->getPrev()->config = _games[i];
+                this->button->getPrev()->stats = gameStats.getStats(this->_db, _games[i].title());
             }
         }
     }
@@ -288,7 +296,7 @@ public:
             draw_update_slide_right();
 
         if (_overlayActive && !_menu_sliding)
-            draw_overlay(button->config);
+            draw_overlay(button->config, button->stats);
         this->tip->draw();
 
         update_carousel();
@@ -393,7 +401,7 @@ public:
      * 
      * @param config the game config.
      */
-    void draw_overlay(ConfigData config)
+    void draw_overlay(ConfigData config, GameData stats)
     {
         int x_offset = (current_window_width() / 2) + (current_window_width() / 14);
         int y_start = current_window_height() / 6;
@@ -405,9 +413,10 @@ public:
         draw_text("Author: " + config.author(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (1 * y_offset));
         draw_text("Genre: " + config.genre(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (2 * y_offset));
         draw_text("Language: " + config.language(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (3 * y_offset));
-        draw_text("Rating: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
+        draw_text("Classification: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
-        string rating = string(3, 'J');
+        draw_text("Rating: ", COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (6 * y_offset));
+        string rating = string(stats.getRating(), 'J');
         rating += string(5-rating.size(),'I');
         draw_text(rating, COLOR_WHITE, "font_star", y_offset+10, x_offset + 90,  y_start + (6 * y_offset));
     }

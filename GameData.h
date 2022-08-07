@@ -1,3 +1,6 @@
+#ifndef ARCADE_MACHINE_GAME_DATA_H
+#define ARCADE_MACHINE_GAME_DATA_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -16,7 +19,10 @@ class GameData {
         int m_highScore;
 
     public:
-        GameData(){}
+        GameData(
+        ){
+            this->m_rating = 0;
+        }
 
         // Constructor
         GameData(string gameName, int startTime, int endTime, int rating, int highScore) {
@@ -272,3 +278,4 @@ class GameData {
             }
         }
 };
+#endif
