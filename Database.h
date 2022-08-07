@@ -74,10 +74,12 @@ class Database {
             // Return true if the table was created
             if (query_success(res)) {
                 std::cout << "Table created successfully" << std::endl;
+                free_all_query_results();
                 return true;
             } else { // Return false if the table was not created
                 std::cout << "Table creation failed" << std::endl;
                 std::cout << createTable << std::endl;
+                free_all_query_results();
                 return false;
             }
         };
@@ -111,10 +113,12 @@ class Database {
                 // Return true if the row was inserted
                 if (query_success(res)) {
                     std::cout << "Data inserted successfully" << std::endl;
+                    free_all_query_results();
                     return true;
                 } else { // Return false if the row was not inserted
                     std::cout << "Data insertion failed" << std::endl;
                     std::cout << insertData << std::endl;
+                    free_all_query_results();
                     return false;
                 }
             } else { // Return false if the table does not exist
@@ -170,6 +174,7 @@ class Database {
                     std::cout << query << std::endl;
                 }
                 free_database(db);
+                free_all_query_results();
                 return data;
 
             } else { // Return an empty vector if the table does not exist
@@ -225,10 +230,12 @@ class Database {
                 // Return true if the data was printed
                 if (query_success(res)) {
                     std::cout << "Data printed successfully" << std::endl;
+                    free_all_query_results();
                     return true;
                 } else { // Return false if the data was not printed
                     std::cout << "Data print failed" << std::endl;
                     std::cout << query << std::endl;
+                    free_all_query_results();
                     return false;
                 }
             } else { // Return false if the table does not exist
@@ -262,10 +269,12 @@ class Database {
                 // Return true if the row was deleted
                 if (query_success(res)) {
                     std::cout << "Data deleted successfully" << std::endl;
+                    free_all_query_results();
                     return true;
                 } else { // Return false if the row was not deleted
                     std::cout << "Data deletion failed" << std::endl;
                     std::cout << query << std::endl;
+                    free_all_query_results();
                     return false;
                 }
             } else { //     Return false if the table does not exist
@@ -306,10 +315,12 @@ class Database {
                 // Return true if the row was updated
                 if (query_success(res)) {
                     std::cout << "Data updated successfully" << std::endl;
+                    free_all_query_results();
                     return true;
                 } else { // Return false if the row was not updated
                     std::cout << "Data update failed" << std::endl;
                     std::cout << query << std::endl;
+                    free_all_query_results();
                     return false;
                 }
             } else {   // Return false if the table does not exist
@@ -332,10 +343,12 @@ class Database {
                 free_database(db);
                 if (query_success(res)) { // Return true if the table was dropped
                     std::cout << "Table dropped successfully" << std::endl;
+                    free_all_query_results();
                     return true;
                 } else { // Return false if the table was not dropped
                     std::cout << "Table drop failed" << std::endl;
                     std::cout << query << std::endl;
+                    free_all_query_results();
                     return false;
                 }
             } else { // Return false if the table does not exist
@@ -396,6 +409,7 @@ class Database {
                     std::cout << query << std::endl;
                 }
                 free_database(db);
+                free_all_query_results();
                 return data;
             } else { // Return an empty vector if the table does not exist
                 std::cout << "Table does not exist" << std::endl;

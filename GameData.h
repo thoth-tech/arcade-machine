@@ -225,6 +225,7 @@ class GameData {
             else {
                 std::cout << "Query failed" << std::endl;
             }
+            free_all_query_results();
             free_database(dataBase);
             return game;
         }
@@ -260,6 +261,7 @@ class GameData {
             else {
                 std::cout << "Query failed" << std::endl;
             }
+            free_all_query_results();
             free_database(dataBase);
             return stats;
         }
