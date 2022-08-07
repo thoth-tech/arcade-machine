@@ -432,29 +432,11 @@ class Database {
 
         //Query a database table with a specialised query.
         //Returns query_result object.
-        query_result queryDatabase(string tableName, string query)
+        query_result queryDatabase(string query)
         {
-            // Check if table exists
-            std::tuple<bool, Table*> tableExists = hasTable(tableName);
-
-            bool exists = std::get<0>(tableExists);
-            Table *table = std::get<1>(tableExists);
-
-            if (exists) {
-                database db = open_database(m_databaseName, m_databaseFileName);
-                query_result res = run_sql(db, query);
-                if (query_success(res)) {
-                    std::cout << "Query executed successfully" << std::endl;
-                } else {
-                    std::cout << "Query execution failed" << std::endl;
-                    std::cout << query << std::endl;
-                }
-                free_database(db);
-                return res;
-            } else { // Return an empty vector if the table does not exist
-                std::cout << "Table does not exist" << std::endl;
-                return;
-            }
+            database db = open_database(m_databaseName, m_databaseFileName);
+            query_result res = run_sql(db, query);
+            return res;
         }
 };
 
