@@ -1,3 +1,6 @@
+#ifndef ARCADE_MACHINE_OPTION_H
+#define ARCADE_MACHINE_OPTION_H
+
 // Options class
 
 using namespace std;
@@ -236,3 +239,5 @@ class Option{
             }
         }
 };
+
+#endif

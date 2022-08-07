@@ -1,11 +1,19 @@
-using namespace std;
-using std::vector;
+#ifndef ARCADE_MACHINE_MENU_H
+#define ARCADE_MACHINE_MENU_H
+
+#include "Tip.h"
+#include "Selector.h"
+#include "GameData.h"
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 
 class Menu {
 private:
-    string background = "games_dashboard";
+    std::string background = "games_dashboard";
     // Vector to store the config data of each game
-    vector<ConfigData> _games;
+    std::vector<ConfigData> _games;
 
 #ifdef _WIN32
     // Contains info about newly created process and thread
@@ -33,16 +41,16 @@ private:
     // Checks if program has exited
     bool _program_exit;
     // Vector of buttons
-    vector<Button*> btns;
+    std::vector<Button*> btns;
     // Vectore to store game images
-    vector<string> game_images;
+    std::vector<std::string> game_images;
     // Menu grid
     Grid _grid;
     Tip *tip;
     ButtonNode *button = nullptr;
     bool _overlayActive = false;
     /// Button Action
-    string _action;
+    std::string _action;
     Selector _selector_games_menu;
     // Passes into Selector optional parameter.
     bool game_menu = true;
@@ -79,7 +87,7 @@ private:
 public:
     Menu(){}
 
-    Menu(vector<ConfigData> configs)
+    Menu(std::vector<ConfigData> configs)
     {
         this->_games = configs;
 
@@ -90,23 +98,23 @@ public:
     ~Menu(){}
 
     // Getters
-    auto get_buttons() const -> const vector<Button*> { return this->btns; }
+    auto get_buttons() const -> const std::vector<Button*> { return this->btns; }
     bool get_overlay_state() { return _overlayActive; }
 
-    /**
+    /** 
      * @brief Gets the game images from the config files and returns vector of game images.
-     *
+     * 
      * @param configs Vector of config data.
      * @return vector of game images.
      */
-    vector<string> get_game_sprites(vector<ConfigData> configs)
+    std::vector<std::string> get_game_sprites(std::vector<ConfigData> configs)
     {
-        vector<string> game_images;
+        std::vector<std::string> game_images;
 
         for (int i = 0; i < configs.size(); i++)
         {
             // Get image dir and image name from games vector.
-            string image = configs[i].folder() + "/" + configs[i].image();
+            std::string image = configs[i].folder() + "/" + configs[i].image();
             game_images.push_back(image);
         }
 
@@ -128,7 +136,7 @@ public:
 
     /**
      * @brief Create a list of games.
-     *
+     * 
      */
     void create_buttons()
     {
@@ -144,14 +152,14 @@ public:
             }
             else
             {
-                string image = game_images[i];
+                std::string image = game_images[i];
                 this->button->addBefore(new ButtonNode(new GameScreenButton(Button::GAME, image)));
                 this->button->getPrev()->config = _games[i];
             }
         }
     }
 
-    /**
+    /** 
      * @brief create a tip to display to the user.
      */
     void create_tip()
@@ -166,7 +174,7 @@ public:
         //Load the animation into options
         drawing_options opt = option_with_animation(anim);
         //Create the tip
-        string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
+        std::string tip_text[3] = {"Use the left and right arrow keys to cycle through the carousel", "Press escape to return to the main menu", "Press enter to start the game"};
         this->tip = new Tip(tip_text[rand()%3],bmpTip, anim, opt, 3000, 25);
     }
 
@@ -245,12 +253,12 @@ public:
 #ifdef _WIN32
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
-#endif
                     string gameName = this->button->config.title();
                     int startTime = time(0);
 
                     m_newGame->setGameName(gameName);
                     m_newGame->setStartTime(startTime);
+#endif
 
                     return;
                 }
@@ -270,9 +278,9 @@ public:
             this->_game_started = false;
             back_to_games_menu();
         }
-
+        
         this->_grid.DrawGrid();
-
+        
         // Wait for selector to key input to determine slide direction.
         if (_selector_games_menu.get_slide_left())
             draw_update_slide_left();
@@ -289,10 +297,10 @@ public:
 
     /**
      * @brief Method to update the sprite positions and draw sprite.
-     *
+     * 
      * @param button_sprite The buttons sprite.
      * @param position The position to move the sprite.
-     * @return ** void
+     * @return ** void 
      */
     void update_slide(sprite button_sprite, int position)
     {
@@ -310,8 +318,8 @@ public:
 
     /**
      * @brief Slide the game buttons on left key input.
-     *
-     * @return ** void
+     * 
+     * @return ** void 
      */
     void draw_update_slide_left()
     {
@@ -347,8 +355,8 @@ public:
 
     /**
      * @brief Slide the game buttons on right key input.
-     *
-     * @return ** void
+     * 
+     * @return ** void 
      */
     void draw_update_slide_right()
     {
@@ -382,7 +390,7 @@ public:
     }
     /**
      * @brief Draw an overlay over the game, using data from the config.
-     *
+     * 
      * @param config the game config.
      */
     void draw_overlay(ConfigData config)
@@ -397,9 +405,8 @@ public:
         draw_text("Author: " + config.author(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (1 * y_offset));
         draw_text("Genre: " + config.genre(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (2 * y_offset));
         draw_text("Language: " + config.language(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (3 * y_offset));
-        draw_text("Classification: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
+        draw_text("Rating: " + config.rating(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (4 * y_offset));
         draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (5 * y_offset));
-        draw_text("Rating: ", COLOR_WHITE, "font_text", y_offset, x_offset, y_start + (6 * y_offset));
         string rating = string(3, 'J');
         rating += string(5-rating.size(),'I');
         draw_text(rating, COLOR_WHITE, "font_star", y_offset+10, x_offset + 90,  y_start + (6 * y_offset));
@@ -408,12 +415,12 @@ public:
 #ifdef _WIN32
     /**
      * @brief  Find the game window and bring it to focus, if it exists
-     *
+     * 
      * @param windowName the name of the window
      * @param timeout time in ms to search for the window
      * @return true/false if window was found.
      */
-    bool FocusWindow(string windowName, int timeout = 2000)
+    bool FocusWindow(std::string windowName, int timeout = 2000)
     {
         LPCSTR gameWindow =  windowName.c_str();
         HWND gameWindowHandle = NULL;
@@ -425,7 +432,7 @@ public:
         do {
             gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
             timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
-            Sleep(250);
+            delay(250);
         }
         while (gameWindowHandle == NULL && timeElapsed <= timeout);
 
@@ -447,11 +454,11 @@ public:
 #ifdef _WIN32
     /**
      * @brief Starts up the selected game by starting a new process.
-     *
+     * 
      * @param gamePath The filepath of the game to open.
      * @param gameExe The executable of the game.
      * @param gameDirectory // The directory of the game.
-     * @return ** void
+     * @return ** void 
      */
     void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
@@ -482,7 +489,7 @@ public:
 
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
 
-            string windowName = gameExe;
+            std::string windowName = gameExe;
             //Remove the extension from the application name (.exe)
             windowName = windowName.substr(0, windowName.find("."));
             //Focus the window
@@ -492,12 +499,12 @@ public:
         }
     }
 #endif
-
+   
 #ifdef _WIN32
    /**
      * @brief Waits for game to exit.
-     *
-     * @return ** void
+     * 
+     * @return ** void 
      */
     void check_game_exit()
     {
@@ -527,7 +534,7 @@ public:
     }
 #endif
 
-    /**
+    /** 
      * @brief Fade back to games menu
      */
     void back_to_games_menu()
@@ -542,7 +549,7 @@ public:
 
     /**
      * @brief Creates a fading effect
-     *
+     * 
      * @param alphaStart The starting alpha value.
      * @param alphaEnd The ending alpha value.
      * @param alphaStep The alpha value to increment/decrement by.
@@ -565,10 +572,9 @@ public:
             alphaStart += alphaStep;
             refresh_screen(60);
 
-#ifdef _WIN32
-            Sleep(50);
-#endif
+            delay(50);
         }
     }
 };
 
+#endif

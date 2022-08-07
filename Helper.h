@@ -1,3 +1,9 @@
+#ifndef ARCADE_MACHINE_HELPER_H
+#define ARCADE_MACHINE_HELPER_H
+
+#include <experimental/filesystem>
+#include <cstring>
+
 namespace fs = std::experimental::filesystem;
 
 // To test txt configs, change to "config"
@@ -198,3 +204,5 @@ class Helper{
             }
         }
 };
+
+#endif
