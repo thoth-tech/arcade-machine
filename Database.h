@@ -432,9 +432,9 @@ class Database {
 
         //Query a database table with a specialised query.
         //Returns query_result object.
-        query_result queryDatabase(string query)
+        query_result queryDatabase(database &db, string query)
         {
-            database db = open_database(m_databaseName, m_databaseFileName);
+            db = open_database(m_databaseName, m_databaseFileName);
             query_result res = run_sql(db, query);
             return res;
         }
