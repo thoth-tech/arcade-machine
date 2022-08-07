@@ -5,6 +5,8 @@
 #include "Selector.h"
 #include "GameData.h"
 #include "Database.h"
+#include "Rating.h"
+#include "Table.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -16,6 +18,8 @@ private:
     // Vector to store the config data of each game
     std::vector<ConfigData> _games;
     Database *_db;
+    Rating _rating;
+    GameData _gameData;
 
 #ifdef _WIN32
     // Contains info about newly created process and thread
@@ -89,12 +93,18 @@ private:
 public:
     Menu(){
         this->_db = new Database();
+        Table *gameDataTable = new Table("gameData", {{"gameName", "TEXT"}, {"startTime", "TEXT"}, {"endTime", "TEXT"}, {"rating", "TEXT"}, {"highScore", "TEXT"}});
+        this->_db->createTable(gameDataTable);
+        this->_rating = Rating();
     }
 
     Menu(std::vector<ConfigData> configs)
     {
         this->_games = configs;
         this->_db = new Database();
+        Table *gameDataTable = new Table("gameData", {{"gameName", "TEXT"}, {"startTime", "TEXT"}, {"endTime", "TEXT"}, {"rating", "TEXT"}, {"highScore", "TEXT"}});
+        this->_db->createTable(gameDataTable);
+        this->_rating = Rating();
 
 
 #ifdef _WIN32
@@ -259,13 +269,10 @@ public:
                     fade(1, 0, 0.1);
 
 #ifdef _WIN32
+                    _gameData.setStartTime(time(0));
+                    _gameData.setGameName(this->button->config.title());
                     // Call method to open game executable
                     start_game(_gamePath, _gameExe, _gameDir);
-                    string gameName = this->button->config.title();
-                    int startTime = time(0);
-
-                    m_newGame->setGameName(gameName);
-                    m_newGame->setStartTime(startTime);
 #endif
 
                     return;
@@ -526,18 +533,13 @@ public:
             {
                 this->_in_game = false;
 
-                int endTime = time(0);
-
-                // ToDo: Collect player rating and highscore achieved.
-
-                int rating = 0;
                 int highScore = 0;
 
-                m_newGame->setRating(rating);
-                m_newGame->setHighScore(highScore);
-                m_newGame->setEndTime(endTime);
-
-                m_newGame->writeData();
+                _gameData.setEndTime(time(0));
+                _gameData.setRating(_rating.getRating());
+                _gameData.setHighScore(highScore);
+                _gameData.writeData(this->_db);
+                this->button->stats = _gameData.getStats(this->_db, _gameData.getGameName());
             }
         }
     }
