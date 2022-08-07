@@ -1,3 +1,9 @@
+#ifndef ARCADE_MACHINE_RATING_H
+#define ARCADE_MACHINE_RATING_H
+
+#include "GridLayout.h"
+#include "Button.h"
+
 class Rating
 {
 private:
@@ -5,10 +11,12 @@ private:
     int _rating;
     int _maxRating;
     Button *starButton;
+    bool _ratingCollected;
 
 public:
     Rating()
     {
+        _ratingCollected = false;
         _grid = Grid(3, 7);
         _rating = 1;
         _maxRating = 5;
@@ -44,8 +52,26 @@ public:
             _rating = ++_rating % (_maxRating + 1);
 
             updateGrid();
-            write_line(_rating);
         }
+        else if (key_typed(RETURN_KEY))
+        {
+            _ratingCollected = true;
+        }
+    }
+
+    int getRating() {
+        _rating = 1;
+        _ratingCollected = false;
+        updateGrid();
+        process_events();
+        while (!_ratingCollected)
+        {
+            clear_screen();
+            draw();
+            process_events();
+            refresh_screen(60);
+        }
+        return _rating;
     }
 
     //update the grid, when the rating changes
@@ -60,3 +86,5 @@ public:
         }
     }
 };
+
+#endif
