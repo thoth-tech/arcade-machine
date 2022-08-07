@@ -190,51 +190,62 @@ class GameData {
             return row;
         }
 
-        // Calculates the:
+        //get the stats for a specific game
+        // Average rating of a game
+        // Total time played of a game in seconds (stored in both start and end time)
+        // Max high score of a of game
+        GameData getStats(Database *db, string gameName)
+        {
+            GameData game;
+            database dataBase;
+            query_result result = db->queryDatabase(dataBase, "SELECT gameName, AVG(rating) AS averageRating, SUM(endTime-startTime) AS totalPlaytime, MAX(highScore) as highscore FROM gameData WHERE gameName='" + gameName + "';");
+            if (query_success(result))
+            {
+                std::cout << "Query success" << std::endl;
+                if (has_row(result))
+                {
+                    game.setGameName(query_column_for_string(result, 0));
+                    game.setRating(query_column_for_double(result, 1));
+                    game.setStartTime(query_column_for_int(result, 2));
+                    game.setEndTime(query_column_for_int(result,2));
+                    game.setHighScore(query_column_for_int(result,3));
+                }
+            }
+            else {
+                std::cout << "Query failed" << std::endl;
+            }
+            free_database(dataBase);
+            return game;
+        }
+
+        //get all the game stats
         // Average rating of a vector of games
         // Total time played of a vector of games in seconds (stored in both start and end time)
         // Max high score of a vector of games
-        GameData calculateStats(std::vector<GameData> data) {
-            GameData stats;
-            int totalRating = 0;
-            int totalTime = 0;
-            int maxScore = 0;
-            string gameName = "";
-            for (int i = 0; i < data.size(); i++) {
-                gameName = data[i].getGameName();
-                totalRating += data[i].getRating();
-                totalTime += data[i].getEndTime() - data[i].getStartTime();
-                if (data[i].getHighScore() > maxScore) {
-                    maxScore = data[i].getHighScore();
+        std::vector<GameData> getAllStats(Database *db) { 
+            std::vector<GameData> stats;
+            GameData game;
+            database dataBase;
+            query_result result = db->queryDatabase(dataBase, "SELECT gameName, AVG(rating) AS averageRating, SUM(endTime-startTime) AS totalPlaytime, MAX(highScore) as highscore FROM gameData GROUP BY gameName;");
+            if (query_success(result))
+            {
+                if (has_row(result))
+                {
+                    do {
+                        game.setGameName(query_column_for_string(result, 0));
+                        game.setRating(query_column_for_double(result, 1));
+                        game.setStartTime(query_column_for_int(result, 2));
+                        game.setEndTime(query_column_for_int(result,2));
+                        game.setHighScore(query_column_for_int(result,3));
+                        stats.push_back(game);
+                    } while(get_next_row(result));
                 }
             }
-            stats.setGameName(gameName);
-            stats.setRating(totalRating / data.size());
-            stats.setStartTime(totalTime);
-            stats.setEndTime(totalTime);
-            stats.setHighScore(maxScore);
+            else {
+                std::cout << "Query failed" << std::endl;
+            }
+            free_database(dataBase);
             return stats;
-        }
-
-        std::map<std::string, GameData> calculateAllStats(std::vector<GameData> data) {
-            // Returns a map of game names to GameData objects
-            // Contains the average rating, total time played, and max high score for each game
-            std::map<std::string, GameData> results;
-            std::map<std::string, std::vector<GameData>> stats;
-            for (int i = 0; i < data.size(); i++) {
-                stats[data[i].getGameName()] = std::vector<GameData>();
-            }
-            for (int i = 0; i < data.size(); i++) {
-                for (auto const& x : stats) {
-                    if (x.first == data[i].getGameName()) {
-                        stats[x.first].push_back(data[i]);
-                    }
-                }
-            }
-            for (auto const& x : stats) {
-                results[x.first] = calculateStats(x.second);
-            }
-            return results;
         }
 
         // Print all game data
