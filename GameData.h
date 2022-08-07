@@ -196,7 +196,7 @@ class GameData {
         // Max high score of a of game
         GameData getStats(Database *db, string gameName)
         {
-            GameData game;
+            GameData game = GameData();
             database dataBase;
             query_result result = db->queryDatabase(dataBase, "SELECT gameName, AVG(rating) AS averageRating, SUM(endTime-startTime) AS totalPlaytime, MAX(highScore) as highscore FROM gameData WHERE gameName='" + gameName + "';");
             if (query_success(result))
@@ -204,6 +204,11 @@ class GameData {
                 std::cout << "Query success" << std::endl;
                 if (has_row(result))
                 {
+                    if (query_type_of_col(result, 0) == "NULL")
+                    {
+                        std::cout << "No data returned from query!" << std::endl;
+                        return game;
+                    }
                     game.setGameName(query_column_for_string(result, 0));
                     game.setRating(query_column_for_double(result, 1));
                     game.setStartTime(query_column_for_int(result, 2));
@@ -224,13 +229,18 @@ class GameData {
         // Max high score of a vector of games
         std::vector<GameData> getAllStats(Database *db) { 
             std::vector<GameData> stats;
-            GameData game;
+            GameData game = GameData();
             database dataBase;
             query_result result = db->queryDatabase(dataBase, "SELECT gameName, AVG(rating) AS averageRating, SUM(endTime-startTime) AS totalPlaytime, MAX(highScore) as highscore FROM gameData GROUP BY gameName;");
             if (query_success(result))
             {
                 if (has_row(result))
                 {
+                    if (query_type_of_col(result, 0) == "NULL")
+                    {
+                        std::cout << "No data returned from query!" << std::endl;
+                        return stats;
+                    }
                     do {
                         game.setGameName(query_column_for_string(result, 0));
                         game.setRating(query_column_for_double(result, 1));
