@@ -40,7 +40,7 @@ namespace Arcade {
 				if (! pipe)
 					throw std::runtime_error("Error running process `" + command + "`");
 
-				std::array<char, 128> buffer;
+				std::array<char, 256> buffer;
 				std::string str_buffer;
 				while (! feof(pipe)) {
 					if (fgets(buffer.data(), 256, pipe) != nullptr)
