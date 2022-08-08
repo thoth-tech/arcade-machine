@@ -2,7 +2,6 @@
 #define ARCADE_MACHINE_RATING_H
 
 #include "GridLayout.h"
-#include "Button.h"
 
 class Rating
 {
@@ -10,7 +9,6 @@ private:
     Grid _grid;
     int _rating;
     int _maxRating;
-    Button *starButton;
     bool _ratingCollected;
 
 public:
@@ -20,11 +18,9 @@ public:
         _grid = Grid(3, 7);
         _rating = 1;
         _maxRating = 5;
+        _grid.SetBackground(bitmap_named("rating_bg"));
 
-        //Temporary asset
-        starButton = new MenuButton(Button::PLAY, 1.0);
-
-        _grid.UpdateCell(starButton, 1, 1);
+        updateGrid();
     }
     ~Rating() {}
 
@@ -33,7 +29,7 @@ public:
     {
         handleInput();
         _grid.DrawGrid();
-        _grid.DrawCells();
+        draw_text("Rate your experience",  COLOR_WHITE, "font_title", 100 ,480, 120);  
     }
 
     //handle input, to be moved to selector?
@@ -79,9 +75,12 @@ public:
     {
         {
             _grid.ClearGrid();
-            for (int i = 1; i <= _rating; i++)
+            for (int i = 1; i <= _maxRating; i++)
             {
-                _grid.UpdateCell(starButton, 1, i);
+                if (i <= _rating)
+                    _grid.UpdateCell(bitmap_named("star-gold"), 1, i);
+                else
+                    _grid.UpdateCell(bitmap_named("star-black"), 1, i);
             }
         }
     }
