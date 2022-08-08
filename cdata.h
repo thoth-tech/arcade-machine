@@ -4,6 +4,13 @@
 using namespace std;
 using std::vector;
 
+#include <thread>
+#include <fstream>
+#include <algorithm> 
+#include <functional> 
+#include <cctype>
+#include <locale>
+
 class ConfigData{
     private:
         /// This configs ID
@@ -146,15 +153,19 @@ class ConfigData{
         /*
             Clones a git repository given the URL and proposed directory name
         */
-        bool get_from_git(string url, const char* dir)
+        bool get_from_git()
         {
+            string url = "https://github.com/thoth-tech/arcade-games.git";
+            const char* dir = "games";
+
             struct stat info;
 
             if (stat(dir, &info) != 0){
-                system(("git clone " + url + " " + dir).c_str());
+                system(("git clone --progress " + url + " " + dir + " > console.txt 2>&1").c_str());
             } else {
                 string d = dir;
-                system(("git -C " + d + " pull " + url).c_str());
+                write_line(d);
+                system(("git -C " + d + " pull --progress " + url + " > console.txt 2>&1").c_str());
             }
 
             return true;
@@ -183,7 +194,7 @@ class ConfigData{
                 system(("rmdir -s -q " + dir).c_str());
                 throw(error);
             } catch (string e) {
-                cerr << "Name cannot be changed" << endl;
+                cerr << "Directory cannot be deleted" << endl;
                 cerr << error << endl;
             }
         }
@@ -204,5 +215,92 @@ class ConfigData{
             write_line("Exe = " + exe());
             write_line("Folder = " + folder());
             write_line("========================");
+        }
+
+        void write_status_to_screen()
+        {
+            //ifstream file;
+            char line[256];
+            string output = "Start";
+            vector<string> status;
+            write_line("status: " + output);
+            
+            while(clone_finished(output) == false)
+            {
+                if(file_exists("console.txt"))
+                {
+                    int i = 0;
+                    FILE* file = fopen("console.txt", "r");
+                    
+                    while (fgets(line, sizeof(line), file)) {
+                        if(line == NULL){
+                            //line = "Open File";
+                            //status.push_back(line);
+                        } else {
+                            i++;
+                            printf("%3d: %s\n", i, line);
+                            //write_line(trim(line));
+                            draw_text(trim(line), COLOR_BLACK, "font_btn", 70, 300, 900);
+                            status.push_back(line);
+                        }
+                    }
+
+                    fclose(file);
+
+                    // if(status[status.size() - 1] != output)
+                    // {
+                    //     //clear_screen();
+                    //     output = status[status.size() - 1];
+                    //     write_line(trim(output));
+                        
+                    //     //std::thread t ([&](auto arg){ write_status(arg.get()); }, std::ref(output));
+                    //     draw_text(trim(output), COLOR_BLACK, "font_btn", 70, 300, 900);
+                    //     refresh_screen();
+                        
+                    //     //t.join();
+                    // }
+                    
+                    //status.clear();
+                }
+            }
+        }
+
+        void write_status(string &s)
+        {
+            draw_text(s, COLOR_BLACK, 300, 900);
+            refresh_screen();
+        }
+
+        bool file_exists (const string& name) 
+        {
+            if (FILE *file = fopen(name.c_str(), "r")) {
+                fclose(file);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        bool clone_finished(const string &line)
+        {
+            smatch sm;
+            const string s = line;
+            if(regex_search(s.begin(), s.end(), sm, regex("(?:^|\\W)Updating(\\W)(\\s*.*?)(?:^|\\W)done(?:$|\\W)")) ||
+                s == "Already up to date.")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        bool run_threads()
+        {
+            std::thread t2 (get_from_git, this);
+            std::thread t1 (write_status_to_screen, this);
+            
+            t2.join();
+            t1.join();
+
+            return true;
         }
 };

@@ -46,7 +46,6 @@ class ArcadeMachine
         /// Menu button node
         ButtonNode *menu_button_node = nullptr;
 
-
     public:
         // Default Constructor
         ArcadeMachine()
@@ -307,10 +306,10 @@ class ArcadeMachine
             {
                 // Draw SplashKit productions screen
                 this->_intro_splashkit.draw_title_page();
-                draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
-                refresh_screen();
+                //draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
+                refresh_screen(60);
                 
-            } while (!this->_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
+            } while (!this->_config.run_threads());
         }
 
         /**
