@@ -2,6 +2,7 @@
 #define ARCADE_MACHINE_HELPER_H
 
 #include <experimental/filesystem>
+#include <cstring>
 
 namespace fs = std::experimental::filesystem;
 
