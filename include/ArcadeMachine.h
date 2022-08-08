@@ -7,6 +7,10 @@
 #define ARCADE_MACHINE_PATH_SEP "/"
 #endif
 
+#define ARCADE_MACHINE_SCALING_FACTOR 1
+#define ARCADE_MACHINE_RES_X 1920 * ARCADE_MACHINE_SCALING_FACTOR
+#define ARCADE_MACHINE_RES_Y 1080 * ARCADE_MACHINE_SCALING_FACTOR
+
 // Arcade Machine Class
 #include "Button.h"
 #include "ButtonList.h"
@@ -297,7 +301,7 @@ class ArcadeMachine
                 // Draw logo
                 screen.draw_title_page();
                 // Fill screen with white at alpha value (opacity)
-                fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
+                fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
                 // Decrement i and alpha 
                 i--; alpha = alpha - 0.05;
                 // If alpha is == 0, hold image for 1.5 seconds
@@ -326,7 +330,7 @@ class ArcadeMachine
             {
                 // Draw SplashKit productions screen
                 this->_intro_splashkit.draw_title_page();
-                draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
+                draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, ARCADE_MACHINE_RES_X / 2 - 100, ARCADE_MACHINE_RES_Y / 2 + 350);
                 refresh_screen();
                 
             } while (!this->_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
