@@ -1,7 +1,6 @@
 #ifndef ARCADE_MACHINE_PROCESS_H
 #define ARCADE_MACHINE_PROCESS_H
 
-#include <array>
 #include <string>
 #include <vector>
 #include <stdexcept>
