@@ -7,6 +7,8 @@
 #include <regex>
 #include <fstream>
 #include <cstring>
+#include <experimental/filesystem>
+#include "Process.h"
 
 /**
  * @brief Parses the configuration data from config.txt files to a data object
@@ -180,19 +182,28 @@ class ConfigData{
          * 
          * @param url git repository url
          * @param dir directory to clone to
-         * @return true 
-         * @return false 
+         * @return bool
          */
         bool get_from_git(std::string url, const char* dir)
         {
             struct stat info;
-
-            if (stat(dir, &info) != 0){
+#ifdef _WIN32
+            // TODO: Replace with Arcade.Process once Windows
+            // support has been written and tested.
+            if (stat(dir, &info) != 0)
                 system(("git clone " + url + " " + dir).c_str());
-            } else {
-                std::string d = dir;
-                system(("git -C " + d + " pull " + url).c_str());
-            }
+            else
+                system(("git -C " + dir + " pull " + url).c_str());
+#else
+            std::vector<std::string> args;
+            if (stat(dir, &info) != 0)
+                args = {"clone", url, dir};
+            else
+                args = {"-C", dir, "pull", url};
+
+            auto p = Arcade::Process("git", args);
+            p.execute_sync();
+#endif
 
             return true;
         }
@@ -225,14 +236,7 @@ class ConfigData{
          */
         void delete_dir(std::string dir)
         {
-            std::string error;
-            try{
-                system(("rmdir -s -q " + dir).c_str());
-                throw(error);
-            } catch (std::string e) {
-                std::cerr << "Name cannot be changed" << std::endl;
-                std::cerr << error << std::endl;
-            }
+            std::experimental::filesystem::remove_all(dir);
         }
         
         /**
