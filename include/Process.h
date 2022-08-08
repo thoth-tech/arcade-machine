@@ -6,13 +6,42 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
+#include <thread>
 
 namespace Arcade {
 	class Process {
 		private:
 			std::string _command;
 			std::vector<std::string> _args;
+			std::thread _execution_context;
+
 			bool _is_running = false;
+
+			void _execute_async_thread(std::vector<std::string> &output_stream) {
+				// Don't allow duplicate threads to execute.
+				if (this->_is_running)
+					return;
+
+				std::string command = std::string(this->_command);
+				for (auto arg : this->_args)
+					command.append(" " + arg);
+
+				this->_is_running = true;
+				auto pipe = popen(command.c_str(), "r");
+				if (! pipe)
+					throw std::runtime_error("Error running process (async) `" + command + "`");
+
+				std::array<char, 256> buffer;
+				while (! feof(pipe)) {
+					if (fgets(buffer.data(), 256, pipe) != nullptr)
+						output_stream.push_back(buffer.data());
+				}
+
+				if (pclose(pipe) !=  EXIT_SUCCESS)
+					std::cerr << "Unable to close process (async), possible memory leak" << std::endl;
+
+				this->_is_running = false;
+			}
 
 		public:
 			Process(std::string command, std::vector<std::string> args) {
@@ -58,7 +87,8 @@ namespace Arcade {
 			 * @brief Executes the process asynchronously in a thread.
 			 */
 			void execute_async(std::vector<std::string> &output_stream) {
-				throw std::runtime_error("This method is currently not supported.");
+				this->_execution_context = std::thread(&Process::_execute_async_thread, this, std::ref(output_stream));
+				this->_execution_context.detach();
 			}
 	};
 }
