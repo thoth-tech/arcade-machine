@@ -37,7 +37,7 @@ public:
     {
         if (key_typed(LEFT_KEY))
         {
-            _rating--;
+            --_rating;
             if (_rating < 0)
                 _rating = _maxRating;
             updateGrid();
@@ -45,7 +45,8 @@ public:
         else if (key_typed(RIGHT_KEY))
         {
             // rating is between 1 and 5
-            _rating = ++_rating % (_maxRating + 1);
+                ++_rating;
+                _rating = _rating % (_maxRating + 1);
 
             updateGrid();
         }
