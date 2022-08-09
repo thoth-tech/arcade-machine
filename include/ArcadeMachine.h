@@ -103,18 +103,23 @@ public:
         // this can be a helper function later
         {
             std::string line;
-            std::ifstream developerNamesFile("../developer_names.txt");
-            if (developerNamesFile.is_open())
+            std::ifstream developerNamesFile("developer_names.txt");
+            if (developerNamesFile.fail())
             {
-                int i = 0;
+                std::cout << "error: unable to open developer names file\n";
+            }
+            else if (developerNamesFile.is_open())
+            {
                 while(std::getline(developerNamesFile, line))
                 {
-                    m_arcadeTeamDeveloperNames[i] = line;
-                    i++;
+                    m_arcadeTeamDeveloperNames.push_back(line);
                 }
-                
             }
-            else std::cout << "unable to open developer names file\n";
+
+            developerNamesFile.close();
+
+            // debug: print developer names to console
+            for (const auto& line : m_arcadeTeamDeveloperNames) std::cout << line << "\n";
         }
         
         Splashscreen intro_arcade_machine_team("intro_arcade_team");
@@ -133,8 +138,9 @@ public:
 
     // Getters
     auto get_configs() const -> const vector<ConfigData>& { return this->_configs; }
-    auto get_intro_thoth_tech() const -> const Splashscreen& { return this->_intro_thoth_tech; }
-    auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; }
+   
+    auto get_intro_thoth_tech() const -> const Splashscreen& { return this->_intro_thoth_tech; } // depracated
+    auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; } // depracated
 
     /**
         Starts the Main Menu
@@ -316,7 +322,8 @@ public:
         if (this->_play_music) play_music("music_mainmenu");
     }
 
-    /** 
+    /**
+        DEPRACATED
         Draws a Splashscreen, plays a sound and
         incremently fills the screen white to animate fading
 
@@ -358,11 +365,95 @@ public:
         }
     }
 
+    /// Plays the Thoth Tech splashscreen animation
+    void playThothTechIntro()
+    {
+        // Set fade increment (opacity)
+        double alpha = 1.0;
+        // Set iterations
+        int i = 60;
+        // Play Thoth Tech Company sound 
+        play_sound_effect("intro_thoth");
+
+        while(i != 0)
+        {
+            process_events();
+            clear_screen();
+            // Draw logo
+            _intro_thoth_tech.draw_title_page();
+            // Fill screen with white at alpha value (opacity)
+            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
+            // Decrement i and alpha 
+            i--; alpha = alpha - 0.05;
+            // If alpha is == 0, hold image for 1.5 seconds
+            if (abs(alpha - 0.0) < 1e-9)
+            {
+                delay(2000);
+                /*  After this has happened, the alpha value will continue into the negatives
+                    The colour function continues to accept negative alpha values, 
+                    effectively creating a fade out animation for the remainder of the while loop
+                */
+            }
+            refresh_screen(60);
+            delay(50);
+        }
+    }
+
+    /// Plays the Arcade Team splashscreen animation
+    void playArcadeTeamIntro()
+    {
+        // Set fade increment (opacity)
+        double alpha = 1.0;
+        // Set iterations
+        int i = 60;
+        // Play Thoth Tech Company sound 
+        play_sound_effect("intro_coin");
+
+        while(i != 0)
+        {
+            process_events();
+            clear_screen();
+
+            // Draw logo
+            _intro_arcade_team.draw_title_page();
+
+            int developerNameSpacing = 32;
+            int developerNameIndex = 0;
+            for  (const auto& developerName : m_arcadeTeamDeveloperNames)
+            {
+                draw_text(developerName,
+                    COLOR_BLACK,
+                    "font_text",
+                    26,
+                    (WIDTH / 2) - 180,
+                    (HEIGHT / 2) + 220 + developerNameSpacing * developerNameIndex);
+                developerNameIndex++;
+            }
+
+            // Fill screen with white at alpha value (opacity)
+            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
+            // Decrement i and alpha 
+            i--; alpha = alpha - 0.05;
+            // If alpha is == 0, hold image for 1.5 seconds
+            if (abs(alpha - 0.0) < 1e-9)
+            {
+                play_sound_effect("intro_start");
+                delay(2000);
+                /*  After this has happened, the alpha value will continue into the negatives
+                    The colour function continues to accept negative alpha values, 
+                    effectively creating a fade out animation for the remainder of the while loop
+                */
+            }
+            refresh_screen(60);
+            delay(50);
+        }
+    }
+
     /**
         Draws the Splashkit Productions logo to the screen and 
         fetches new games from Git repo
     */
-    void intro_splashkit()
+    void playSplashKitIntro()
     {
         // Pull the most recent version of the arcade-games repo.
         do

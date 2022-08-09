@@ -20,16 +20,18 @@ int main()
     // Play Thoth Tech intro
     if (play_intro) 
     {
-        Arcade.intro_animation(Arcade.get_intro_thoth_tech(), "intro_thoth");
-        Arcade.intro_animation(Arcade.get_intro_arcade_team(), "intro_coin", "intro_start");
+        Arcade.playThothTechIntro();
+        Arcade.playArcadeTeamIntro();
     }
     // Play SplashKit intro
-    if (load_games) Arcade.intro_splashkit();
+    if (load_games) Arcade.playSplashKitIntro();
     
     // Prepare the main menu
     Arcade.prepare_main_menu();
     // Draw the main menu
     Arcade.main_menu();
+
+    free_resource_bundle("bundle");
 
     return 0;
 }
