@@ -37,52 +37,6 @@
 */
 class ArcadeMachine
 {
-public:
-    // Default Constructor
-    ArcadeMachine()
-    {
-        // Instantiate fundamental objects
-        Helper helper;
-        ConfigData config;
-        Selector cursor("cursor");
-        Splashscreen intro_thoth_tech("intro_thoth_tech");
-
-        // load developer names into m_arcadeTeamDeveloperNames
-        // this can be a helper function later
-        {
-            std::string line;
-            std::ifstream developerNamesFile("developer_names.txt");
-            if (developerNamesFile.is_open())
-            {
-                int i = 0;
-                while(std::getline(developerNamesFile, line))
-                {
-                    m_arcadeTeamDeveloperNames[i] = line;
-                    i++;
-                }
-                
-            }
-            else std::cout << "unable to open developer names file\n";
-        }
-        
-        Splashscreen intro_arcade_machine_team("intro_arcade_team");
-        Splashscreen intro_splashkit("intro_splashkit");
-        // Set objects to private properties
-        this->_helper = helper;
-        this->_config = config;
-        this->_selector_main_menu = cursor;
-        this->_intro_thoth_tech = intro_thoth_tech;
-        this->_intro_arcade_team = intro_arcade_machine_team;
-        this->_intro_splashkit = intro_splashkit;
-    }
-
-    // Destructor
-    ~ArcadeMachine(){}
-
-    // Start the program
-    // definition in ArcadeMachine.cpp
-    void run();
-
 private:
     /// Instance of Helper
     Helper _helper;
@@ -134,6 +88,53 @@ private:
 
     /// Menu button node
     ButtonNode *menu_button_node = nullptr;
+
+public:
+    // Default Constructor
+    ArcadeMachine()
+    {
+        // Instantiate fundamental objects
+        Helper helper;
+        ConfigData config;
+        Selector cursor("cursor");
+        Splashscreen intro_thoth_tech("intro_thoth_tech");
+
+        // load developer names into m_arcadeTeamDeveloperNames
+        // this can be a helper function later
+        {
+            std::string line;
+            std::ifstream developerNamesFile("../developer_names.txt");
+            if (developerNamesFile.is_open())
+            {
+                int i = 0;
+                while(std::getline(developerNamesFile, line))
+                {
+                    m_arcadeTeamDeveloperNames[i] = line;
+                    i++;
+                }
+                
+            }
+            else std::cout << "unable to open developer names file\n";
+        }
+        
+        Splashscreen intro_arcade_machine_team("intro_arcade_team");
+        Splashscreen intro_splashkit("intro_splashkit");
+        // Set objects to private properties
+        this->_helper = helper;
+        this->_config = config;
+        this->_selector_main_menu = cursor;
+        this->_intro_thoth_tech = intro_thoth_tech;
+        this->_intro_arcade_team = intro_arcade_machine_team;
+        this->_intro_splashkit = intro_splashkit;
+    }
+
+    // Destructor
+    ~ArcadeMachine(){}
+
+    // Getters
+    auto get_configs() const -> const vector<ConfigData>& { return this->_configs; }
+    auto get_intro_thoth_tech() const -> const Splashscreen& { return this->_intro_thoth_tech; }
+    auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; }
 
     /**
         Starts the Main Menu
