@@ -1,10 +1,6 @@
 #ifndef ARCADE_MACHINE_GRID_LAYOUT_H
 #define ARCADE_MACHINE_GRID_LAYOUT_H
 
-// Define screen size (in pixels)
-#define WIDTH  1920
-#define HEIGHT 1080
-
 void write(std::string text);
 
 enum item
