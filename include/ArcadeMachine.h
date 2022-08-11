@@ -138,9 +138,6 @@ public:
 
     // Getters
     auto get_configs() const -> const vector<ConfigData>& { return this->_configs; }
-   
-    auto get_intro_thoth_tech() const -> const Splashscreen& { return this->_intro_thoth_tech; } // depracated
-    auto get_intro_arcade_team() const -> const Splashscreen& { return this->_intro_arcade_team; } // depracated
 
     /**
         Starts the Main Menu
@@ -320,49 +317,6 @@ public:
 
         // Play main menu music
         if (this->_play_music) play_music("music_mainmenu");
-    }
-
-    /**
-        DEPRACATED
-        Draws a Splashscreen, plays a sound and
-        incremently fills the screen white to animate fading
-
-        @param screen The Splashscreen to draw to screen
-        @param sound1 (optional) The first sound to play
-        @param sound2 (optional) The second sound to play 
-    */
-    void intro_animation(Splashscreen screen, std::string sound1 = "", std::string sound2 = "")
-    {
-        // Set fade increment (opacity)
-        double alpha = 1.0;
-        // Set iterations
-        int i = 60;
-        // Play Thoth Tech Company sound 
-        play_sound_effect(sound1);
-
-        while(i != 0)
-        {
-            process_events();
-            clear_screen();
-            // Draw logo
-            screen.draw_title_page();
-            // Fill screen with white at alpha value (opacity)
-            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
-            // Decrement i and alpha 
-            i--; alpha = alpha - 0.05;
-            // If alpha is == 0, hold image for 1.5 seconds
-            if (abs(alpha - 0.0) < 1e-9)
-            {
-                play_sound_effect(sound2);
-                delay(2000);
-                /*  After this has happened, the alpha value will continue into the negatives
-                    The colour function continues to accept negative alpha values, 
-                    effectively creating a fade out animation for the remainder of the while loop
-                */
-            }
-            refresh_screen(60);
-            delay(50);
-        }
     }
 
     /// Plays the Thoth Tech splashscreen animation
