@@ -89,6 +89,27 @@ private:
     /// Menu button node
     ButtonNode *menu_button_node = nullptr;
 
+    // Helper function to load developer names into m_arcadeTeamDeveloperNames
+    // Called in the constructor
+    void loadDeveloperNames(const char* file_path)
+    {
+        std::string line;
+        std::ifstream developerNamesFile(file_path);
+        if (developerNamesFile.fail())
+        {
+            std::cout << "error: unable to open developer names file\n";
+        }
+        else if (developerNamesFile.is_open())
+        {
+            while(std::getline(developerNamesFile, line))
+            {
+                m_arcadeTeamDeveloperNames.push_back(line);
+            }
+        }
+
+        developerNamesFile.close();
+    }
+
 public:
     // Default Constructor
     ArcadeMachine()
@@ -100,27 +121,7 @@ public:
         Splashscreen intro_thoth_tech("intro_thoth_tech");
 
         // load developer names into m_arcadeTeamDeveloperNames
-        // this can be a helper function later
-        {
-            std::string line;
-            std::ifstream developerNamesFile("developer_names.txt");
-            if (developerNamesFile.fail())
-            {
-                std::cout << "error: unable to open developer names file\n";
-            }
-            else if (developerNamesFile.is_open())
-            {
-                while(std::getline(developerNamesFile, line))
-                {
-                    m_arcadeTeamDeveloperNames.push_back(line);
-                }
-            }
-
-            developerNamesFile.close();
-
-            // debug: print developer names to console
-            for (const auto& line : m_arcadeTeamDeveloperNames) std::cout << line << "\n";
-        }
+        loadDeveloperNames("developer_names.txt");
         
         Splashscreen intro_arcade_machine_team("intro_arcade_team");
         Splashscreen intro_splashkit("intro_splashkit");
@@ -336,7 +337,7 @@ public:
             // Draw logo
             _intro_thoth_tech.draw_title_page();
             // Fill screen with white at alpha value (opacity)
-            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
+            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
             // Decrement i and alpha 
             i--; alpha = alpha - 0.05;
             // If alpha is == 0, hold image for 1.5 seconds
@@ -379,13 +380,13 @@ public:
                     COLOR_BLACK,
                     "font_text",
                     26,
-                    (WIDTH / 2) - 180,
-                    (HEIGHT / 2) + 220 + developerNameSpacing * developerNameIndex);
+                    (ARCADE_MACHINE_RES_X / 2) - 180,
+                    (ARCADE_MACHINE_RES_Y / 2) + 220 + developerNameSpacing * developerNameIndex);
                 developerNameIndex++;
             }
 
             // Fill screen with white at alpha value (opacity)
-            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, 1920, 1080);
+            fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
             // Decrement i and alpha 
             i--; alpha = alpha - 0.05;
             // If alpha is == 0, hold image for 1.5 seconds
@@ -414,7 +415,7 @@ public:
         {
             // Draw SplashKit productions screen
             this->_intro_splashkit.draw_title_page();
-            draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, WIDTH/2 - 100, HEIGHT/2 + 350);
+            draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, ARCADE_MACHINE_RES_X / 2 - 100, ARCADE_MACHINE_RES_Y / 2 + 350);
             refresh_screen();
             
         } while (!this->_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
