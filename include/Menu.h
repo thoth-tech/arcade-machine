@@ -234,7 +234,7 @@ public:
                     fade(0, 1, 0.1);
 
                     // fill with black
-                    fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
+                    fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
                     // clear grid
                     this->_grid.ClearGrid();
                     // set new background
@@ -516,7 +516,7 @@ public:
     {
         // fade to black
         fade(0, 1, 0.1);
-        fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, 1920, 1080);
+        fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
         this->_grid.SetBackground(bitmap_named("games_dashboard"));
         // fade to normal
         fade(1, 0, 0.1);
@@ -542,7 +542,7 @@ public:
             clear_screen();
             this->_grid.DrawGrid();
             // Alpha value manipulates to the opacity of the rectangle.
-            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alphaStart), 0, 0, 1920, 1080);
+            fill_rectangle(rgba_color(0.0, 0.0, 0.0, alphaStart), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
             // Update the alpha value.
             alphaStart += alphaStep;
             refresh_screen(60);

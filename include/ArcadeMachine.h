@@ -7,6 +7,10 @@
 #define ARCADE_MACHINE_PATH_SEP "/"
 #endif
 
+#define ARCADE_MACHINE_SCALING_FACTOR 1
+#define ARCADE_MACHINE_RES_X 1920 * ARCADE_MACHINE_SCALING_FACTOR
+#define ARCADE_MACHINE_RES_Y 1080 * ARCADE_MACHINE_SCALING_FACTOR
+
 // Arcade Machine Class
 #include "Button.h"
 #include "ButtonList.h"
@@ -26,10 +30,6 @@
 // Define number of rows and columns in grid
 #define ROWS 7
 #define COLS 15
-
-// Define screen size (in pixels)
-#define WIDTH  1920
-#define HEIGHT 1080
 
 /* 
     This class handles the creation of the

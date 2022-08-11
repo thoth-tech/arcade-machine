@@ -10,7 +10,7 @@ int main()
     ArcadeMachine Arcade;
 
     // Open window and toggle border off.
-    open_window("arcade-machine", WIDTH, HEIGHT);
+    open_window("arcade-machine", ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
     window_toggle_border("arcade-machine");
 
     // Do you want to play the intros and fetch new games? 
