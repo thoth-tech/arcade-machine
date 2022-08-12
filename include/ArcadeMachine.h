@@ -270,9 +270,9 @@ public:
         draw_text("Arcade",  COLOR_BLACK, "font_title", 100, 1180, 100);
         draw_text("Machine", COLOR_BLACK, "font_title", 100, 1150, 200);
         // Draw text on buttons
-        draw_text("play!", COLOR_BLACK, "font_btn", 70, play.button->x() + (play.button->centre_x()/2) + 5, play.button->y() + 5);
-        draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centre_x()/2) - 20, options.button->y() + 5);
-        draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centre_x()/2) + 20, exit.button->y() + 5);
+        draw_text("play!", COLOR_BLACK, "font_btn", 70, play.button->x() + (play.button->centreX()/2) + 5, play.button->y() + 5);
+        draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centreX()/2) - 20, options.button->y() + 5);
+        draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centreX()/2) + 20, exit.button->y() + 5);
 
         // Check input in selector class.
         this->m_menuButtonNode = this->m_selectorMainMenu.check_key_input(this->m_menuButtonNode);
