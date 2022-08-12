@@ -27,9 +27,9 @@ int main()
     if (load_games) Arcade.playSplashKitIntro();
     
     // Prepare the main menu
-    Arcade.prepare_main_menu();
+    Arcade.prepareMainMenu();
     // Draw the main menu
-    Arcade.main_menu();
+    Arcade.mainMenu();
 
     free_resource_bundle("bundle");
 
