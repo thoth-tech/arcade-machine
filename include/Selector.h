@@ -5,8 +5,6 @@
 #include "ButtonNode.h"
 #include <string>
 
-using namespace std;
-
 class Selector {
     private:
         /// Checks first button.
@@ -171,7 +169,7 @@ class Selector {
         void highlightButton(ButtonNode* buttonNode, string direction)
         {
             // Sprite to store the previous sprite.
-            sprite prevSprite;
+            sprite prevSprite = nullptr;
 
             // Get current sprite.
             sprite currentSprite = buttonNode->button->m_btn;
@@ -182,7 +180,7 @@ class Selector {
             // Get previous sprite by checking direction of movement.
             if (direction == "prev")
                 prevSprite = buttonNode->getNext()->button->btn();
-            else if (direction == "next")
+            else
                 prevSprite = buttonNode->getPrev()->button->btn();
 
             // Toggle previous sprite highlight layer off.

@@ -10,8 +10,6 @@ using std::vector;
 
 class Option{
     private: 
-        bool m_isGameRunning=false;
-        bool m_isChosen=false;
         int m_displayStyle=1;
         int _selector=1;
         bool m_isSelected=false;
@@ -178,7 +176,7 @@ class Option{
                 double a=screen_width()-bitmap_width("backCurrentGame")-400;
                 double b=a/100*m_volume;
                 fill_rectangle(color_yellow(),bitmap_width("backCurrentGame")+200,200,b,50);
-                draw_text(to_string(screen_width()-bitmap_width("backCurrentGame")),color_red(),300,300);
+                draw_text(std::to_string(screen_width()-bitmap_width("backCurrentGame")),color_red(),300,300);
 
                 if (m_insideSeletor==1)
                 {
@@ -188,7 +186,7 @@ class Option{
                 if(m_insideSeletor==2)
                 {
                     draw_text("CHANGE MUSIC",color_white(),bitmap_width("backCurrentGame")+100,500);
-                    draw_text(to_string(m_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
+                    draw_text(std::to_string(m_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
                 }
             }
 

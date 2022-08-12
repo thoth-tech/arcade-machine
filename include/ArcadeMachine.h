@@ -22,6 +22,7 @@
 #include "Helper.h"
 #include "Menu.h"
 #include "Option.h"
+#include "Audio.h"
 #include "Splashscreen.h"
 #include "Selector.h"
 #include "splashkit.h"
@@ -82,9 +83,6 @@ private:
 
     /// Button Action 
     std::string m_action;
-
-    /// Play clicked
-    bool m_playClicked = false;
 
     /// Turn menu music on/off
     bool m_playMusic = true;

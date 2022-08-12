@@ -39,8 +39,6 @@ private:
     double m_y;
     // Checks if game is running
     bool m_inGame = false;
-    // Checks if program has exited
-    bool m_programExit;
     // Vector of buttons
     std::vector<Button*> m_btns;
     // Vectore to store game images
@@ -221,11 +219,11 @@ public:
                 {
 #ifdef _WIN32
                     // Get game path
-                    _gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
+                    _gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
                     // Get executable name
-                    _gameExe = strdup(this->button->config.exe().c_str());
+                    _gameExe = strdup(this->m_button->config.exe().c_str());
                     // Get game directory
-                    _gameDir = this->button->config.folder().c_str();
+                    _gameDir = this->m_button->config.folder().c_str();
 #endif
 
                     // Set the center of the game
