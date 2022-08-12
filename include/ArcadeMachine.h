@@ -287,7 +287,7 @@ public:
     void prepareMainMenu()
     {
         // Get the data from the config files.
-        this->m_configs = this->m_helper.config_data_list();
+        this->m_configs = this->m_helper.ConfigDataList();
         // Initialise grid 
         Grid grid(ROWS, COLS);
         this->m_grid = grid;

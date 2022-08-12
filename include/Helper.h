@@ -23,7 +23,7 @@ class Helper {
          * @param entryPath 
          * @return * string 
          */
-        string get_folder_name(string entryPath)
+        string getFolderName(string entryPath)
         {
             string dir  = fs::path(entryPath).remove_filename().generic_string();
             std::cout << "Game-Directory Path: " << dir << "\n";
@@ -36,7 +36,7 @@ class Helper {
          * @param dir The games directory
          * @return * vector<string> 
          */
-        vector<string> get_config_files(string dir)
+        vector<string> getConfigFiles(string dir)
         {
             vector<string> files;
 
@@ -57,9 +57,9 @@ class Helper {
          * 
          * @return * vector<ConfigData> 
          */
-        vector<ConfigData> config_data_list()
+        vector<ConfigData> ConfigDataList()
         {   
-            vector<string> files = get_config_files("./games/games");
+            vector<string> files = getConfigFiles("./games/games");
 
             vector<ConfigData> configs;
 
@@ -68,7 +68,7 @@ class Helper {
                 if (strcmp(CONFIG_DIR, "config") == 0)
                 {
                     ConfigData config(files[i]);
-                    string dir = get_folder_name(files[i]);
+                    string dir = getFolderName(files[i]);
                     config.setFolder(dir);
                     config.setId(i);
                     config.printConfigData();
@@ -94,7 +94,7 @@ class Helper {
          * 
          * @param grid 
          */
-        void ResetScreen(Grid grid)
+        void resetScreen(Grid grid)
         {
             process_events();
             clear_screen(COLOR_DARK_SLATE_GRAY);
@@ -108,7 +108,7 @@ class Helper {
          * @brief To test the grid layout 
          * 
          */
-        void GridLayoutExample()
+        void gridLayoutExample()
         {
             bitmap testBitmap = load_bitmap("test", "appContainer.png");
             open_window("Grid Layout Example", 600, 800);
@@ -120,7 +120,7 @@ class Helper {
             Grid grid(rows, cols, true);
             //Grid grid(rows,colsArray, true);
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             int span = cols;
             for (size_t i = 0; i < rows; i++)
@@ -128,7 +128,7 @@ class Helper {
                 grid.updateCell(testBitmap, i, 0, span);
                 --span;
             }
-            ResetScreen(grid);
+            resetScreen(grid);
 
             span = 1;
             for (size_t i = 0; i < rows; i++)
@@ -137,7 +137,7 @@ class Helper {
                 ++span;
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             bool alternate = true;
             for (size_t i = 0; i < rows; i++)
@@ -150,7 +150,7 @@ class Helper {
                 }
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             alternate = false;
             for (size_t i = 0; i < rows; i++)
@@ -163,7 +163,7 @@ class Helper {
                 alternate = !alternate;
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             alternate = false;
             for (size_t i = 0; i < cols; i++)
@@ -177,10 +177,10 @@ class Helper {
                 alternate = !alternate;
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             grid.updateAllCells(testBitmap);
-            ResetScreen(grid);
+            resetScreen(grid);
 
             while (!quit_requested())
             {
