@@ -22,10 +22,8 @@ class Audio {
         }  
 };
 
-class Option{
+class Option {
     private: 
-        bool m_isGameRunning=false;
-        bool m_isChosen=false;
         int m_displayStyle=1;
         int _selector=1;
         bool m_isSelected=false;

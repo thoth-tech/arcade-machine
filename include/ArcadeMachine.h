@@ -80,9 +80,6 @@ private:
     /// Button Action 
     std::string m_action;
 
-    /// Play clicked
-    bool m_playClicked = false;
-
     /// Turn menu music on/off
     bool m_playMusic = true;
 

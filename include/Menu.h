@@ -37,8 +37,6 @@ private:
     double m_y;
     // Checks if game is running
     bool m_inGame = false;
-    // Checks if program has exited
-    bool m_programExit;
     // Vector of buttons
     std::vector<Button*> m_btns;
     // Vectore to store game images
