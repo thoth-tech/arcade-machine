@@ -335,7 +335,7 @@ public:
             process_events();
             clear_screen();
             // Draw logo
-            m_introThothTech.draw_title_page();
+            m_introThothTech.drawTitlePage();
             // Fill screen with white at alpha value (opacity)
             fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
             // Decrement i and alpha 
@@ -370,7 +370,7 @@ public:
             clear_screen();
 
             // Draw logo
-            m_introArcadeTeam.draw_title_page();
+            m_introArcadeTeam.drawTitlePage();
 
             int developerNameSpacing = 32;
             int developerNameIndex = 0;
@@ -414,7 +414,7 @@ public:
         do
         {
             // Draw SplashKit productions screen
-            this->m_introSplashkit.draw_title_page();
+            this->m_introSplashkit.drawTitlePage();
             draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, ARCADE_MACHINE_RES_X / 2 - 100, ARCADE_MACHINE_RES_Y / 2 + 350);
             refresh_screen();
             
