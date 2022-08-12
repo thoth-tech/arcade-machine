@@ -1,8 +1,6 @@
 #ifndef ARCADE_MACHINE_SELECTOR_H
 #define ARCADE_MACHINE_SELECTOR_H
 
-using namespace std;
-
 class Selector {
     private:
         /// Checks first button.

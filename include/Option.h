@@ -3,16 +3,13 @@
 
 // Options class
 
-using namespace std;
-using std::vector;
-
 class Audio {
     public:
         Audio(){}
 
         void playMusic(int _currentMusic,float volume)
         {
-            play_music(to_string(_currentMusic));
+            play_music(std::to_string(_currentMusic));
             set_music_volume(volume);
         }  
 
@@ -190,7 +187,7 @@ class Option {
                 double a=screen_width()-bitmap_width("backCurrentGame")-400;
                 double b=a/100*m_volume;
                 fill_rectangle(color_yellow(),bitmap_width("backCurrentGame")+200,200,b,50);
-                draw_text(to_string(screen_width()-bitmap_width("backCurrentGame")),color_red(),300,300);
+                draw_text(std::to_string(screen_width()-bitmap_width("backCurrentGame")),color_red(),300,300);
 
                 if (m_insideSeletor==1)
                 {
@@ -200,7 +197,7 @@ class Option {
                 if(m_insideSeletor==2)
                 {
                     draw_text("CHANGE MUSIC",color_white(),bitmap_width("backCurrentGame")+100,500);
-                    draw_text(to_string(m_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
+                    draw_text(std::to_string(m_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
                 }
             }
 
