@@ -5,7 +5,8 @@
 
 using namespace std;
 using std::vector;
-class Audio{
+
+class Audio {
     public:
         Audio(){}
 
@@ -23,87 +24,83 @@ class Audio{
 
 class Option{
     private: 
-        bool _isGameRunning=false;
-        bool _isChosen=false;
-        int _displayStyle=1;
+        bool m_isGameRunning=false;
+        bool m_isChosen=false;
+        int m_displayStyle=1;
         int _selector=1;
-        bool _isSelected=false;
-        int _currentMusic=1;
-        int _insideSeletor=1;
-        float _volume=40;
-        bool _isOptionOpen=true;
+        bool m_isSelected=false;
+        int m_currentMusic=1;
+        int m_insideSeletor=1;
+        float m_volume=40;
+        bool m_isOptionOpen=true;
 
     public:
         Option(){}
 
-        float getVolume(){return _volume/100;}
+        float getVolume()
+        { 
+            return m_volume / 100;
+        }
         
-        void VolumeControl()
+        void volumeControl()
         {
-            if(_selector==2&&_isSelected&&key_typed(RIGHT_KEY)&&_volume<100&&_insideSeletor==1)
-            {
-                _volume=_volume+20;
-            }
-            if(_selector==2&&_isSelected&&key_typed(LEFT_KEY)&&_volume>0&&_insideSeletor==1)
-            {
-                _volume=_volume-20;
-            }
+            if(_selector == 2 && m_isSelected && key_typed(RIGHT_KEY) && m_volume < 100 && m_insideSeletor == 1)
+                m_volume += 20;
+
+            if(_selector ==2 && m_isSelected && key_typed(LEFT_KEY) && m_volume > 0 && m_insideSeletor == 1)
+                m_volume -= 20;
         }
 
         void setCurrentMusic()
         {
-            if(_selector==2&&_isSelected&&_volume<100&&_insideSeletor==2)
+            if(_selector == 2 && m_isSelected && m_volume < 100 && m_insideSeletor == 2)
             {
-                if(key_typed(LEFT_KEY)&&_currentMusic>1)
-                {
-                    _currentMusic=_currentMusic-1;
-                }
-                if(key_typed(RIGHT_KEY)&&_currentMusic<3)
-                {
-                    _currentMusic=_currentMusic+1;
-                }
+                if(key_typed(LEFT_KEY) && m_currentMusic > 1)
+                    m_currentMusic = m_currentMusic-1;
+                if(key_typed(RIGHT_KEY) && m_currentMusic < 3)
+                    m_currentMusic = m_currentMusic+1;
             }
         }
 
         int getCurrentMusic()
         {
-            return _currentMusic;
+            return m_currentMusic;
         }
 
-        void ChangeDisPlay()
+        void changeDisplay()
         {
-            if(_selector==3&&_isSelected)
+            if(_selector == 3 && m_isSelected)
             {
-                if(_displayStyle==1)
-                {
-                    if(key_typed(RIGHT_KEY)){_displayStyle=2;}
-                    if(key_typed(DOWN_KEY)){_displayStyle=3;}
-                }
-                if(_displayStyle==2)
-                {
-                    if(key_typed(DOWN_KEY)){_displayStyle=4;}
-                    if(key_typed(LEFT_KEY)){_displayStyle=1;}
-                }
-                if(_displayStyle==3)
-                {
-                    if(key_typed(UP_KEY)){_displayStyle=1;}
-                    if(key_typed(RIGHT_KEY)){_displayStyle=4;}
-                }
-                if(_displayStyle==4)
-                {
-                    if(key_typed(UP_KEY)){_displayStyle=2;}
-                    if(key_typed(LEFT_KEY)){_displayStyle=3;}
+                switch (m_displayStyle) {
+                    case 1:
+                        if (key_typed(RIGHT_KEY))
+                            m_displayStyle = 2;
+                        else if (key_typed(DOWN_KEY))
+                            m_displayStyle = 3;
+                    break;
+                    case 2:
+                        if (key_typed(DOWN_KEY))
+                            m_displayStyle = 4;
+                        else if(key_typed(LEFT_KEY))
+                            m_displayStyle = 1;
+                    break;
+                    case 3:
+                        if (key_typed(UP_KEY))
+                            m_displayStyle = 1;
+                        else if (key_typed(RIGHT_KEY))
+                            m_displayStyle = 4;
+                    break;
                 }
             }
         }
         bool isChangeMusic()
         {
-            if(_selector==2&&_isSelected&&_volume<100&&_insideSeletor==2&&(key_typed(LEFT_KEY)||key_typed(RIGHT_KEY))){return true;}
+            if(_selector==2&&m_isSelected&&m_volume<100&&m_insideSeletor==2&&(key_typed(LEFT_KEY)||key_typed(RIGHT_KEY))){return true;}
             else return false;
         }
         bool isChangeVoLume()
         {
-            if(_selector==2&&_isSelected&&_volume<100&&_insideSeletor==1&&(key_typed(LEFT_KEY)||key_typed(RIGHT_KEY))){return true;}
+            if(_selector==2&&m_isSelected&&m_volume<100&&m_insideSeletor==1&&(key_typed(LEFT_KEY)||key_typed(RIGHT_KEY))){return true;}
             else return false;
         }
         
@@ -111,52 +108,52 @@ class Option{
         {
             if(key_typed(P_KEY))
             {
-                if(_isSelected==false)
+                if(m_isSelected==false)
                 {
-                    _isSelected=true;
+                    m_isSelected=true;
                 }
-                else if(_isSelected==true)
+                else if(m_isSelected==true)
                 {
-                    _isSelected=false;
+                    m_isSelected=false;
                 }
                 
             }                    
 
-            if(key_typed(DOWN_KEY)&&_selector<4 && !_isSelected)
+            if(key_typed(DOWN_KEY)&&_selector<4 && !m_isSelected)
             {
                 _selector=_selector+1;
             }
 
-            if(key_typed(UP_KEY)&&_selector>1 && !_isSelected)
+            if(key_typed(UP_KEY)&&_selector>1 && !m_isSelected)
             {
                 _selector=_selector-1;
             }
 
-            if(_selector==2&&_isSelected==true&&_insideSeletor==1)
+            if(_selector==2&&m_isSelected==true&&m_insideSeletor==1)
             {
                 if(key_typed(DOWN_KEY))
                 {
-                    _insideSeletor=2;
+                    m_insideSeletor=2;
                 }
             }
 
-            if(_selector==2&&_isSelected==true&&_insideSeletor==2)
+            if(_selector==2&&m_isSelected==true&&m_insideSeletor==2)
             {
                 if(key_typed(UP_KEY))
                 {
-                    _insideSeletor=1;
+                    m_insideSeletor=1;
                 }
             }             
         }
 
         void updateOption()
         {
-            if(_isOptionOpen)
+            if(m_isOptionOpen)
             {
                 changeSelector();
-                ChangeDisPlay();
+                changeDisplay();
                 setCurrentMusic();
-                VolumeControl();
+                volumeControl();
                 drawIntinialHub();
             }
 
@@ -165,7 +162,7 @@ class Option{
 
             if(key_typed(O_KEY))
             {
-                _isOptionOpen=!_isOptionOpen;
+                m_isOptionOpen=!m_isOptionOpen;
             }
         }
 
@@ -193,19 +190,19 @@ class Option{
                 
                 fill_rectangle(color_red(),bitmap_width("backCurrentGame")+200,200,screen_width()-bitmap_width("backCurrentGame")-400,50);
                 double a=screen_width()-bitmap_width("backCurrentGame")-400;
-                double b=a/100*_volume;
+                double b=a/100*m_volume;
                 fill_rectangle(color_yellow(),bitmap_width("backCurrentGame")+200,200,b,50);
                 draw_text(to_string(screen_width()-bitmap_width("backCurrentGame")),color_red(),300,300);
 
-                if (_insideSeletor==1)
+                if (m_insideSeletor==1)
                 {
                     draw_text("CHANGE SOUND",color_white(),bitmap_width("backCurrentGame")+100,200);
                 }
 
-                if(_insideSeletor==2)
+                if(m_insideSeletor==2)
                 {
                     draw_text("CHANGE MUSIC",color_white(),bitmap_width("backCurrentGame")+100,500);
-                    draw_text(to_string(_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
+                    draw_text(to_string(m_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
                 }
             }
 
@@ -224,10 +221,10 @@ class Option{
                 fill_rectangle(color_white(),secong_column_x,first_row_y,rec_width,rec_height);
                 fill_rectangle(color_white(),first_column_x,second_row_y,rec_width,rec_height);
                 fill_rectangle(color_white(),secong_column_x,second_row_y,rec_width,rec_height);
-                if(_displayStyle==1){fill_rectangle(color_red(),first_column_x,first_row_y,rec_width,rec_height);}
-                if(_displayStyle==2){fill_rectangle(color_red(),secong_column_x,first_row_y,rec_width,rec_height);}
-                if(_displayStyle==3){fill_rectangle(color_red(),first_column_x,second_row_y,rec_width,rec_height);}
-                if(_displayStyle==4){fill_rectangle(color_red(),secong_column_x,second_row_y,rec_width,rec_height);}
+                if(m_displayStyle==1){fill_rectangle(color_red(),first_column_x,first_row_y,rec_width,rec_height);}
+                if(m_displayStyle==2){fill_rectangle(color_red(),secong_column_x,first_row_y,rec_width,rec_height);}
+                if(m_displayStyle==3){fill_rectangle(color_red(),first_column_x,second_row_y,rec_width,rec_height);}
+                if(m_displayStyle==4){fill_rectangle(color_red(),secong_column_x,second_row_y,rec_width,rec_height);}
             }
 
             if(_selector==4)
