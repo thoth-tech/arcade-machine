@@ -2,12 +2,11 @@
 #define ARCADE_MACHINE_HELPER_H
 
 #include <experimental/filesystem>
-#include <cstring>
 
 namespace fs = std::experimental::filesystem;
 
-// To test txt configs, change to "config"
-#define CONFIG_DIR "config"
+// Remove definition to use JSON config.
+#define ARCADE_MACHINE_USE_TEXT_CONFIG
 
 /**
  * @brief Helper class
@@ -65,17 +64,14 @@ class Helper {
 
             for (int i = 0; i < files.size(); i++)
             {
-                if (strcmp(CONFIG_DIR, "config") == 0)
-                {
+                #ifdef ARCADE_MACHINE_USE_TEXT_CONFIG 
                     ConfigData config(files[i]);
                     string dir = getFolderName(files[i]);
                     config.setFolder(dir);
                     config.setId(i);
                     config.printConfigData();
                     configs.push_back(config);
-                }
-                else if (strcmp(CONFIG_DIR, "json") == 0)
-                {
+                #else
                     ConfigData config;
                     string filename = fs::path(files[i]).string();
                     write_line(filename);
@@ -83,7 +79,7 @@ class Helper {
                     config.setId(i);
                     config.printConfigData();
                     configs.push_back(config);
-                }
+                #endif
             }
 
             return configs;
