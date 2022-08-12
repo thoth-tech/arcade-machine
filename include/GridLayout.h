@@ -1,26 +1,12 @@
 #ifndef ARCADE_MACHINE_GRID_LAYOUT_H
 #define ARCADE_MACHINE_GRID_LAYOUT_H
 
+#include <string>
+#include "splashkit.h"
+#include "Button.h"
+#include "Cell.h"
+
 void write(std::string text);
-
-enum item
-{
-    EMPTY,
-    BMP,
-    SPT,
-    BTN
-};
-
-class Cell
-{
-public:
-    item cellType = EMPTY;
-    bitmap bmp = NULL;
-    sprite spr = NULL;
-    Button *button;
-    int span = 1;
-    bool centre = true;
-};
 
 class Grid
 {
