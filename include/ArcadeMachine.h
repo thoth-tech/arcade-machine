@@ -263,9 +263,9 @@ public:
         // Draw cursor
         draw_sprite(this->_selector_main_menu.get_cursor());
         // Get button postions
-        cell play = this->_grid.GetCell(2, 10);
-        cell options = this->_grid.GetCell(3, 10);
-        cell exit = this->_grid.GetCell(4, 10);
+        Cell play = this->_grid.GetCell(2, 10);
+        Cell options = this->_grid.GetCell(3, 10);
+        Cell exit = this->_grid.GetCell(4, 10);
         // Arcade Machine title
         draw_text("Arcade",  COLOR_BLACK, "font_title", 100, 1180, 100);
         draw_text("Machine", COLOR_BLACK, "font_title", 100, 1150, 200);

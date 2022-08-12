@@ -11,7 +11,7 @@ enum item
     BTN
 };
 
-class cell
+class Cell
 {
 public:
     item cellType = EMPTY;
@@ -36,7 +36,7 @@ private:
     // Rows
     int _rows;
     // Stores information for each cell (bitmap, span)
-    cell *_grid;
+    Cell *_grid;
     // Number of cells
     int _cells = 0;
     // Scale the bitmap to fill the cell
@@ -62,7 +62,7 @@ public:
         // Calculate number of cells
         _cells = _rows * _cols;
         // Initialise the grid
-        _grid = new cell[_cells];
+        _grid = new Cell[_cells];
     }
     /**
      * @brief Construct a new Grid object with a dynamic number of columns per row
@@ -85,7 +85,7 @@ public:
             _cells += colsArray[i];
         }
         // Initialise the grid
-        _grid = new cell[_cells];
+        _grid = new Cell[_cells];
     }
 
     /**
@@ -305,7 +305,7 @@ public:
      * @param col column of the cell
      * @return cell* pointer to the cell
      */
-    cell GetCell(int row, int col)
+    Cell GetCell(int row, int col)
     {
         return _grid[FindCell(row, col)];
     }
