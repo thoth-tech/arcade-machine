@@ -225,16 +225,16 @@ public:
                             write("ScaleToFit: Feature not currently available with use of sprites.\n");
                         if (_grid[index].centre)
                         {
-                            x = x + ((xOffset * _grid[index].span) / 2) - _grid[index].button->centre_x();
-                            y = y + _grid[index].button->centre_y();
+                            x = x + ((xOffset * _grid[index].span) / 2) - _grid[index].button->centreX();
+                            y = y + _grid[index].button->centreY();
                         }
                         sprite_set_x(_grid[index].button->btn(), x);
                         sprite_set_y(_grid[index].button->btn(), y);
                         // Update Button position of button
-                        this->_grid[index].button->set_x(sprite_x(this->_grid[index].button->btn()));
-                        this->_grid[index].button->set_y(sprite_y(this->_grid[index].button->btn()));
+                        this->_grid[index].button->setX(sprite_x(this->_grid[index].button->btn()));
+                        this->_grid[index].button->setY(sprite_y(this->_grid[index].button->btn()));
                         // Draw Button
-                        _grid[index].button->draw_button();
+                        _grid[index].button->drawButton();
                         break;
                     default:
                         break;

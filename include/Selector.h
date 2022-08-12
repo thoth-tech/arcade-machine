@@ -146,7 +146,7 @@ class Selector {
         void highlight_first(ButtonNode* button_node)
         {
             // Get the current buttons sprite.
-            sprite currentSprite = button_node->button->_btn;
+            sprite currentSprite = button_node->button->m_btn;
             // Toggle on the highlight layer.
             sprite_toggle_layer_visible(currentSprite, 1);
 
@@ -173,7 +173,7 @@ class Selector {
             sprite prev_sprite;
 
             // Get current sprite.
-            sprite current_sprite = button_node->button->_btn;
+            sprite current_sprite = button_node->button->m_btn;
 
             // Toggle current sprites highlight layer.
             sprite_toggle_layer_visible(current_sprite, 1);
