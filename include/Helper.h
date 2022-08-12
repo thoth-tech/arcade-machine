@@ -1,9 +1,14 @@
 #ifndef ARCADE_MACHINE_HELPER_H
 #define ARCADE_MACHINE_HELPER_H
 
+#if __cplusplus >= 201703L
+#include <filesystem>
+namespace fs = std::filesystem;
+#else
+#define _LIBCPP_NO_EXPERIMENTAL_DEPRECATION_WARNING_FILESYSTEM
 #include <experimental/filesystem>
-
 namespace fs = std::experimental::filesystem;
+#endif
 
 // Remove definition to use JSON config.
 #define ARCADE_MACHINE_USE_TEXT_CONFIG
