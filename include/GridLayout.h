@@ -28,7 +28,7 @@ private:
     // Stores the bitmap used for the background
     bitmap m_background = nullptr;
     // Stores the number of columns per row
-    int *_colsArray;
+    int *m_colsArray;
     // Different number of columns per row?
     bool _useColsArray = false;
     // Columns, used if number of columns is fixed
@@ -77,7 +77,7 @@ public:
         _scaleToFit = scaleToFit;
         _useColsArray = true;
         _rows = rows;
-        _colsArray = colsArray;
+        m_colsArray = colsArray;
         // Calculate the number of cells in the grid
         for (size_t i = 0; i < rows; i++)
         {
@@ -93,7 +93,7 @@ public:
      * 
      * @param bmp bitmap to use as background
      */
-    void SetBackground(bitmap bmp)
+    void setBackground(bitmap bmp)
     {
         m_background = bmp;
     }
@@ -106,7 +106,7 @@ public:
      * @param cellHeight height of the cell
      * @return drawing_options options
      */
-    drawing_options BitmapScaleOpt(int bmpWidth, int bmpHeight, double cellWidth, double cellHeight, int span)
+    drawing_options bitmapScaleOpt(int bmpWidth, int bmpHeight, double cellWidth, double cellHeight, int span)
     {
         return option_scale_bmp((cellWidth / bmpWidth) * span, cellHeight / bmpHeight);
     }
@@ -115,7 +115,7 @@ public:
      * @brief Draw the cell boundaries, to help with placement
      * 
      */
-    void DrawCells()
+    void drawCells()
     {
         // Vertical offset between each cell
         double yOffset = current_window_height() / _rows;
@@ -134,9 +134,9 @@ public:
             if (_useColsArray)
             {
                 // Update horizontal offset each row
-                xOffset = current_window_width() / _colsArray[i];
+                xOffset = current_window_width() / m_colsArray[i];
                 // Number of columns to iterate over
-                _cols = _colsArray[i];
+                _cols = m_colsArray[i];
             }
             // Iterate over columns
             for (size_t j = 0; j < _cols; j++)
@@ -151,7 +151,7 @@ public:
      * @brief Draw the items in the grid
      * 
      */
-    void DrawGrid()
+    void drawGrid()
     {
         if (m_background)
            draw_bitmap(m_background, 0, 0);
@@ -175,9 +175,9 @@ public:
             if (_useColsArray)
             {
                 // Update horizontal offset each row
-                xOffset = current_window_width() / _colsArray[i];
+                xOffset = current_window_width() / m_colsArray[i];
                 // Number of columns to iterate over
-                _cols = _colsArray[i];
+                _cols = m_colsArray[i];
             }
             // Iterate over columns
             for (size_t j = 0; j < _cols; j++)
@@ -201,7 +201,7 @@ public:
                     case BMP:
                         if (_scaleToFit)
                         {
-                            options = BitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp), xOffset, yOffset, _grid[index].span);
+                            options = bitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp), xOffset, yOffset, _grid[index].span);
                         }
                         if (_grid[index].centre)
                         {
@@ -257,7 +257,7 @@ public:
      * @param col column of the cell
      * @return int index of the cell
      */
-    int FindCell(int row, int col)
+    int findCell(int row, int col)
     {
         int cellNum = 0;
         // Selected row is out of bounds
@@ -270,7 +270,7 @@ public:
         if (_useColsArray)
         {
             // Selected column is out of bounds
-            if (_colsArray[row] < col + 1)
+            if (m_colsArray[row] < col + 1)
             {
                 throw std::out_of_range("Column index out of range");
                 return -1;
@@ -278,7 +278,7 @@ public:
             // Calculate the cell number
             for (size_t i = 0; i < row; i++)
             {
-                cellNum += _colsArray[i];
+                cellNum += m_colsArray[i];
             }
 
             cellNum += col;
@@ -305,9 +305,9 @@ public:
      * @param col column of the cell
      * @return cell* pointer to the cell
      */
-    Cell GetCell(int row, int col)
+    Cell getCell(int row, int col)
     {
-        return _grid[FindCell(row, col)];
+        return _grid[findCell(row, col)];
     }
 
     /**
@@ -319,11 +319,11 @@ public:
      * @param span number of columns the bitmap spans
      * @param centre whether the bitmap should be centered
      */
-    void UpdateCell(const bitmap &bmp, int row, int col, int span = 1, bool centre = true)
+    void updateCell(const bitmap &bmp, int row, int col, int span = 1, bool centre = true)
     {
         _gridEmpty=false;
         // Stores the index of the cell
-        int cellNum = FindCell(row, col);
+        int cellNum = findCell(row, col);
         // Selected row is out of bounds
         // Update the cell
         _grid[cellNum].cellType = BMP;
@@ -343,11 +343,11 @@ public:
      * @param span number of columns the sprite spans
      * @param centre whether the sprite should be centered
      */
-    void UpdateCell(const sprite &sprite, int row, int col, int span = 1, bool centre = true)
+    void updateCell(const sprite &sprite, int row, int col, int span = 1, bool centre = true)
     {
         _gridEmpty=false;
         // Stores the index of the cell
-        int cellNum = FindCell(row, col);
+        int cellNum = findCell(row, col);
         // Selected row is out of bounds
         // Update the cell
         _grid[cellNum].cellType = SPT;
@@ -367,11 +367,11 @@ public:
      * @param span number of columns the button spans
      * @param centre whether the button should be centered
      */
-    void UpdateCell(Button *button, int row, int col, int span = 1, bool centre = true)
+    void updateCell(Button *button, int row, int col, int span = 1, bool centre = true)
     {
         _gridEmpty=false;
         // Stores the index of the cell
-        int cellNum = FindCell(row, col);
+        int cellNum = findCell(row, col);
         // Selected row is out of bounds
         // Update the cell
         _grid[cellNum].cellType = BTN;
@@ -388,7 +388,7 @@ public:
      * @param bmp bitmap to update the cells with
      * @param centre whether the bitmaps should be centered
      */
-    void UpdateAllCells(bitmap bmp, bool centre = true)
+    void updateAllCells(bitmap bmp, bool centre = true)
     {
         _gridEmpty=false;
         // Iterate over all the cells
@@ -408,7 +408,7 @@ public:
      * @param sprite sprite to update the cells with
      * @param centre whether the sprites should be centered
      */
-    void UpdateAllCells(sprite sprite, bool centre = true)
+    void updateAllCells(sprite sprite, bool centre = true)
     {
         _gridEmpty=false;
         // Iterate over all the cells
@@ -426,7 +426,7 @@ public:
      * @brief Log the dimensions of the cells to console
      * 
      */
-    void DrawLayout()
+    void drawLayout()
     {
         int colWidth = 0;
         write("Drawing layout\n");
@@ -437,8 +437,8 @@ public:
         {
             if (_useColsArray)
             {
-                colWidth = current_window_width() / _colsArray[i];
-                _cols = _colsArray[i];
+                colWidth = current_window_width() / m_colsArray[i];
+                _cols = m_colsArray[i];
             }
             write("Row " + std::to_string(i) + " (colWidth: " + std::to_string(colWidth) + "): ");
             for (size_t j = 0; j < _cols; j++)
@@ -454,7 +454,7 @@ public:
      * @brief Clear the grid
      * 
      */
-    void ClearGrid()
+    void clearGrid()
     {
         if (_gridEmpty)
             return;
@@ -478,7 +478,7 @@ public:
      * @param y y-coordinate (px)
      * @return point_2d 
      */
-     point_2d FindCellfromLoc(int x, int y)
+     point_2d findCellFromLoc(int x, int y)
     {
         int rowNum;
         // Selected row is out of bounds
@@ -494,7 +494,7 @@ public:
         }
         int xOffset;
         if (_useColsArray)
-            xOffset = (current_window_width() / _colsArray[rowNum]);
+            xOffset = (current_window_width() / m_colsArray[rowNum]);
         else
             xOffset = (current_window_width()/_cols);
         runningSum = 0;
@@ -517,10 +517,10 @@ public:
      * @brief Clear the cell
      * 
      */
-   void ClearCell(int row, int col)
+   void clearCell(int row, int col)
     {
         // Gets the index of the cell
-        int cellNum = FindCell(row, col);
+        int cellNum = findCell(row, col);
         // Clear cell
         _grid[cellNum].cellType = EMPTY;
         _grid[cellNum].spr = NULL;

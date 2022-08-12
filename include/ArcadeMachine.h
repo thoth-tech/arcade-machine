@@ -259,13 +259,13 @@ public:
     {
         // Get mouse position
         this->m_mouse = mouse_position();
-        this->m_grid.DrawGrid();
+        this->m_grid.drawGrid();
         // Draw cursor
         draw_sprite(this->m_selectorMainMenu.get_cursor());
         // Get button postions
-        Cell play = this->m_grid.GetCell(2, 10);
-        Cell options = this->m_grid.GetCell(3, 10);
-        Cell exit = this->m_grid.GetCell(4, 10);
+        Cell play = this->m_grid.getCell(2, 10);
+        Cell options = this->m_grid.getCell(3, 10);
+        Cell exit = this->m_grid.getCell(4, 10);
         // Arcade Machine title
         draw_text("Arcade",  COLOR_BLACK, "font_title", 100, 1180, 100);
         draw_text("Machine", COLOR_BLACK, "font_title", 100, 1150, 200);
@@ -304,7 +304,7 @@ public:
         // Fetch menu background
         bitmap thoth = bitmap_named("thoth");
         // Update grid cells with assets
-        this->m_grid.SetBackground(thoth);
+        this->m_grid.setBackground(thoth);
 
         // Make new nodes with buttons.
         this->m_menuButtonNode = new ButtonNode(play);
@@ -312,9 +312,9 @@ public:
         this->m_menuButtonNode->addBefore(new ButtonNode(exit));
 
         // Update grid with nodes.
-        this->m_grid.UpdateCell(m_menuButtonNode->button, 2, 10);
-        this->m_grid.UpdateCell(m_menuButtonNode->getPrev()->button, 4, 10);
-        this->m_grid.UpdateCell(m_menuButtonNode->getNext()->button, 3, 10);
+        this->m_grid.updateCell(m_menuButtonNode->button, 2, 10);
+        this->m_grid.updateCell(m_menuButtonNode->getPrev()->button, 4, 10);
+        this->m_grid.updateCell(m_menuButtonNode->getNext()->button, 3, 10);
 
         // Play main menu music
         if (this->m_playMusic) play_music("music_mainmenu");

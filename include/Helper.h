@@ -111,8 +111,8 @@ class Helper{
         {
             process_events();
             clear_screen(COLOR_DARK_SLATE_GRAY);
-            grid.DrawGrid();
-            grid.ClearGrid();
+            grid.drawGrid();
+            grid.clearGrid();
             refresh_screen();
             delay(1000);
         }
@@ -138,7 +138,7 @@ class Helper{
             int span = cols;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell(testBitmap, i, 0, span);
+                grid.updateCell(testBitmap, i, 0, span);
                 --span;
             }
             ResetScreen(grid);
@@ -146,7 +146,7 @@ class Helper{
             span = 1;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell(testBitmap, i, 0, span);
+                grid.updateCell(testBitmap, i, 0, span);
                 ++span;
             }
 
@@ -158,7 +158,7 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(testBitmap, i, j, 1);
+                        grid.updateCell(testBitmap, i, j, 1);
                     alternate = !alternate;
                 }
             }
@@ -171,7 +171,7 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(testBitmap, i, j, 1);
+                        grid.updateCell(testBitmap, i, j, 1);
                 }
                 alternate = !alternate;
             }
@@ -184,7 +184,7 @@ class Helper{
                 for (size_t j = 0; j < rows; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(testBitmap, i, j, 1);
+                        grid.updateCell(testBitmap, i, j, 1);
                     alternate = !alternate;
                 }
                 alternate = !alternate;
@@ -192,12 +192,12 @@ class Helper{
 
             ResetScreen(grid);
 
-            grid.UpdateAllCells(testBitmap);
+            grid.updateAllCells(testBitmap);
             ResetScreen(grid);
 
             while (!quit_requested())
             {
-                grid.DrawGrid();
+                grid.drawGrid();
                 process_events();
                 clear_screen();
                 refresh_screen(60);

@@ -127,7 +127,7 @@ public:
         Grid grid(8, 14);
         this->_grid = grid;
         // Update the background
-        this->_grid.SetBackground(bitmap_named(this->background));
+        this->_grid.setBackground(bitmap_named(this->background));
     }
 
     /**
@@ -182,14 +182,14 @@ public:
         // If menu is sliding then clear the grid.
         if (this->_menu_sliding)
         {
-            this->_grid.ClearGrid();
+            this->_grid.clearGrid();
         }
         else {
             if (this->button && !this->_in_game)
             {
-                this->_grid.UpdateCell(this->button->getPrev()->button, 2, 0, 1, false);
-                this->_grid.UpdateCell(this->button->button, 2, 5, 1, false);
-                this->_grid.UpdateCell(this->button->getNext()->button, 2, 10, 1, false);
+                this->_grid.updateCell(this->button->getPrev()->button, 2, 0, 1, false);
+                this->_grid.updateCell(this->button->button, 2, 5, 1, false);
+                this->_grid.updateCell(this->button->getNext()->button, 2, 10, 1, false);
             }
         }
     }
@@ -236,9 +236,9 @@ public:
                     // fill with black
                     fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
                     // clear grid
-                    this->_grid.ClearGrid();
+                    this->_grid.clearGrid();
                     // set new background
-                    this->_grid.SetBackground(bitmap_named("in_game_bgnd"));
+                    this->_grid.setBackground(bitmap_named("in_game_bgnd"));
                     //turn off overlay
                     this->_overlayActive = false;
                     // turn off menu music
@@ -270,7 +270,7 @@ public:
             back_to_games_menu();
         }
         
-        this->_grid.DrawGrid();
+        this->_grid.drawGrid();
         
         // Wait for selector to key input to determine slide direction.
         if (_selector_games_menu.get_slide_left())
@@ -517,7 +517,7 @@ public:
         // fade to black
         fade(0, 1, 0.1);
         fill_rectangle(rgba_color(0.0, 0.0, 0.0, 1.0), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
-        this->_grid.SetBackground(bitmap_named("games_dashboard"));
+        this->_grid.setBackground(bitmap_named("games_dashboard"));
         // fade to normal
         fade(1, 0, 0.1);
     }
@@ -540,7 +540,7 @@ public:
         for (int i = 0; i < steps; i++)
         {
             clear_screen();
-            this->_grid.DrawGrid();
+            this->_grid.drawGrid();
             // Alpha value manipulates to the opacity of the rectangle.
             fill_rectangle(rgba_color(0.0, 0.0, 0.0, alphaStart), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
             // Update the alpha value.
