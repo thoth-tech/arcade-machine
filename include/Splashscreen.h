@@ -2,6 +2,7 @@
 #define ARCADE_MACHINE_SPLASH_SCREEN_H
 
 #include <string>
+#include "splashkit.h"
 
 class Splashscreen
 {

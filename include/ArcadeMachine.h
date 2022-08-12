@@ -13,9 +13,12 @@
 
 // Arcade Machine Class
 #include "Button.h"
-#include "ButtonList.h"
+#include "MenuButton.h"
+#include "GameScreenButton.h"
+#include "ButtonNode.h"
 #include "ConfigData.h"
 #include "GridLayout.h"
+#include "Cell.h"
 #include "Helper.h"
 #include "Menu.h"
 #include "Option.h"

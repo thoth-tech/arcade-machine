@@ -1,6 +1,10 @@
 #ifndef ARCADE_MACHINE_SELECTOR_H
 #define ARCADE_MACHINE_SELECTOR_H
 
+#include "splashkit.h"
+#include "ButtonNode.h"
+#include <string>
+
 using namespace std;
 
 class Selector {
