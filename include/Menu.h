@@ -200,8 +200,8 @@ public:
     void carouselHandler()
     {
         /// Check for input in selector class.
-        this->m_button = this->m_selectorGamesMenu.check_key_input(this->m_button, m_gameMenu);
-        this->_action = this->m_selectorGamesMenu.check_for_selection(this->m_button, m_gameMenu);
+        this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
+        this->_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
 
 #ifdef _WIN32
         check_game_exit();
@@ -273,9 +273,9 @@ public:
         this->m_grid.drawGrid();
         
         // Wait for selector to key input to determine slide direction.
-        if (m_selectorGamesMenu.get_slide_left())
+        if (m_selectorGamesMenu.getSlideLeft())
             drawUpdateSlideLeft();
-        else if (m_selectorGamesMenu.get_slide_right())
+        else if (m_selectorGamesMenu.getSlideRight())
             drawUpdateSlideRight();
 
         if (_overlayActive && !m_menuSliding)
@@ -335,7 +335,7 @@ public:
         if (this->m_pos1 > 1300)
         {
             // Set selector bool back to false.
-            m_selectorGamesMenu.set_slide_left(false);
+            m_selectorGamesMenu.setSlideLeft(false);
             this->m_menuSliding = false;
             // Reset positions.
             this->m_pos1 = m_posX;
@@ -371,7 +371,7 @@ public:
         if (this->m_pos1 <= 20)
         {
             // Set selector bool back to false.
-            m_selectorGamesMenu.set_slide_right(false);
+            m_selectorGamesMenu.setSlideRight(false);
             this->m_menuSliding = false;
             // Reset positions.
             this->m_pos1 = m_posX;

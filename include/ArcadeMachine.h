@@ -261,7 +261,7 @@ public:
         this->m_mouse = mouse_position();
         this->m_grid.drawGrid();
         // Draw cursor
-        draw_sprite(this->m_selectorMainMenu.get_cursor());
+        draw_sprite(this->m_selectorMainMenu.getCursor());
         // Get button postions
         Cell play = this->m_grid.getCell(2, 10);
         Cell options = this->m_grid.getCell(3, 10);
@@ -275,10 +275,10 @@ public:
         draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centreX()/2) + 20, exit.button->y() + 5);
 
         // Check input in selector class.
-        this->m_menuButtonNode = this->m_selectorMainMenu.check_key_input(this->m_menuButtonNode);
+        this->m_menuButtonNode = this->m_selectorMainMenu.checkKeyInput(this->m_menuButtonNode);
 
         // Check input in selector class.
-        this->m_action = this->m_selectorMainMenu.check_for_selection(this->m_menuButtonNode);
+        this->m_action = this->m_selectorMainMenu.checkForSelection(this->m_menuButtonNode);
     }
 
     /**
