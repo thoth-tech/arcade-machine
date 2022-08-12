@@ -162,25 +162,25 @@ public:
     {
         // Instantiate new menu
         Menu menu(this->m_configs);
-        bool overlayActive = menu.get_overlay_state();
+        bool overlayActive = menu.getOverlayState();
         write_line("got configs");
-        menu.create_grid();
-        menu.create_buttons();
-        menu.create_tip();
+        menu.createGrid();
+        menu.createButtons();
+        menu.createTip();
         write_line("got buttons");
         write_line("set image");
-        this->m_gameBtns = menu.get_buttons();
+        this->m_gameBtns = menu.getButtons();
         
         while ((!key_typed(ESCAPE_KEY) && !overlayActive) || overlayActive)
         {
             //write_line("into while");
-            overlayActive = menu.get_overlay_state();
+            overlayActive = menu.getOverlayState();
             process_events();   
             clear_screen();
             // Get mouse position
             this->m_mouse = mouse_position();
             // Draw games menu
-            menu.draw_menu_page();
+            menu.drawMenuPage();
             // Check input
             //  this->_action = this->m_selectorGamesMenu.check_key_input(this->_games_btns);
             refresh_screen(60);
