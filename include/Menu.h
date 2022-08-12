@@ -406,23 +406,23 @@ public:
     bool focusWindow(std::string windowName, int timeout = 2000)
     {
         LPCSTR gameWindow =  windowName.c_str();
-        HWND gameWindowm_handle = NULL;
+        HWND gameWindowHandle = NULL;
 
         int timeElapsed;
         auto startTime = chrono::steady_clock::now();
 
         //Find the window m_handle
         do {
-            gameWindowm_handle = FindWindowEx(NULL,NULL,NULL, gameWindow);
+            gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
             timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
             delay(250);
         }
-        while (gameWindowm_handle == NULL && timeElapsed <= timeout);
+        while (gameWindowHandle == NULL && timeElapsed <= timeout);
 
         //Maximise the Window
-        if (gameWindowm_handle != NULL)
+        if (gameWindowHandle != NULL)
         {
-            ShowWindow(gameWindowm_handle, SW_SHOWMAXIMIZED);
+            ShowWindow(gameWindowHandle, SW_SHOWMAXIMIZED);
             return true;
         }
         else
