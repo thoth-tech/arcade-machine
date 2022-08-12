@@ -82,9 +82,9 @@ class Helper{
                 {
                     ConfigData config(files[i]);
                     string dir = get_folder_name(files[i]);
-                    config.set_folder(dir);
-                    config.set_id(i);
-                    config.print_config_data();
+                    config.setFolder(dir);
+                    config.setId(i);
+                    config.printConfigData();
                     configs.push_back(config);
                 }
                 else if (strcmp(CONFIG_DIR, "json") == 0)
@@ -92,9 +92,9 @@ class Helper{
                     ConfigData config;
                     string filename = fs::path(files[i]).string();
                     write_line(filename);
-                    config.collect_json_data(config.read_json(filename));
-                    config.set_id(i);
-                    config.print_config_data();
+                    config.collectJsonData(config.readJson(filename));
+                    config.setId(i);
+                    config.printConfigData();
                     configs.push_back(config);
                 }
             }

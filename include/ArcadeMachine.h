@@ -418,7 +418,7 @@ public:
             draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, ARCADE_MACHINE_RES_X / 2 - 100, ARCADE_MACHINE_RES_Y / 2 + 350);
             refresh_screen();
             
-        } while (!this->m_config.get_from_git("https://github.com/thoth-tech/arcade-games.git", "games"));
+        } while (!this->m_config.getFromGit("https://github.com/thoth-tech/arcade-games.git", "games"));
     }
 
     /**
@@ -426,7 +426,7 @@ public:
     */
     void printConfigs()
     {
-        this->m_config.print_config_data();
+        this->m_config.printConfigData();
     }
 
     /**
