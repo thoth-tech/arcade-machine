@@ -14,21 +14,8 @@ namespace fs = std::experimental::filesystem;
  * This class has been added to house orphan functions 
  * 
  */
-class Helper{
+class Helper {
     public:
-        /**
-         * @brief Convert a string to a char array
-         * 
-         * @param str String to convert to char
-         * @return char* 
-         */
-        char* string_to_char(string str)
-        {
-            int n = str.length();
-            char* name[n+1];
-            strcpy(*name, str.c_str());
-            return *name;
-        }
 
         /**
          * @brief Find the game folder name to store in config class.
