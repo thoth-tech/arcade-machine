@@ -6,8 +6,8 @@
 class ButtonNode
 {
 private:
-    ButtonNode *next;
-    ButtonNode *prev;
+    ButtonNode *m_next;
+    ButtonNode *m_prev;
 
 public:
     Button *button;
@@ -21,8 +21,8 @@ public:
     ButtonNode(Button *button)
     {
         this->button = button;
-        this->next = this;
-        this->prev = this;
+        this->m_next = this;
+        this->m_prev = this;
     }
 
     /**
@@ -35,8 +35,8 @@ public:
     ButtonNode(Button *button, ButtonNode *next, ButtonNode *prev)
     {
         this->button = button;
-        this->next = next;
-        this->prev = prev;
+        this->m_next = next;
+        this->m_prev = prev;
     }
 
     /**
@@ -46,10 +46,10 @@ public:
      */
     void addAfter(ButtonNode *node)
     {
-        node->next = this->next;
-        node->prev = this;
-        this->next->prev = node;
-        this->next = node;
+        node->m_next = this->m_next;
+        node->m_prev = this;
+        this->m_next->m_prev = node;
+        this->m_next = node;
     }
 
     /**
@@ -59,10 +59,10 @@ public:
      */
     void addBefore(ButtonNode *node)
     {
-        node->next = this;
-        node->prev = this->prev;
-        this->prev->next = node;
-        this->prev = node;
+        node->m_next = this;
+        node->m_prev = this->m_prev;
+        this->m_prev->m_next = node;
+        this->m_prev = node;
     }
 
     /**
@@ -71,8 +71,8 @@ public:
      */
     void remove()
     {
-        this->prev->next = this->next;
-        this->next->prev = this->prev;
+        this->m_prev->m_next = this->m_next;
+        this->m_next->m_prev = this->m_prev;
     }
 
     /**
@@ -82,7 +82,7 @@ public:
      */
     ButtonNode *getNext()
     {
-        return this->next;
+        return this->m_next;
     }
     
     /**
@@ -92,7 +92,7 @@ public:
      */
     ButtonNode *getPrev()
     {
-        return this->prev;
+        return this->m_prev;
     }
 };
 
