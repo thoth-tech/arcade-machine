@@ -192,7 +192,7 @@ public:
     /**
      * @brief m_handle carousel input
      */
-    void carouselm_handler()
+    void carouselHandler()
     {
         /// Check for input in selector class.
         this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
@@ -278,7 +278,7 @@ public:
         this->m_tip->draw();
 
         updateCarousel();
-        carouselm_handler();
+        carouselHandler();
     }
 
     /**
