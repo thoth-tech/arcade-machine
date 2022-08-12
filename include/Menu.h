@@ -8,6 +8,10 @@
 #include <Windows.h>
 #endif
 
+#include <string>
+#include <vector>
+#include <chrono>
+
 class Menu {
 private:
     std::string m_background = "games_dashboard";
@@ -39,18 +43,22 @@ private:
     double m_y;
     // Checks if game is running
     bool m_inGame = false;
+    // Checks if program has exited
+    bool m_programExit;
     // Vector of buttons
     std::vector<Button*> m_btns;
-    // Vectore to store game images
+    // Vector to store game images
     std::vector<std::string> m_gameImages;
     // Menu grid
     Grid m_grid;
     Tip *m_tip;
     ButtonNode *m_button = nullptr;
-    bool _overlayActive = false;
+    bool m_overlayActive = false;
     /// Button Action
-    std::string _action;
+    std::string m_action;
+
     Selector m_selectorGamesMenu;
+
     // Passes into Selector optional parameter.
     bool m_gameMenu = true;
 
@@ -90,7 +98,7 @@ public:
 
     // Getters
     auto getButtons() const -> const std::vector<Button*> { return this->m_btns; }
-    bool getOverlayState() { return _overlayActive; }
+    bool getOverlayState() { return m_overlayActive; }
 
     /** 
      * @brief Gets the game images from the config files and returns vector of game images.
@@ -196,7 +204,7 @@ public:
     {
         /// Check for input in selector class.
         this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
-        this->_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
+        this->m_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
 
 #ifdef _WIN32
         checkGameExit();
@@ -204,21 +212,21 @@ public:
 
         if (this->m_button)
         {
-            if (this->_action == "escape" && _overlayActive)
+            if (this->m_action == "escape" && m_overlayActive)
             {
-                _overlayActive = false;
+                m_overlayActive = false;
             }
-            else if (this->_action == "return")
+            else if (this->m_action == "return")
             {
-                if (_overlayActive)
+                if (m_overlayActive)
                 {
 #ifdef _WIN32
                     // Get game path
-                    m_gamePath = (this->button->config.folder() + "/" + this->button->config.exe()).c_str();
+                    m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
                     // Get executable name
-                    m_gameExe = strdup(this->button->config.exe().c_str());
+                    m_gameExe = strdup(this->m_button->config.exe().c_str());
                     // Get game directory
-                    m_gameDir = this->button->config.folder().c_str();
+                    m_gameDir = this->m_button->config.folder().c_str();
 #endif
 
                     // Set the center of the game
@@ -235,7 +243,7 @@ public:
                     // set new background
                     this->m_grid.setBackground(bitmap_named("in_game_bgnd"));
                     //turn off overlay
-                    this->_overlayActive = false;
+                    this->m_overlayActive = false;
                     // turn off menu music
                     fade_music_out(1000);
                     // fade back in
@@ -248,7 +256,7 @@ public:
 
                     return;
                 }
-                _overlayActive = true;
+                m_overlayActive = true;
             }
         }
     }
@@ -273,7 +281,7 @@ public:
         else if (m_selectorGamesMenu.getSlideRight())
             drawUpdateSlideRight();
 
-        if (_overlayActive && !m_menuSliding)
+        if (m_overlayActive && !m_menuSliding)
             drawOverlay(m_button->config);
         this->m_tip->draw();
 
@@ -409,12 +417,12 @@ public:
         HWND gameWindowm_handle = NULL;
 
         int timeElapsed;
-        auto startTime = chrono::steady_clock::now();
+        auto startTime = std::chrono::steady_clock::now();
 
         //Find the window m_handle
         do {
             gameWindowm_handle = FindWindowEx(NULL,NULL,NULL, gameWindow);
-            timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+            timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count();
             delay(250);
         }
         while (gameWindowm_handle == NULL && timeElapsed <= timeout);
@@ -443,7 +451,7 @@ public:
      */
     void startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
-        if (!this->_in_game)
+        if (!this->m_inGame)
         {
             // Additional info
             STARTUPINFOA startupInfo;
@@ -451,7 +459,7 @@ public:
             // Set the size of the structures
             ZeroMemory(&startupInfo, sizeof(startupInfo));
             startupInfo.cb = sizeof(startupInfo);
-            ZeroMemory(&m_processInfo, sizeof(processInfo));
+            ZeroMemory(&m_processInfo, sizeof(m_processInfo));
 
             // Start the program up
             WINBOOL gameProcess = CreateProcessA
@@ -476,7 +484,7 @@ public:
             //Focus the window
             focusWindow(windowName);
 
-            this->_in_game = true;
+            this->m_inGame = true;
         }
     }
 
@@ -487,14 +495,16 @@ public:
      */
     void checkGameExit()
     {
-        if (this->_in_game == true)
+        if (this->m_inGame == true)
         {
-            this->_game_started = true;
+            this->m_gameStarted = true;
             // Check if game has been exited.
-            this->_program_exit = GetExitCodeProcess(m_processInfo.hProcess, &m_exitCode);
-            if ((this->_program_exit) && (STILL_ACTIVE != m_exitCode))
+            this->m_programExit
+     = GetExitCodeProcess(m_processInfo.hProcess, &m_exitCode);
+            if ((this->m_programExit
+    ) && (STILL_ACTIVE != m_exitCode))
             {
-                this->_in_game = false;
+                this->m_inGame = false;
             }
         }
     }
