@@ -10,6 +10,10 @@
 #include <Windows.h>
 #endif
 
+#include <string>
+#include <vector>
+#include <chrono>
+
 class Menu {
 private:
     std::string m_background = "games_dashboard";
@@ -18,15 +22,17 @@ private:
 
 #ifdef _WIN32
     // Contains info about newly created process and thread
-    PROCESS_INFORMATION processInfo;
+    PROCESS_INFORMATION m_processInfo;
     // Unsigned int to store exit info
-    DWORD exit_code;
+    DWORD m_exitCode;
     // Holds the game path of selected game
-    LPCSTR _gamePath;
+    LPCSTR m_gamePath;
     // Holds the executable of selected game
-    LPSTR _gameExe;
+    LPSTR m_gameExe;
     // Holds the game directory of selected game
-    LPCSTR _gameDir;
+    LPCSTR m_gameDir;
+    // m_handle for game window.
+    HWND m_handle;
 #endif
 
     // Used to find x centre of screen
@@ -39,25 +45,24 @@ private:
     double m_y;
     // Checks if game is running
     bool m_inGame = false;
+    // Checks if program has exited
+    bool m_programExit;
     // Vector of buttons
     std::vector<Button*> m_btns;
-    // Vectore to store game images
+    // Vector to store game images
     std::vector<std::string> m_gameImages;
     // Menu grid
     Grid m_grid;
     Tip *m_tip;
     ButtonNode *m_button = nullptr;
-    bool _overlayActive = false;
+    bool m_overlayActive = false;
     /// Button Action
-    std::string _action;
+    std::string m_action;
+
     Selector m_selectorGamesMenu;
+
     // Passes into Selector optional parameter.
     bool m_gameMenu = true;
-
-#ifdef _WIN32
-    // Handle for game window.
-    HWND handle;
-#endif
 
     // Determines when game has started.
     bool m_gameStarted = false;
@@ -88,14 +93,14 @@ public:
         this->m_games = configs;
 
 #ifdef _WIN32
-        handle = FindWindowA(NULL, "arcade-machine");
+        m_handle = FindWindowA(NULL, "arcade-machine");
 #endif
     }
     ~Menu(){}
 
     // Getters
     auto getButtons() const -> const std::vector<Button*> { return this->m_btns; }
-    bool getOverlayState() { return _overlayActive; }
+    bool getOverlayState() { return m_overlayActive; }
 
     /** 
      * @brief Gets the game images from the config files and returns vector of game images.
@@ -195,35 +200,35 @@ public:
     }
 
     /**
-     * @brief handle carousel input
+     * @brief m_handle carousel input
      */
     void carouselHandler()
     {
         /// Check for input in selector class.
         this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
-        this->_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
+        this->m_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
 
 #ifdef _WIN32
-        check_game_exit();
+        checkGameExit();
 #endif
 
         if (this->m_button)
         {
-            if (this->_action == "escape" && _overlayActive)
+            if (this->m_action == "escape" && m_overlayActive)
             {
-                _overlayActive = false;
+                m_overlayActive = false;
             }
-            else if (this->_action == "return")
+            else if (this->m_action == "return")
             {
-                if (_overlayActive)
+                if (m_overlayActive)
                 {
 #ifdef _WIN32
                     // Get game path
-                    _gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
+                    m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
                     // Get executable name
-                    _gameExe = strdup(this->m_button->config.exe().c_str());
+                    m_gameExe = strdup(this->m_button->config.exe().c_str());
                     // Get game directory
-                    _gameDir = this->m_button->config.folder().c_str();
+                    m_gameDir = this->m_button->config.folder().c_str();
 #endif
 
                     // Set the center of the game
@@ -240,7 +245,7 @@ public:
                     // set new background
                     this->m_grid.setBackground(bitmap_named("in_game_bgnd"));
                     //turn off overlay
-                    this->_overlayActive = false;
+                    this->m_overlayActive = false;
                     // turn off menu music
                     fade_music_out(1000);
                     // fade back in
@@ -248,12 +253,12 @@ public:
 
 #ifdef _WIN32
                     // Call method to open game executable
-                    start_game(_gamePath, _gameExe, _gameDir);
+                    startGame(m_gamePath, m_gameExe, m_gameDir);
 #endif
 
                     return;
                 }
-                _overlayActive = true;
+                m_overlayActive = true;
             }
         }
     }
@@ -278,7 +283,7 @@ public:
         else if (m_selectorGamesMenu.getSlideRight())
             drawUpdateSlideRight();
 
-        if (_overlayActive && !m_menuSliding)
+        if (m_overlayActive && !m_menuSliding)
             drawOverlay(m_button->config);
         this->m_tip->draw();
 
@@ -408,18 +413,18 @@ public:
      * @param timeout time in ms to search for the window
      * @return true/false if window was found.
      */
-    bool FocusWindow(std::string windowName, int timeout = 2000)
+    bool focusWindow(std::string windowName, int timeout = 2000)
     {
         LPCSTR gameWindow =  windowName.c_str();
         HWND gameWindowHandle = NULL;
 
         int timeElapsed;
-        auto startTime = chrono::steady_clock::now();
+        auto startTime = std::chrono::steady_clock::now();
 
-        //Find the window handle
+        //Find the window m_handle
         do {
             gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
-            timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - startTime).count();
+            timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count();
             delay(250);
         }
         while (gameWindowHandle == NULL && timeElapsed <= timeout);
@@ -432,7 +437,7 @@ public:
         }
         else
         {
-            write_line("Unable to find gameWindow Handle");
+            write_line("Unable to find gameWindow m_handle");
             return false;
         }
         return true;
@@ -446,9 +451,9 @@ public:
      * @param gameDirectory // The directory of the game.
      * @return ** void 
      */
-    void start_game(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
+    void startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     {
-        if (!this->_in_game)
+        if (!this->m_inGame)
         {
             // Additional info
             STARTUPINFOA startupInfo;
@@ -456,21 +461,21 @@ public:
             // Set the size of the structures
             ZeroMemory(&startupInfo, sizeof(startupInfo));
             startupInfo.cb = sizeof(startupInfo);
-            ZeroMemory(&processInfo, sizeof(processInfo));
+            ZeroMemory(&m_processInfo, sizeof(m_processInfo));
 
             // Start the program up
             WINBOOL gameProcess = CreateProcessA
             (
                 gamePath,               // the path
                 gameExe,                // Command line
-                NULL,                   // Process handle not inheritable
-                NULL,                   // Thread handle not inheritable
-                FALSE,                  // Set handle inheritance to FALSE
+                NULL,                   // Process m_handle not inheritable
+                NULL,                   // Thread m_handle not inheritable
+                FALSE,                  // Set m_handle inheritance to FALSE
                 NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
                 NULL,                    // Use parent's environment block
                 gameDirectory,           // Use parent's starting directory
                 &startupInfo,            // Pointer to STARTUPINFO structure
-                &processInfo           // Pointer to PROCESS_INFORMATION structure
+                &m_processInfo           // Pointer to PROCESS_INFORMATION structure
             );
 
             OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
@@ -479,9 +484,9 @@ public:
             //Remove the extension from the application name (.exe)
             windowName = windowName.substr(0, windowName.find("."));
             //Focus the window
-            FocusWindow(windowName);
+            focusWindow(windowName);
 
-            this->_in_game = true;
+            this->m_inGame = true;
         }
     }
 
@@ -490,16 +495,18 @@ public:
      * 
      * @return ** void 
      */
-    void check_game_exit()
+    void checkGameExit()
     {
-        if (this->_in_game == true)
+        if (this->m_inGame == true)
         {
-            this->_game_started = true;
+            this->m_gameStarted = true;
             // Check if game has been exited.
-            this->_program_exit = GetExitCodeProcess(processInfo.hProcess, &exit_code);
-            if ((this->_program_exit) && (STILL_ACTIVE != exit_code))
+            this->m_programExit
+     = GetExitCodeProcess(m_processInfo.hProcess, &m_exitCode);
+            if ((this->m_programExit
+    ) && (STILL_ACTIVE != m_exitCode))
             {
-                this->_in_game = false;
+                this->m_inGame = false;
             }
         }
     }
