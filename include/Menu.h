@@ -3,6 +3,8 @@
 
 #include "Tip.h"
 #include "Selector.h"
+#include "Button.h"
+#include "MenuButton.h"
 
 #ifdef _WIN32
 #include <Windows.h>

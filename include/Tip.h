@@ -1,6 +1,8 @@
 #ifndef ARCADE_MACHINE_TIP_H
 #define ARCADE_MACHINE_TIP_H
 
+#include "splashkit.h"
+
 // Font size
 #define FONT_SIZE 20
 // Width of the border

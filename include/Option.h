@@ -1,25 +1,14 @@
 #ifndef ARCADE_MACHINE_OPTION_H
 #define ARCADE_MACHINE_OPTION_H
 
+#include "splashkit.h"
+
 // Options class
 
-class Audio {
-    public:
-        Audio(){}
+using namespace std;
+using std::vector;
 
-        void playMusic(int _currentMusic,float volume)
-        {
-            play_music(std::to_string(_currentMusic));
-            set_music_volume(volume);
-        }  
-
-        void setVolume(float volume)
-        {
-            set_music_volume(volume);
-        }  
-};
-
-class Option {
+class Option{
     private: 
         int m_displayStyle=1;
         int _selector=1;

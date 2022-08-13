@@ -1,7 +1,8 @@
-#ifndef ARCADE_MACHINE_BUTTON_LIST_H
-#define ARCADE_MACHINE_BUTTON_LIST_H
+#ifndef ARCADE_MACHINE_BUTTON_NODE_H
+#define ARCADE_MACHINE_BUTTON_NODE_H
 
 #include "ConfigData.h"
+#include "Button.h"
 
 class ButtonNode
 {
