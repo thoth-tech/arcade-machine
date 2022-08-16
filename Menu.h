@@ -304,7 +304,8 @@ public:
 
         if (_overlayActive && !_menu_sliding)
             draw_overlay(button->config, button->stats);
-        this->tip->draw();
+        if (!_in_game)
+            this->tip->draw();
 
         update_carousel();
         carousel_handler();
