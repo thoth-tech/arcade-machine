@@ -17,27 +17,27 @@
 class ConfigData{
     private:
         /// This configs ID
-        int _id;
+        int m_id;
         /// The repository
-        std::string _repo;
+        std::string m_repo;
         /// This programming language this game was written in 
-        std::string _language;
+        std::string m_language;
         /// The thumbnail image of this game  
-        std::string _image;
+        std::string m_image;
         /// The title of this game
-        std::string _title;
+        std::string m_title;
         /// The genre of this game
-        std::string _genre;
+        std::string m_genre;
         /// The MPA classification rating of this game 
-        std::string _rating;
+        std::string m_rating;
         /// Th author/creator of this game
-        std::string _author;
+        std::string m_author;
         /// The path to the executable of this game
-        std::string _exe;
+        std::string m_exe;
         /// The folder this game is inside
-        std::string _folder;
+        std::string m_folder;
         /// A descritpion of the game 
-        std::string _description;
+        std::string m_description;
     public:
         /**
          * @brief Default Constructor
@@ -49,28 +49,28 @@ class ConfigData{
         /**
          * @brief Construct a new Config Data object
          * 
-         * @param config_file The config.txt file
+         * @param configFile The config.txt file
          */
-        ConfigData(std::string config_file)
+        ConfigData(std::string configFile)
         {
-            collect_config_data(read_txt(open_file(config_file)));
+            collectConfigData(readTxt(openFile(configFile)));
         }
 
         //Setters:
-        auto set_id(int &i) { _id = i; }
-        auto set_folder(std::string &dir) { _folder = dir; }
+        auto setId(int &i) { m_id = i; }
+        auto setFolder(std::string &dir) { m_folder = dir; }
         // Getters:
-        auto id()            const -> const int&    { return _id;            }
-        auto repo()          const -> const std::string& { return _repo;          }
-        auto language()      const -> const std::string& { return _language;      }
-        auto image()         const -> const std::string& { return _image;         }
-        auto title()         const -> const std::string& { return _title;         }
-        auto genre()         const -> const std::string& { return _genre;         }
-        auto rating()        const -> const std::string& { return _rating;        }
-        auto author()        const -> const std::string& { return _author;        }
-        auto exe()           const -> const std::string& { return _exe;           }
-        auto folder()        const -> const std::string& { return _folder;        }
-        auto description()   const -> const std::string& { return _description;   }
+        auto id()            const -> const int&    { return m_id;            }
+        auto repo()          const -> const std::string& { return m_repo;          }
+        auto language()      const -> const std::string& { return m_language;      }
+        auto image()         const -> const std::string& { return m_image;         }
+        auto title()         const -> const std::string& { return m_title;         }
+        auto genre()         const -> const std::string& { return m_genre;         }
+        auto rating()        const -> const std::string& { return m_rating;        }
+        auto author()        const -> const std::string& { return m_author;        }
+        auto exe()           const -> const std::string& { return m_exe;           }
+        auto folder()        const -> const std::string& { return m_folder;        }
+        auto description()   const -> const std::string& { return m_description;   }
 
         /**
          * @brief Generic open file function 
@@ -78,19 +78,19 @@ class ConfigData{
          * @param file The config.txt file
          * @return A file as ifstream object
          */
-        std::ifstream open_file(std::string file)
+        std::ifstream openFile(std::string file)
         {
-            std::ifstream config_file;
+            std::ifstream configFile;
 
-            config_file.open(file);
+            configFile.open(file);
 
-            if(config_file.fail())
+            if(configFile.fail())
             {
                 std::cerr << "Error Opening File" << std::endl;
                 exit(1);
             }
 
-            return config_file;
+            return configFile;
         }
 
         /**
@@ -99,9 +99,9 @@ class ConfigData{
          * @param file The ifstream object
          * @return An array of data from a text file
          */
-        std::vector<std::string> read_txt(std::ifstream file)
+        std::vector<std::string> readTxt(std::ifstream file)
         {
-            std::vector<std::string> config_items;
+            std::vector<std::string> configItems;
             std::string line;
             char c = '#';
             char s = ' ';
@@ -109,11 +109,11 @@ class ConfigData{
             while(getline(file, line)){
                 if(line[0] != c && line[0] != s)
                 {
-                    config_items.push_back(line);
+                    configItems.push_back(line);
                 }
             }
             
-            return config_items;
+            return configItems;
         }
 
         /**
@@ -122,7 +122,7 @@ class ConfigData{
          * @param configs a vector of strings
          * @return * void
          */
-        void collect_config_data(std::vector<std::string> configs = std::vector<std::string>())
+        void collectConfigData(std::vector<std::string> configs = std::vector<std::string>())
         {
             std::smatch sm;
 
@@ -134,15 +134,15 @@ class ConfigData{
 
                     if(std::regex_search(s.begin(), s.end(), sm, std::regex("(.*)=(.*)")))
                     {
-                        if      (sm[1] == "title")       this->_title = sm[2]; 
-                        else if (sm[1] == "author")      this->_author = sm[2];
-                        else if (sm[1] == "genre")       this->_genre = sm[2];
-                        else if (sm[1] == "description") this->_description = sm[2];
-                        else if (sm[1] == "rating")      this->_rating = sm[2];
-                        else if (sm[1] == "language")    this->_language = sm[2];
-                        else if (sm[1] == "image")       this->_image = sm[2];
-                        else if (sm[1] == "executable")  this->_exe = sm[2];
-                        else if (sm[1] == "repository")  this->_repo = sm[2];
+                        if      (sm[1] == "title")       this->m_title = sm[2]; 
+                        else if (sm[1] == "author")      this->m_author = sm[2];
+                        else if (sm[1] == "genre")       this->m_genre = sm[2];
+                        else if (sm[1] == "description") this->m_description = sm[2];
+                        else if (sm[1] == "rating")      this->m_rating = sm[2];
+                        else if (sm[1] == "language")    this->m_language = sm[2];
+                        else if (sm[1] == "image")       this->m_image = sm[2];
+                        else if (sm[1] == "executable")  this->m_exe = sm[2];
+                        else if (sm[1] == "repository")  this->m_repo = sm[2];
                     }
                 }
             }
@@ -154,7 +154,7 @@ class ConfigData{
          * @param filepath 
          * @return json 
          */
-        json read_json(std::string filepath)
+        json readJson(std::string filepath)
         {
             json config_items = json_from_file(filepath);
             return config_items;
@@ -165,16 +165,16 @@ class ConfigData{
          * 
          * @param json_configs 
          */
-        void collect_json_data(json json_configs = {})
+        void collectJsonData(json json_configs = {})
         {
-            this->_repo     = json_read_string(json_configs, "repo");
-            this->_language = json_read_string(json_configs, "language");
-            this->_image    = json_read_string(json_configs, "image");
-            this->_title    = json_read_string(json_configs, "title");
-            this->_genre    = json_read_string(json_configs, "genre");
-            this->_rating   = json_read_string(json_configs, "rating");
-            this->_author   = json_read_string(json_configs, "author");
-            this->_exe      = json_read_string(json_configs, "exe");
+            this->m_repo     = json_read_string(json_configs, "repo");
+            this->m_language = json_read_string(json_configs, "language");
+            this->m_image    = json_read_string(json_configs, "image");
+            this->m_title    = json_read_string(json_configs, "title");
+            this->m_genre    = json_read_string(json_configs, "genre");
+            this->m_rating   = json_read_string(json_configs, "rating");
+            this->m_author   = json_read_string(json_configs, "author");
+            this->m_exe      = json_read_string(json_configs, "exe");
         }
 
         /**
@@ -184,7 +184,7 @@ class ConfigData{
          * @param dir directory to clone to
          * @return bool
          */
-        bool get_from_git(std::string url, const char* dir)
+        bool getFromGit(std::string url, const char* dir)
         {
             struct stat info;
 #ifdef _WIN32
@@ -213,12 +213,12 @@ class ConfigData{
          * 
          * @param dir directory to change the name of
          */
-        void rename_dir(const char* dir)
+        void renameDir(const char* dir)
         {
             std::string error;
-            int n = _title.length();
+            int n = m_title.length();
             char name[n+1];
-            strcpy(name, _title.c_str());
+            strcpy(name, m_title.c_str());
             try{
                 rename(dir, name);
                 throw(error);
@@ -234,7 +234,7 @@ class ConfigData{
          * 
          * @param dir name of direcotry to delete
          */
-        void delete_dir(std::string dir)
+        void deleteDir(std::string dir)
         {
             std::experimental::filesystem::remove_all(dir);
         }
@@ -243,7 +243,7 @@ class ConfigData{
          * @brief Print the data contained in this object
          * 
          */
-        void print_config_data()
+        void printConfigData()
         {
             std::string i = std::to_string(id());
             write_line("========================");

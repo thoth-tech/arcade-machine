@@ -2,33 +2,19 @@
 #define ARCADE_MACHINE_HELPER_H
 
 #include <experimental/filesystem>
-#include <cstring>
 
 namespace fs = std::experimental::filesystem;
 
-// To test txt configs, change to "config"
-#define CONFIG_DIR "config"
+// Remove definition to use JSON config.
+#define ARCADE_MACHINE_USE_TEXT_CONFIG
 
 /**
  * @brief Helper class
  * This class has been added to house orphan functions 
  * 
  */
-class Helper{
+class Helper {
     public:
-        /**
-         * @brief Convert a string to a char array
-         * 
-         * @param str String to convert to char
-         * @return char* 
-         */
-        char* string_to_char(string str)
-        {
-            int n = str.length();
-            char* name[n+1];
-            strcpy(*name, str.c_str());
-            return *name;
-        }
 
         /**
          * @brief Find the game folder name to store in config class.
@@ -36,7 +22,7 @@ class Helper{
          * @param entryPath 
          * @return * string 
          */
-        string get_folder_name(string entryPath)
+        string getFolderName(string entryPath)
         {
             string dir  = fs::path(entryPath).remove_filename().generic_string();
             std::cout << "Game-Directory Path: " << dir << "\n";
@@ -49,7 +35,7 @@ class Helper{
          * @param dir The games directory
          * @return * vector<string> 
          */
-        vector<string> get_config_files(string dir)
+        vector<string> getConfigFiles(string dir)
         {
             vector<string> files;
 
@@ -70,33 +56,30 @@ class Helper{
          * 
          * @return * vector<ConfigData> 
          */
-        vector<ConfigData> config_data_list()
+        vector<ConfigData> ConfigDataList()
         {   
-            vector<string> files = get_config_files("./games/games");
+            vector<string> files = getConfigFiles("./games/games");
 
             vector<ConfigData> configs;
 
             for (int i = 0; i < files.size(); i++)
             {
-                if (strcmp(CONFIG_DIR, "config") == 0)
-                {
+                #ifdef ARCADE_MACHINE_USE_TEXT_CONFIG 
                     ConfigData config(files[i]);
-                    string dir = get_folder_name(files[i]);
-                    config.set_folder(dir);
-                    config.set_id(i);
-                    config.print_config_data();
+                    string dir = getFolderName(files[i]);
+                    config.setFolder(dir);
+                    config.setId(i);
+                    config.printConfigData();
                     configs.push_back(config);
-                }
-                else if (strcmp(CONFIG_DIR, "json") == 0)
-                {
+                #else
                     ConfigData config;
                     string filename = fs::path(files[i]).string();
                     write_line(filename);
-                    config.collect_json_data(config.read_json(filename));
-                    config.set_id(i);
-                    config.print_config_data();
+                    config.collectJsonData(config.readJson(filename));
+                    config.setId(i);
+                    config.printConfigData();
                     configs.push_back(config);
-                }
+                #endif
             }
 
             return configs;
@@ -107,12 +90,12 @@ class Helper{
          * 
          * @param grid 
          */
-        void ResetScreen(Grid grid)
+        void resetScreen(Grid grid)
         {
             process_events();
             clear_screen(COLOR_DARK_SLATE_GRAY);
-            grid.DrawGrid();
-            grid.ClearGrid();
+            grid.drawGrid();
+            grid.clearGrid();
             refresh_screen();
             delay(1000);
         }
@@ -121,7 +104,7 @@ class Helper{
          * @brief To test the grid layout 
          * 
          */
-        void GridLayoutExample()
+        void gridLayoutExample()
         {
             bitmap testBitmap = load_bitmap("test", "appContainer.png");
             open_window("Grid Layout Example", 600, 800);
@@ -133,24 +116,24 @@ class Helper{
             Grid grid(rows, cols, true);
             //Grid grid(rows,colsArray, true);
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             int span = cols;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell(testBitmap, i, 0, span);
+                grid.updateCell(testBitmap, i, 0, span);
                 --span;
             }
-            ResetScreen(grid);
+            resetScreen(grid);
 
             span = 1;
             for (size_t i = 0; i < rows; i++)
             {
-                grid.UpdateCell(testBitmap, i, 0, span);
+                grid.updateCell(testBitmap, i, 0, span);
                 ++span;
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             bool alternate = true;
             for (size_t i = 0; i < rows; i++)
@@ -158,12 +141,12 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(testBitmap, i, j, 1);
+                        grid.updateCell(testBitmap, i, j, 1);
                     alternate = !alternate;
                 }
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             alternate = false;
             for (size_t i = 0; i < rows; i++)
@@ -171,12 +154,12 @@ class Helper{
                 for (size_t j = 0; j < cols; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(testBitmap, i, j, 1);
+                        grid.updateCell(testBitmap, i, j, 1);
                 }
                 alternate = !alternate;
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
             alternate = false;
             for (size_t i = 0; i < cols; i++)
@@ -184,20 +167,20 @@ class Helper{
                 for (size_t j = 0; j < rows; j++)
                 {
                     if (alternate)
-                        grid.UpdateCell(testBitmap, i, j, 1);
+                        grid.updateCell(testBitmap, i, j, 1);
                     alternate = !alternate;
                 }
                 alternate = !alternate;
             }
 
-            ResetScreen(grid);
+            resetScreen(grid);
 
-            grid.UpdateAllCells(testBitmap);
-            ResetScreen(grid);
+            grid.updateAllCells(testBitmap);
+            resetScreen(grid);
 
             while (!quit_requested())
             {
-                grid.DrawGrid();
+                grid.drawGrid();
                 process_events();
                 clear_screen();
                 refresh_screen(60);

@@ -1,7 +1,5 @@
 #include "include/ArcadeMachine.h"
 
-using namespace std;
-
 int main()
 {
     // Load all resources
@@ -12,7 +10,7 @@ int main()
     ArcadeMachine Arcade;
 
     // Open window and toggle border off.
-    open_window("arcade-machine", WIDTH, HEIGHT);
+    open_window("arcade-machine", ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
     window_toggle_border("arcade-machine");
 
     // Do you want to play the intros and fetch new games? 
@@ -22,16 +20,18 @@ int main()
     // Play Thoth Tech intro
     if (play_intro) 
     {
-        Arcade.intro_animation(Arcade.get_intro_thoth_tech(), "intro_thoth");
-        Arcade.intro_animation(Arcade.get_intro_arcade_team(), "intro_coin", "intro_start");
+        Arcade.playThothTechIntro();
+        Arcade.playArcadeTeamIntro();
     }
     // Play SplashKit intro
-    if (load_games) Arcade.intro_splashkit();
+    if (load_games) Arcade.playSplashKitIntro();
     
     // Prepare the main menu
-    Arcade.prepare_main_menu();
+    Arcade.prepareMainMenu();
     // Draw the main menu
-    Arcade.main_menu();
+    Arcade.mainMenu();
+
+    free_resource_bundle("bundle");
 
     return 0;
 }
