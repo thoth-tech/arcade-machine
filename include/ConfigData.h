@@ -8,7 +8,7 @@
 #include <fstream>
 #include <cstring>
 #include <experimental/filesystem>
-#include "Process.h"
+#include "Git.h"
 
 /**
  * @brief Parses the configuration data from config.txt files to a data object
@@ -195,14 +195,10 @@ class ConfigData{
             else
                 system(("git -C " + dir + " pull " + url).c_str());
 #else
-            std::vector<std::string> args;
             if (stat(dir, &info) != 0)
-                args = {"clone", url, dir};
+                Arcade::Git::clone(url, dir);
             else
-                args = {"-C", dir, "pull", url};
-
-            auto p = Arcade::Process("git", args);
-            p.execute_sync();
+                Arcade::Git::pull(url, dir);
 #endif
 
             return true;
