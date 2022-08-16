@@ -292,6 +292,9 @@ public:
         {
             this->_game_started = false;
             back_to_games_menu();
+            _gameData.setRating(_rating.getRating());
+            _gameData.writeData(this->_db);
+            this->button->stats = _gameData.getStats(this->_db, _gameData.getGameName());
         }
         
         this->_grid.DrawGrid();
@@ -537,10 +540,7 @@ public:
                 int highScore = 0;
 
                 _gameData.setEndTime(time(0));
-                _gameData.setRating(_rating.getRating());
                 _gameData.setHighScore(highScore);
-                _gameData.writeData(this->_db);
-                this->button->stats = _gameData.getStats(this->_db, _gameData.getGameName());
             }
         }
     }
