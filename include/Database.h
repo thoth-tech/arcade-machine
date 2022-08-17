@@ -11,8 +11,8 @@
 
 class Database {
     private:
-        string m_databaseName;
-        string m_databaseFileName;
+        std::string m_databaseName;
+        std::string m_databaseFileName;
         std::vector<Table*> m_tables;
 
     public:
@@ -24,7 +24,7 @@ class Database {
             free_database(db);
         };
 
-        Database(string databaseName, string databaseFileName){
+        Database(std::string databaseName, std::string databaseFileName){
             m_databaseName = databaseName;
             m_databaseFileName = databaseFileName;
             database db = open_database(m_databaseName, m_databaseFileName);
@@ -40,11 +40,11 @@ class Database {
         }
 
         // Getters
-        string getDatabaseName(){
+        std::string getDatabaseName(){
             return m_databaseName;
         };
 
-        string getDatabaseFileName(){
+        std::string getDatabaseFileName(){
             return m_databaseFileName;
         };
 
@@ -63,8 +63,8 @@ class Database {
             m_tables.push_back(table);
 
             // Create the query
-            string createTable = "CREATE TABLE IF NOT EXISTS " + table->getTableName() + " (";
-            std::map<string, string> columnNames = table->getColumnNames();
+            std::string createTable = "CREATE TABLE IF NOT EXISTS " + table->getTableName() + " (";
+            std::map<std::string, std::string> columnNames = table->getColumnNames();
             for (auto const& pair : columnNames) {
                 createTable += pair.first + " " + pair.second + ", ";
             }
@@ -90,7 +90,7 @@ class Database {
         };
 
         // Inserts a new row into a table
-        bool insertData(string tableName, std::map<string, string> data){
+        bool insertData(std::string tableName, std::map<std::string, std::string> data){
             // Check if table exists
             bool exists = std::get<0>(hasTable(tableName));
 
@@ -98,7 +98,7 @@ class Database {
                 database db = open_database(m_databaseName, m_databaseFileName);
 
                 // Create the query
-                string insertData = "INSERT INTO " + tableName + " (";
+                std::string insertData = "INSERT INTO " + tableName + " (";
                 for (auto const& pair : data) {
                     insertData += pair.first + ", ";
                 }
@@ -134,7 +134,7 @@ class Database {
 
 
         // Returns a vector of vectors of strings containing the data in the table
-        std::vector<std::vector<string>> getAllData(string tableName){
+        std::vector<std::vector<std::string>> getAllData(std::string tableName){
             // Check if table exists
             std::tuple<bool, Table*> tableExists = hasTable(tableName);
 
@@ -153,7 +153,7 @@ class Database {
                 query_result res = run_sql(db, query);
 
                 // Add the column names to the data vector first
-                vector<string> columnNames;
+                std::vector<std::string> columnNames;
                 for (auto const& pair: table->getColumnNames()) {
                     columnNames.push_back(pair.first);
                 }
@@ -162,7 +162,7 @@ class Database {
                 // Add the data to the data vector
                 while (has_row(res)) {
                     // Get each row as a vector of strings
-                    vector<string> row = get_current_row_strings(res);
+                    std::vector<std::string> row = get_current_row_strings(res);
 
                     data.push_back(row);
 
@@ -184,12 +184,12 @@ class Database {
 
             } else { // Return an empty vector if the table does not exist
                 std::cout << "Table does not exist" << std::endl;
-                return std::vector<std::vector<string>>() ;
+                return std::vector<std::vector<std::string>>() ;
             }
         };
 
         // Prints the all data in the table to the console
-        bool printAllData(string tableName){
+        bool printAllData(std::string tableName){
             // Check if table exists
             std::tuple<bool, Table*> tableExists = hasTable(tableName);
 
@@ -219,7 +219,7 @@ class Database {
 
                 // Print the data
                 while (has_row(res)) {
-                    vector<string> row = get_current_row_strings(res);
+                    std::vector<std::string> row = get_current_row_strings(res);
 
                     for (int i = 0; i < row.size(); i++) {
                         std::cout << row[i] << " | ";
@@ -250,7 +250,7 @@ class Database {
         };
 
         // Returns a bool if a row was deleted
-        bool deleteData(string tableName, std::map<string, string> data){
+        bool deleteData(std::string tableName, std::map<std::string, std::string> data){
             // Check if table exists
             bool exists = std::get<0>(hasTable(tableName));
 
@@ -258,7 +258,7 @@ class Database {
                 database db = open_database(m_databaseName, m_databaseFileName);
 
                 // Create the query
-                string query = "DELETE FROM " + tableName + " WHERE ";
+                std::string query = "DELETE FROM " + tableName + " WHERE ";
                 for (auto const& pair : data) {
                     query += pair.first + " = '" + pair.second + "' AND ";
                 }
@@ -293,7 +293,7 @@ class Database {
         // The newData parameter is a map of column names to new values
         // The conditionData parameter is a map of column names to values to be used in the WHERE clause
 
-        bool updateData(string tableName, std::map<string, string> newData, std::map<string, string> conditionData){
+        bool updateData(std::string tableName, std::map<std::string, std::string> newData, std::map<std::string, std::string> conditionData){
             // Check if table exists
             bool exists = std::get<0>(hasTable(tableName));
 
@@ -301,7 +301,7 @@ class Database {
                 database db = open_database(m_databaseName, m_databaseFileName);
 
                 // Create the query
-                string query = "UPDATE " + tableName + " SET ";
+                std::string query = "UPDATE " + tableName + " SET ";
                 for (auto const& pair : newData) {
                     query += pair.first + " = '" + pair.second + "', ";
                 }
@@ -335,13 +335,13 @@ class Database {
         };
 
         // Returns a bool if a table was dropped
-        bool dropTable(string tableName){
+        bool dropTable(std::string tableName){
             // Check if table exists
             bool exists = std::get<0>(hasTable(tableName));
             if (exists) {
                 database db = open_database(m_databaseName, m_databaseFileName);
                 // Create the query
-                string query = "DROP TABLE " + tableName;
+                std::string query = "DROP TABLE " + tableName;
                 // Execute the query
                 query_result res = run_sql(db, query);
 
@@ -365,7 +365,7 @@ class Database {
 
         // Returns a vector of vectors of strings containing the data matching a condition
         // The conditionData parameter is a map of column names to values to be used in the WHERE clause
-        std::vector<std::vector<string>> getData(string tableName, std::map<string, string> conditionData){
+        std::vector<std::vector<std::string>> getData(std::string tableName, std::map<std::string, std::string> conditionData){
             // Check if table exists
             std::tuple<bool, Table*> tableExists = hasTable(tableName);
 
@@ -374,11 +374,11 @@ class Database {
             Table *table = std::get<1>(tableExists);
 
             if (exists) {
-                std::vector<std::vector<string>> data;
+                std::vector<std::vector<std::string>> data;
                 database db = open_database(m_databaseName, m_databaseFileName);
 
                 // Create the query
-                string query = "SELECT * FROM " + tableName + " WHERE ";
+                std::string query = "SELECT * FROM " + tableName + " WHERE ";
                 for (auto const& pair : conditionData) {
                     query += pair.first + " = '" + pair.second + "' AND ";
                 }
@@ -388,7 +388,7 @@ class Database {
                 query_result res = run_sql(db, query);
 
                 // Add the column names to the data vector first
-                vector<string> columnNames;
+                std::vector<std::string> columnNames;
                 for (auto const& pair: table->getColumnNames()) {
                     columnNames.push_back(pair.first);
                 }
@@ -397,7 +397,7 @@ class Database {
                 // Add the data to the data vector
                 while (has_row(res)) {
                     // Get each row as a vector of strings
-                    vector<string> row = get_current_row_strings(res);
+                    std::vector<std::string> row = get_current_row_strings(res);
 
                     data.push_back(row);
 
@@ -423,7 +423,7 @@ class Database {
         };
 
         // Returns the current row as a vector of strings
-        std::vector<string> get_current_row_strings(query_result res) {
+        std::vector<std::string> get_current_row_strings(query_result res) {
             vector<string> row;
             for (int i = 0; i < query_column_count(res); i++) {
                 row.push_back(query_column_for_string(res, i));
@@ -432,7 +432,7 @@ class Database {
         }
 
         // Returns a tuple of a bool and a table if the table exists
-        std::tuple<bool, Table*> hasTable(string tableName){
+        std::tuple<bool, Table*> hasTable(std::string tableName){
 
             // Check if table exists
             std::tuple<bool, Table*> exists;
@@ -451,7 +451,7 @@ class Database {
 
         //Query a database table with a specialised query.
         //Returns query_result object.
-        query_result queryDatabase(database &db, string query)
+        query_result queryDatabase(database &db, std::string query)
         {
             db = open_database(m_databaseName, m_databaseFileName);
             query_result res = run_sql(db, query);
