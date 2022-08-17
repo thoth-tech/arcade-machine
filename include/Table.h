@@ -22,7 +22,10 @@ class Table {
             m_columnNames = columnNames;
         };
 
-        ~Table();
+        ~Table()
+        {
+            std::cout << "Destructor called on table: \"" << m_tableName << "\"\n";
+        }
 
         // Setters
         void setTableName(string tableName){
