@@ -3,3 +3,4 @@ logs/
 **/*.log
 **/*.exe
 **/*.out*
+resources/databases/arcadeMachine.db
