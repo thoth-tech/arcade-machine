@@ -75,8 +75,8 @@ private:
     /// Games Menu Selector
     Selector m_selectorGamesMenu;
 
-    /// Instance of Grid
-    Grid m_grid;
+    /// Instance of Grid Layout
+    GridLayout m_grid;
 
     /// Mouse pointer
     point_2d m_mouse;

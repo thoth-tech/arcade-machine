@@ -6,7 +6,7 @@
 class Rating
 {
 private:
-    Grid _grid;
+    GridLayout _grid;
     int _rating;
     int _maxRating;
     bool _ratingCollected;
@@ -15,7 +15,7 @@ public:
     Rating()
     {
         _ratingCollected = false;
-        _grid = Grid(3, 7);
+        _grid = GridLayout(3, 7);
         _rating = 1;
         _maxRating = 5;
         _grid.setBackground(bitmap_named("rating_bg"));

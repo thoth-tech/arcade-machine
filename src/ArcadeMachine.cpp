@@ -194,7 +194,7 @@ void ArcadeMachine::prepareMainMenu()
     // Get the data from the config files.
     this->m_configs = this->m_helper.ConfigDataList();
     // Initialise grid 
-    Grid grid(ROWS, COLS);
+    GridLayout grid(ROWS, COLS);
     this->m_grid = grid;
     // Create menu buttons
     Button *play = new MenuButton(Button::PLAY, 1.5);

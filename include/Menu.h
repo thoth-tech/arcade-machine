@@ -7,7 +7,7 @@
 #include "Database.h"
 #include "Rating.h"
 #include "Table.h"
-
+#include "GridLayout.h"
 #include "Button.h"
 #include "MenuButton.h"
 
@@ -60,7 +60,7 @@ private:
     // Vector to store game images
     std::vector<std::string> m_gameImages;
     // Menu grid
-    Grid m_grid;
+    GridLayout m_grid;
     Tip *m_tip;
     ButtonNode *m_button = nullptr;
     bool m_overlayActive = false;
@@ -146,7 +146,7 @@ public:
     void createGrid()
     {
         // Instantiate grid object
-        Grid grid(8, 14);
+        GridLayout grid(8, 14);
         this->m_grid = grid;
         // Update the background
         this->m_grid.setBackground(bitmap_named(this->m_background));
