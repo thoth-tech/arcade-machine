@@ -8,7 +8,7 @@
 #include "Database.h"
 #include <tuple>
 
-string TABLE_NAME = "gameData";
+#define TABLE_NAME "gameData"
 
 class GameData
 {
