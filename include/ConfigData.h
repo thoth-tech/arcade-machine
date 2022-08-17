@@ -12,7 +12,8 @@
  * @brief Parses the configuration data from config.txt files to a data object
  * 
  */
-class ConfigData{
+class ConfigData
+{
     private:
         /// This configs ID
         int m_id;

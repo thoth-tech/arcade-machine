@@ -10,7 +10,8 @@
 
 string TABLE_NAME = "gameData";
 
-class GameData {
+class GameData
+{
     private:
         string m_gameName;
         int m_startTime;

@@ -10,7 +10,8 @@
  * 
  * Derived from abstract Button class
  */
-class GameScreenButton : public Button {
+class GameScreenButton : public Button
+{
     public:
         // First constructor
         GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
