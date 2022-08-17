@@ -46,20 +46,20 @@ public:
     std::string m_imagePath;
 
     /// Getters:
-    auto id()       const -> const int&      { return m_id;       }
-    auto pic()      const -> const bitmap&   { return m_pic;      }
-    auto btn()      const -> const sprite&   { return m_btn;      }
-    auto location() const -> const point_2d& { return m_btnLocation; }
-    auto x()        const -> const int&      { return m_x;        }
-    auto y()        const -> const int&      { return m_y;        }
-    auto centreX() const -> const int&      { return m_centreX; }
-    auto centreY() const -> const int&      { return m_centreY; }
-    auto color()    const -> const std::string&   { return m_btnColor;    }
+    auto id()       const -> const int&         { return m_id;          }
+    auto pic()      const -> const bitmap&      { return m_pic;         }
+    auto btn()      const -> const sprite&      { return m_btn;         }
+    auto location() const -> const point_2d&    { return m_btnLocation; }
+    auto x()        const -> const int&         { return m_x;           }
+    auto y()        const -> const int&         { return m_y;           }
+    auto centreX()  const -> const int&         { return m_centreX;     }
+    auto centreY()  const -> const int&         { return m_centreY;     }
+    auto color()    const -> const std::string& { return m_btnColor;    }
 
     /// Setters
-    void setId(int id)     { this->m_id = id; }
-    void setX(const int &x){ this->m_x  = x;  }
-    void setY(const int &y){ this->m_y  = y;  }
+    void setId(int id)      { this->m_id = id; }
+    void setX(const int &x) { this->m_x  = x;  }
+    void setY(const int &y) { this->m_y  = y;  }
 
     /**
     * @brief Enumeration of button types
