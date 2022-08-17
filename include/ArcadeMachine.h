@@ -99,7 +99,7 @@ public:
     ArcadeMachine();
 
     // Destructor
-    ~ArcadeMachine() {}
+    ~ArcadeMachine();
 
     // Getters
     auto get_configs() const -> const vector<ConfigData>& { return this->m_configs; }

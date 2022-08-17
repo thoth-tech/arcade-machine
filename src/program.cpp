@@ -23,6 +23,7 @@ int main()
         Arcade.playThothTechIntro();
         Arcade.playArcadeTeamIntro();
     }
+
     // Play SplashKit intro
     if (load_games) Arcade.playSplashKitIntro();
     

@@ -45,12 +45,23 @@ ArcadeMachine::ArcadeMachine()
     this->m_introSplashkit = introSplashkit;
 }
 
+/// Destructor
+ArcadeMachine::~ArcadeMachine()
+{
+    std::cout << "Destructor called on ArcadeMachine\n";
+    std::cout << "ArcadeMachine: clearing memory...\n";
+    for (const auto& button : m_menuBtns) delete button;
+    m_menuBtns.clear();
+    for (const auto& button : m_gameBtns) delete button;
+    m_gameBtns.clear();
+}
+
 /**
     Starts the Main Menu
 */
 void ArcadeMachine::mainMenu()
 {
-    while (! quit_requested())
+    while (!quit_requested())
     {
         process_events();
         clear_screen();
@@ -193,9 +204,11 @@ void ArcadeMachine::prepareMainMenu()
 {
     // Get the data from the config files.
     this->m_configs = this->m_helper.ConfigDataList();
+    
     // Initialise grid 
     GridLayout grid(ROWS, COLS);
     this->m_grid = grid;
+
     // Create menu buttons
     Button *play = new MenuButton(Button::PLAY, 1.5);
     Button *opts = new MenuButton(Button::OPTS, 1.5);
@@ -208,6 +221,7 @@ void ArcadeMachine::prepareMainMenu()
 
     // Fetch menu background
     bitmap thoth = bitmap_named("thoth");
+    
     // Update grid cells with assets
     this->m_grid.setBackground(thoth);
 

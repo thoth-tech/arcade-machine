@@ -81,7 +81,7 @@ public:
     Button(Color c, std::string image, float scale = 1);
 
     // Destructor
-    ~Button() {}
+    virtual ~Button() {}
 
     // Virtual fucntions
     virtual void btnImage(std::string image) = 0;
