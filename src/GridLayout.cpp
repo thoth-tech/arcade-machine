@@ -1,7 +1,7 @@
 #include "GridLayout.h"
 
 #include <stdexcept> // used for std::out_of_range
-
+#include <iostream>
 
 /**
 * Construct a new grid object with a fixed number of columns/rows
@@ -14,8 +14,10 @@ GridLayout::GridLayout(int rows, int cols, bool scaleToFit)
     _scaleToFit = scaleToFit;
     _rows = rows;
     _cols = cols;
+
     // Calculate number of cells
     _cells = _rows * _cols;
+
     // Initialise the grid
     _grid = new Cell[_cells];
 }
@@ -42,6 +44,14 @@ GridLayout::GridLayout(int rows, int colsArray[], bool scaleToFit)
     }
     // Initialise the grid
     _grid = new Cell[_cells];
+}
+
+void GridLayout::destroy()
+{
+    std::cout << "Manually called destroy on GridLayout\n";
+    std::cout << "GridLayout: clearing memory...\n";
+    delete[] _grid;
+    delete[] m_colsArray;
 }
 
 /**

@@ -12,7 +12,7 @@ private:
     // Stores the bitmap used for the background
     bitmap m_background = nullptr;
     // Stores the number of columns per row
-    int *m_colsArray;
+    int* m_colsArray;
     // Different number of columns per row?
     bool _useColsArray = false;
     // Columns, used if number of columns is fixed
@@ -20,7 +20,7 @@ private:
     // Rows
     int _rows;
     // Stores information for each cell (bitmap, span)
-    Cell *_grid;
+    Cell* _grid;
     // Number of cells
     int _cells = 0;
     // Scale the bitmap to fill the cell
@@ -32,6 +32,8 @@ public:
     GridLayout() {}
     GridLayout(int rows, int cols, bool scaleToFit = false);
     GridLayout(int rows, int colsArray[], bool scaleToFit = false);
+
+    void destroy(); // clears memory
 
     void setBackground(bitmap bmp);
 

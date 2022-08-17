@@ -1,5 +1,8 @@
 #include "ArcadeMachine.h"
 
+#include <iostream>
+#include <cstdlib>
+
 // Helper function to load developer names into m_arcadeTeamDeveloperNames
 // Called in the constructor
 void ArcadeMachine::loadDeveloperNames(const char* filePath)
@@ -45,7 +48,6 @@ ArcadeMachine::ArcadeMachine()
     this->m_introSplashkit = introSplashkit;
 }
 
-/// Destructor
 ArcadeMachine::~ArcadeMachine()
 {
     std::cout << "Destructor called on ArcadeMachine\n";
@@ -54,6 +56,7 @@ ArcadeMachine::~ArcadeMachine()
     m_menuBtns.clear();
     for (const auto& button : m_gameBtns) delete button;
     m_gameBtns.clear();
+    m_grid.destroy();
 }
 
 /**

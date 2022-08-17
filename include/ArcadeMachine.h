@@ -29,7 +29,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <iostream>
 
 // Define number of rows and columns in grid
 #define ROWS 7

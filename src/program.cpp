@@ -14,7 +14,7 @@ int main()
     window_toggle_border("arcade-machine");
 
     // Do you want to play the intros and fetch new games? 
-    bool play_intro = true;
+    bool play_intro = false;
     bool load_games = true;
 
     // Play Thoth Tech intro
@@ -31,6 +31,9 @@ int main()
     Arcade.prepareMainMenu();
     // Draw the main menu
     Arcade.mainMenu();
+
+    // ISSUE - we never get here because the program exits forcibly from ArcadeMachine, rather than exiting from main and returning 0.
+    std::cout << "we never reach this point to output?\n";
 
     free_resource_bundle("bundle");
 
