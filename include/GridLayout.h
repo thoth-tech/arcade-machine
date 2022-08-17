@@ -6,8 +6,6 @@
 #include "Button.h"
 #include "Cell.h"
 
-void write(std::string text);
-
 class GridLayout
 {
 private:
