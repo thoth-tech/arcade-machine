@@ -31,7 +31,13 @@ class Database {
             free_database(db);
         };
 
-        ~Database();
+        ~Database()
+        {
+            std::cout << "Destructor called on database: \"" << m_databaseName << "\"\n";
+            std::cout << "Database: Clearing table memory...\n";
+            for (auto& table : m_tables) delete table;
+            m_tables.clear();
+        }
 
         // Getters
         string getDatabaseName(){
