@@ -1,6 +1,5 @@
-#ifndef Included_Database_h
-
-#define Included_Database_h
+#ifndef ARCADE_MACHINE_DATABASE_H
+#define ARCADE_MACHINE_DATABASE_H
 
 #include <iostream>
 #include <string>

@@ -1,6 +1,5 @@
-#ifndef Included_Table_h
-
-#define Included_Table_h
+#ifndef ARCADE_MACHINE_TABLE_H
+#define ARCADE_MACHINE_TABLE_H
 
 #include <iostream>
 #include <string>
