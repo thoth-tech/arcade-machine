@@ -3,6 +3,9 @@
 
 #include "splashkit.h"
 
+#include <chrono>
+#include <iostream>
+
 // Font size
 #define FONT_SIZE 20
 // Width of the border
@@ -164,7 +167,11 @@ public:
 
         calculatePosition();
     };
-    ~Tip();
+
+    ~Tip()
+    {
+        std::cout << "Destructor called on Tip\n";
+    }
     
     /**
      * @brief draw the tip
