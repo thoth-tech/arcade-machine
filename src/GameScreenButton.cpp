@@ -1,4 +1,4 @@
-#include "GameScreenButton.h"
+#include "includes/GameScreenButton.h"
 
 // First constructor
 GameScreenButton::GameScreenButton(Color c, float scale)

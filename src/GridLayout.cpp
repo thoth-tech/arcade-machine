@@ -1,4 +1,4 @@
-#include "GridLayout.h"
+#include "includes/GridLayout.h"
 
 #include <stdexcept> // used for std::out_of_range
 #include <iostream>

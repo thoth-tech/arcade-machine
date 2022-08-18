@@ -1,4 +1,4 @@
-#include "ArcadeMachine.h"
+#include "includes/ArcadeMachine.h"
 
 #include <iostream>
 #include <cstdlib>
