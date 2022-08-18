@@ -13,6 +13,8 @@ make
 ./ArcadeMachine
 ```
 
+Subsequent builds (as you change code) can be completed by using just `make`. If you need to run a clean build again, you can use `make clean` first proceeded by `make`.
+
 ## Building arcade machine (manually)
 + Compile the application with the command ```skm clang++ src/* -Iinclude -lstdc++fs -o test```  
 + Run the application ```./test```
