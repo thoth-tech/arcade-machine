@@ -1,4 +1,4 @@
-#include "includes/MenuButton.h"
+#include "MenuButton.h"
 
 // First constructor
 MenuButton::MenuButton(Color c, float scale)

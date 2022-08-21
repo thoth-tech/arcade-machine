@@ -1,4 +1,4 @@
-#include "includes/Selector.h"
+#include "Selector.h"
 
 Selector::Selector(const std::string &cursor)
 {

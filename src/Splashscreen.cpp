@@ -1,4 +1,4 @@
-#include "includes/Splashscreen.h"
+#include "Splashscreen.h"
 
 void Splashscreen::drawTitlePage()
 { 
