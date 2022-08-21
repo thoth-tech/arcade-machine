@@ -3,6 +3,7 @@
 
 #include "ConfigData.h"
 #include "Button.h"
+#include "GameData.h"
 
 class ButtonNode
 {
@@ -13,6 +14,7 @@ private:
 public:
     Button *button;
     ConfigData config;
+    GameData stats;
 
     /**
      * @brief construct a new Button Node object

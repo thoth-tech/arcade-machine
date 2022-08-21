@@ -1,6 +1,8 @@
 #ifndef ARCADE_MACHINE_HELPER_H
 #define ARCADE_MACHINE_HELPER_H
 
+#include "GridLayout.h"
+
 #include <experimental/filesystem>
 
 namespace fs = std::experimental::filesystem;
@@ -90,7 +92,7 @@ class Helper {
          * 
          * @param grid 
          */
-        void resetScreen(Grid grid)
+        void resetScreen(GridLayout grid)
         {
             process_events();
             clear_screen(COLOR_DARK_SLATE_GRAY);
@@ -113,7 +115,7 @@ class Helper {
             int rows = 5;
             int cols = 5;
             //#rows, #cols, ScaletoFit
-            Grid grid(rows, cols, true);
+            GridLayout grid(rows, cols, true);
             //Grid grid(rows,colsArray, true);
 
             resetScreen(grid);
