@@ -14,7 +14,7 @@ int main()
     window_toggle_border("arcade-machine");
 
     // Do you want to play the intros and fetch new games? 
-    bool play_intro = false;
+    bool play_intro = true;
     bool load_games = true;
 
     // Play Thoth Tech intro
