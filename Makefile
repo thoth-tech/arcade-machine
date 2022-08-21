@@ -1,4 +1,5 @@
-CXX = skm clang++ -Iinclude
+INCDIRS = -Iinclude
+CXX = skm clang++ $(INCDIRS)
 src = $(wildcard src/*.cpp)
 obj = $(src:.cpp=.o)
 
