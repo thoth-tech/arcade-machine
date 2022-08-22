@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+#include <cmath>
+
 Menu::Menu()
 {
     this->m_db = new Database();
@@ -478,10 +480,10 @@ void Menu::backToGamesMenu()
 void Menu::fade(double alphaStart, double alphaEnd, double alphaStep)
 {
     if (alphaStart > alphaEnd)
-        alphaStep = -abs(alphaStep);
+        alphaStep = -std::abs(alphaStep);
     // Calculate the number of steps required to complete the fade.
-    double difference = abs(alphaEnd - alphaStart);
-    int steps = difference / abs(alphaStep);
+    double difference = std::abs(alphaEnd - alphaStart);
+    int steps = difference / std::abs(alphaStep);
 
     for (int i = 0; i < steps; i++)
     {
