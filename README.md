@@ -1,8 +1,13 @@
 # arcade-machine
 An application to showcase and execute Splashkit games  
 
-## Install
+## Pre-requisites (all operating systems)
+
 + Install the [SplashKit](https://splashkit.io) SDK using the [guide](https://splashkit.io/articles/installation/)
+
+## Pre-requisites (mingw32 / Windows)
+
++ Install `make` using `pacman -S make`
 
 ## Building arcade machine (using the Makefile)
 Compiling Arcade Machine using the Makefile allows incremental building of changed objects.
