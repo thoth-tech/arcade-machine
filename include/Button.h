@@ -10,280 +10,86 @@
  * This abstract class is the base class for all derived classes
  * Contains three overloaded contructors and three virtual methods 
  */
-class Button{
-    public:
-        /// This buttons ID
-        int _id;
-        /// This buttons bitmap
-        bitmap _pic;
-        /// This buttons sprite
-        sprite _btn;
-        /// This buttons position in the window as point_2d in pixels (x,y)
-        point_2d _location;
-        /// This buttons position in the window in pixels
-        int _x; int _y;
-        /// This buttons centre point offset width in pixels
-        int _centre_x;
-        /// This buttons centre point offset height in pixels
-        int _centre_y;
-        /// This buttons color 
-        std::string _color;
-        /// This buttons hightlight bitmap
-        bitmap _hghlt;
-        /// This buttons hightlight layer
-        std::string _highlight;
-        /// This buttons image path
-        std::string _image_path;
-    
-        /// Getters:
-        auto id()       const -> const int&      { return _id;       }
-        auto pic()      const -> const bitmap&   { return _pic;      }
-        auto btn()      const -> const sprite&   { return _btn;      }
-        auto location() const -> const point_2d& { return _location; }
-        auto x()        const -> const int&      { return _x;        }
-        auto y()        const -> const int&      { return _y;        }
-        auto centre_x() const -> const int&      { return _centre_x; }
-        auto centre_y() const -> const int&      { return _centre_y; }
-        auto color()    const -> const std::string&   { return _color;    }
+class Button
+{
+public:
+    /// This buttons ID
+    int m_id;
 
-        /// Setters
-        void set_id(int id)     { this->_id = id; }
-        void set_x(const int &x){ this->_x  = x;  }
-        void set_y(const int &y){ this->_y  = y;  }
+    /// This buttons bitmap
+    bitmap m_pic;
 
-        /**
-         * @brief Enumeration of button types
-         * 
-         */
-        enum Color
-        {
-            PLAY,
-            EXIT,
-            OPTS, 
-            GAME,
-            HOME
-        };
+    /// This buttons sprite
+    sprite m_btn;
 
-        // Default Constructor
-        Button(){}
+    /// This buttons position in the window as point_2d in pixels (x,y)
+    point_2d m_btnLocation;
 
-        /**
-         * @brief First Overloaded Constructor
-         * 
-         * @param c button type / color
-         * @param scale size multiplier
-         * 
-         */
-        Button(Color c, float scale = 1)
-        {
-            // button color
-            this->_color = btn_color(c);
-            // load button color image
-            //this->_pic = load_bitmap(to_string(c), this->_color);
-            // create sprite from image
-            this->_btn = create_sprite(this->_color);
-            // add hightlight layer to sprite
-            sprite_add_layer(this->_btn, this->_hghlt, this->_highlight);
-            // scale the sprite
-            sprite_set_scale(this->_btn, scale);
-            // get the centre points of the sprite 
-            this->_centre_x = sprite_width(this->_btn) /2;
-            this->_centre_y = sprite_height(this->_btn)/2;
-        }
-        
-        /**
-         * @brief Second Overloaded Constructor
-         * Calculates the position in the window
-         * 
-         * @param c button type / color
-         * @param x intended x-axis position in window
-         * @param y intended y-axis position in window
-         * @param x_cell size of cell x-dimension 
-         * @param y_cell size of cell y-dimension
-         * @param scale size multiplier
-         */
-        Button(Color c, float x, float y, int x_cell, int y_cell, float scale = 1)
-        { 
-            // button color
-            this->_color = btn_color(c);
-            // create sprite from image
-            this->_btn = create_sprite(this->_color);
-            // add hightlight layer to sprite
-            sprite_add_layer(this->_btn, this->_hghlt, this->_highlight);
-            // get the centre points of the sprite 
-            this->_centre_x = sprite_width(this->_btn) /2;
-            this->_centre_y = sprite_height(this->_btn)/2;
-            // store the intended location 
-            this->_x = x * x_cell; _y = y * y_cell;
-            // set button sprite centre point to intended location
-            sprite_set_x(this->_btn, this->_x - this->_centre_x);
-            sprite_set_y(this->_btn, this->_y - this->_centre_y);
-            // store the window centre point of button as location
-            this->_location = center_point(this->_btn);
-            // scale the sprite
-            sprite_set_scale(this->_btn, scale);
-        }
+    /// This buttons position in the window in pixels
+    int m_x; 
+    int m_y;
 
-        /**
-         * @brief Third Overloaded Constructor
-         * Calculates the position in the window
-         * 
-         * @param c button type / color
-         * @param image bitmap name
-         * @param scale size multiplier
-         */
-        Button(Color c, std::string image, float scale = 1)
-        {
-            // button color
-            this->_color = btn_color(c);
-            // create bitmap from string
-            //this->_pic = load_bitmap(image, image);
-            // create sprite from image
-            this->_btn = create_sprite(image);
-            // add hightlight layer to sprite
-            sprite_add_layer(this->_btn, this->_hghlt, this->_highlight);
-            // scale the sprite
-            sprite_set_scale(this->_btn, scale);
-            // get the centre points of the sprite 
-            this->_centre_x = sprite_width(this->_btn) /2;
-            this->_centre_y = sprite_height(this->_btn)/2;
-        }
+    /// This buttons centre point offset width in pixels
+    int m_centreX;
 
-        // Destructor
-        ~Button(){}
+    /// This buttons centre point offset height in pixels
+    int m_centreY;
+    std::string m_btnColor;
 
-        // Virtual fucntions
-        virtual void btn_image(std::string image) = 0;
-        virtual void draw_button() = 0;
-        virtual std::string action(std::string keyinput = "") = 0;
+    /// This buttons hightlight bitmap
+    bitmap m_btnHighlightPic;
 
-        /**
-         * @brief Gets the filepath to the requested color (image) 
-         * 
-         * @param c 
-         * @return * string 
-         */
-        std::string btn_color(Color c)
-        {
-            std::string filepath = "buttons/";
-            switch(c)
-            {
-                case PLAY:
-                    _hghlt = bitmap_named("play_hghlt");
-                    _highlight = "play_highlight";
-                    return "btn_play";
-                    break;
-                case EXIT:
-                    _hghlt = bitmap_named("exit_hghlt");
-                    _highlight = "exit_highlight";
-                    return "btn_exit";
-                    break;
-                case OPTS:
-                    _hghlt = bitmap_named("options_hghlt");
-                    _highlight = "options_highlight";
-                    return "btn_opts";
-                    break;
-                case GAME:
-                    _hghlt = bitmap_named("game_hghlt");
-                    _highlight = "game_highlight";
-                    return "";
-                case HOME:
-                    return filepath + "Gray/home.png";
-                    break;
-                default:
-                    return "btn_play";
-                    break;
-            }
-        }
-};
+    /// This buttons hightlight layer
+    std::string m_btnHighlightText;
 
-/**
- * @brief Buttons created for the main opening Menu Screen
- * 
- * Derived from abstract Button class
- */
-class MenuButton : public Button{
-    public:
-        // First constructor
-        MenuButton(Color c, float scale = 1) : Button(c, scale){}
+    /// This buttons image path
+    std::string m_imagePath;
 
-        /**
-         * @brief The action of this button
-         * Called when the selector receives input for this button
-         * 
-         * @param keyinput 
-         * @return string
-         */
-        std::string action(std::string keyinput = "")
-        {
-            if (this->color() == btn_color(Button::PLAY))
-            {
-                // go to this screen
-                write_line("Play");
-                return "play";
-            }
-            if (this->color() == btn_color(Button::EXIT))
-            {
-                // go to this screen
-                write_line("Exit");
-                return "exit";
-            }
-            if (this->color() == btn_color(Button::OPTS))
-            {
-                // go to this screen
-                write_line("Options");
-                return "options";
-            }
-            return keyinput;
-        }
+    /// Getters:
+    auto id()       const -> const int&         { return m_id;          }
+    auto pic()      const -> const bitmap&      { return m_pic;         }
+    auto btn()      const -> const sprite&      { return m_btn;         }
+    auto location() const -> const point_2d&    { return m_btnLocation; }
+    auto x()        const -> const int&         { return m_x;           }
+    auto y()        const -> const int&         { return m_y;           }
+    auto centreX()  const -> const int&         { return m_centreX;     }
+    auto centreY()  const -> const int&         { return m_centreY;     }
+    auto color()    const -> const std::string& { return m_btnColor;    }
 
-        /**
-         * @brief Draws button to screen
-         * 
-         * @return * void 
-         */
-        void draw_button()
-        {
-            draw_sprite(this->_btn);
-        }
+    /// Setters
+    void setId(int id)      { this->m_id = id; }
+    void setX(const int &x) { this->m_x  = x;  }
+    void setY(const int &y) { this->m_y  = y;  }
 
-        void get_button_image(std::string image) {};
-        void btn_image(std::string image) { }
-};
+    /**
+    * @brief Enumeration of button types
+    * 
+    */
+    enum Color
+    {
+        PLAY,
+        EXIT,
+        OPTS, 
+        GAME,
+        HOME
+    };
 
-/**
- * @brief Buttons created for Game Screen Menu
- * 
- * Derived from abstract Button class
- */
-class GameScreenButton : public Button{
-    public:
-        // First constructor
-        GameScreenButton(Color c, float scale = 1) : Button(c, scale){}
-        // Third constructor
-        GameScreenButton(Color c, std::string s, float scale = 1) : Button(c, s, scale){}
+    // Default Constructor
+    Button() {}
+    Button(Color c, float scale = 1);
+    Button(Color c, float x, float y, int xCell, int yCell, float scale = 1);
+    Button(Color c, std::string image, float scale = 1);
 
-        /**
-         * @brief returns the action 
-         * 
-         * @param keyinput 
-         * @return string 
-         */
-        std::string action(std::string keyinput = "")
-        {
-            return keyinput;
-        }
+    // Destructor
+    virtual ~Button() {}
 
-        void btn_image(std::string image)
-        {
-            this->_color = image;
-        }
+    // Virtual fucntions
+    virtual void btnImage(std::string image) = 0;
+    virtual void drawButton() = 0;
+    virtual std::string action(std::string keyinput = "") = 0;
 
-        // draw button to screen
-        void draw_button()
-        {
-            draw_sprite(this->_btn);
-        }
+    std::string btn_color(Color c);
+
 };
 
 #endif
