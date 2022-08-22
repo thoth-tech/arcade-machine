@@ -5,7 +5,8 @@ BITMAP,intro_thoth_tech,backgrounds/intro_thoth.bmp
 BITMAP,intro_arcade_team,backgrounds/intro_arcade_team.png
 BITMAP,games_dashboard,backgrounds/retro.bmp
 BITMAP,back_ground,back_ground.jpg
-BITMAP,in_game_bgnd,backgrounds/arcade-screen-frame.png
+BITMAP,in_game_bgnd,backgrounds/arcade-screen-background.png
+BITMAP,rating_bg,backgrounds/rating_background.png
 
 // Buttons
 BITMAP,btn_play,buttons/btn_play.png
@@ -28,10 +29,15 @@ BITMAP,cursor,splashkit_cursor.png
 // Tip Icons
 BITMAP,information,information.png
 
+//Rating symbol 
+BITMAP,star-gold,star-gold.png
+BITMAP,star-black,star-black.png
+
 // Fonts
 FONT,font_btn,MindPlay.ttf
 FONT,font_title,Retroking.ttf
 FONT,font_text,Roboto-Regular.ttf
+FONT,font_star,Stars.ttf
 
 // Sounds
 SOUND,intro_thoth,intro1.wav

@@ -1,4 +1,4 @@
-#include "include/ArcadeMachine.h"
+#include "ArcadeMachine.h"
 
 int main()
 {
@@ -23,6 +23,7 @@ int main()
         Arcade.playThothTechIntro();
         Arcade.playArcadeTeamIntro();
     }
+
     // Play SplashKit intro
     if (load_games) Arcade.playSplashKitIntro();
     
@@ -30,6 +31,9 @@ int main()
     Arcade.prepareMainMenu();
     // Draw the main menu
     Arcade.mainMenu();
+
+    // ISSUE - we never get here because the program exits forcibly from ArcadeMachine, rather than exiting from main and returning 0.
+    std::cout << "we never reach this point to output?\n";
 
     free_resource_bundle("bundle");
 

@@ -1,7 +1,9 @@
-#ifndef ARCADE_MACHINE_BUTTON_LIST_H
-#define ARCADE_MACHINE_BUTTON_LIST_H
+#ifndef ARCADE_MACHINE_BUTTON_NODE_H
+#define ARCADE_MACHINE_BUTTON_NODE_H
 
 #include "ConfigData.h"
+#include "Button.h"
+#include "GameData.h"
 
 class ButtonNode
 {
@@ -12,6 +14,7 @@ private:
 public:
     Button *button;
     ConfigData config;
+    GameData stats;
 
     /**
      * @brief construct a new Button Node object

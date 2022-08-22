@@ -10,6 +10,8 @@ namespace fs = std::filesystem;
 namespace fs = std::experimental::filesystem;
 #endif
 
+#include "GridLayout.h"
+
 // Remove definition to use JSON config.
 #define ARCADE_MACHINE_USE_TEXT_CONFIG
 
@@ -95,7 +97,7 @@ class Helper {
          * 
          * @param grid 
          */
-        void resetScreen(Grid grid)
+        void resetScreen(GridLayout grid)
         {
             process_events();
             clear_screen(COLOR_DARK_SLATE_GRAY);
@@ -118,7 +120,7 @@ class Helper {
             int rows = 5;
             int cols = 5;
             //#rows, #cols, ScaletoFit
-            Grid grid(rows, cols, true);
+            GridLayout grid(rows, cols, true);
             //Grid grid(rows,colsArray, true);
 
             resetScreen(grid);
