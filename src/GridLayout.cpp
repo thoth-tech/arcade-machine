@@ -14,6 +14,7 @@ GridLayout::GridLayout(int rows, int cols, bool scaleToFit)
     _scaleToFit = scaleToFit;
     _rows = rows;
     _cols = cols;
+    m_colsArray = nullptr;
 
     // Calculate number of cells
     _cells = _rows * _cols;
