@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 
 // Helper function to load developer names into m_arcadeTeamDeveloperNames
 // Called in the constructor
@@ -263,7 +264,7 @@ void ArcadeMachine::playThothTechIntro()
         // Decrement i and alpha 
         i--; alpha = alpha - 0.05;
         // If alpha is == 0, hold image for 1.5 seconds
-        if (abs(alpha - 0.0) < 1e-9)
+        if (std::abs(alpha - 0.0) < 1e-9)
         {
             delay(2000);
             /*  After this has happened, the alpha value will continue into the negatives
@@ -312,7 +313,7 @@ void ArcadeMachine::playArcadeTeamIntro()
         // Decrement i and alpha 
         i--; alpha = alpha - 0.05;
         // If alpha is == 0, hold image for 1.5 seconds
-        if (abs(alpha - 0.0) < 1e-9)
+        if (std::abs(alpha - 0.0) < 1e-9)
         {
             play_sound_effect("intro_start");
             delay(2000);
