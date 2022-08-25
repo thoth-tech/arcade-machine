@@ -1,5 +1,9 @@
 #include "Menu.h"
 
+#ifndef _WIN32
+#include "Process.h"
+#endif
+
 #include <cmath>
 
 Menu::Menu()
@@ -139,9 +143,7 @@ void Menu::carouselHandler()
     this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
     this->m_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
 
-#ifdef _WIN32
     checkGameExit();
-#endif
 
     if (this->m_button)
     {
@@ -153,14 +155,6 @@ void Menu::carouselHandler()
         {
             if (m_overlayActive)
             {
-#ifdef _WIN32
-                // Get game path
-                m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
-                // Get executable name
-                m_gameExe = strdup(this->m_button->config.exe().c_str());
-                // Get game directory
-                m_gameDir = this->m_button->config.folder().c_str();
-#endif
 
                 // Set the center of the game
                 this->m_x = m_centreX;
@@ -185,8 +179,22 @@ void Menu::carouselHandler()
                 m_gameData.setGameName(this->m_button->config.title());
 
 #ifdef _WIN32
+                // Get game path
+                m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
+                // Get executable name
+                m_gameExe = strdup(this->m_button->config.exe().c_str());
+                // Get game directory
+                m_gameDir = this->m_button->config.folder().c_str();
+
                 // Call method to open game executable
                 startGame(m_gamePath, m_gameExe, m_gameDir);
+#else
+    #ifdef __APPLE__
+                std::string gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()) + "-macos";
+    #else
+                std::string gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()) + "-linux";
+    #endif
+                startGame(gamePath);
 #endif
 
                 return;
@@ -432,6 +440,19 @@ void Menu::startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
         this->m_inGame = true;
     }
 }
+#else
+void Menu::startGame(std::string filePath) {
+    if (!this->m_inGame) {
+
+        // TODO: Ensure that spaces in filePath are escaped with \ to
+        // ensure execution works on unix environments.
+
+        this->m_processId = spawnProcess(filePath);
+        this->m_inGame = true;
+    }
+}
+#endif
+
 
 /**
 * @brief Waits for game to exit.
@@ -442,6 +463,7 @@ void Menu::checkGameExit()
 {
     if (this->m_inGame == true)
     {
+#ifdef _WIN32
         this->m_gameStarted = true;
         // Check if game has been exited.
         this->m_programExit = GetExitCodeProcess(m_processInfo.hProcess, &m_exitCode);
@@ -453,9 +475,16 @@ void Menu::checkGameExit()
             m_gameData.setEndTime(time(0));
             m_gameData.setHighScore(highScore);
         }
+#else
+        if (! processRunning(this->m_processId)) {
+            this->m_inGame = false;
+            int highScore = 0;
+            m_gameData.setEndTime(time(0));
+            m_gameData.setHighScore(highScore);
+        }
+#endif
     }
 }
-#endif
 
 /** 
 * @brief Fade back to games menu
