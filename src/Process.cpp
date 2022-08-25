@@ -17,7 +17,7 @@ pid_t spawnProcess(std::string processFp) {
 
 	auto pipe = popen(processFp.c_str(), "r");
 	if (! pipe) {
-		std::cout << "Error executing popen" << std::endl;
+		std::cerr << "Error executing popen" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
