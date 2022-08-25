@@ -1,7 +1,6 @@
 #include "Process.h"
 #include <string>
 #include <unistd.h>
-#include <stdexcept>
 #include <iostream>
 #include <array>
 #include <sys/types.h>
