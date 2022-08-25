@@ -4,8 +4,8 @@
 #include <stdexcept>
 #include <iostream>
 #include <array>
- #include <sys/types.h>
- #include <signal.h>
+#include <sys/types.h>
+#include <signal.h>
 
 pid_t spawnProcess(std::string processFp) {
 	pid_t processId = fork();
@@ -13,7 +13,6 @@ pid_t spawnProcess(std::string processFp) {
 		return processId;
 
     std::array<char, 128> buffer;
-    std::string result;
 
 	auto pipe = popen(processFp.c_str(), "r");
 	if (! pipe) {
@@ -21,10 +20,11 @@ pid_t spawnProcess(std::string processFp) {
 		exit(EXIT_FAILURE);
 	}
 
-	while (fgets(buffer.data(), 128, pipe) != NULL)
-		result += buffer.data();
+	while (fgets(buffer.data(), 128, pipe) != NULL) {
+		;
+	}
 
-	auto returnCode = pclose(pipe);
+	pclose(pipe);
 
 	exit(EXIT_SUCCESS);
 }
