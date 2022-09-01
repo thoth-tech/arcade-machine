@@ -36,8 +36,14 @@ private:
     /// Th author/creator of this game
     std::string m_author;
 
-    /// The path to the executable of this game
-    std::string m_exe;
+    /// The path to the Windows executable of this game
+    std::string m_win_exe;
+
+    /// The path to the Linux binaries of this game
+    std::string m_lin_exe;
+
+    /// The path to the MacOS binaries of this game
+    std::string m_mac_exe;
 
     /// The folder this game is inside
     std::string m_folder;
@@ -53,7 +59,7 @@ public:
     auto setId(int &i) { m_id = i; }
     auto setFolder(std::string &dir) { m_folder = dir; }
     // Getters:
-    auto id()            const -> const int&    { return m_id;            }
+    auto id()            const -> const int&         { return m_id;            }
     auto repo()          const -> const std::string& { return m_repo;          }
     auto language()      const -> const std::string& { return m_language;      }
     auto image()         const -> const std::string& { return m_image;         }
@@ -61,7 +67,9 @@ public:
     auto genre()         const -> const std::string& { return m_genre;         }
     auto rating()        const -> const std::string& { return m_rating;        }
     auto author()        const -> const std::string& { return m_author;        }
-    auto exe()           const -> const std::string& { return m_exe;           }
+    auto win_exe()       const -> const std::string& { return m_win_exe;       }
+    auto lin_exe()       const -> const std::string& { return m_lin_exe;       }
+    auto mac_exe()       const -> const std::string& { return m_mac_exe;       }
     auto folder()        const -> const std::string& { return m_folder;        }
     auto description()   const -> const std::string& { return m_description;   }
 
