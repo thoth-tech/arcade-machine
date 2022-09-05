@@ -3,6 +3,7 @@
 #include <regex>
 #include <iostream>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 /**
 * @brief Construct a new Config Data object
@@ -133,13 +134,22 @@ void ConfigData::collectJsonData(json json_configs)
 */
 bool ConfigData::getFromGit(std::string url, const char* dir)
 {
+    // info struct lets us query the directory to see if it exists
     struct stat info;
-
-    if (stat(dir, &info) != 0){
+    if (stat(dir, &info) != 0)
+    {
+        // cant access dir -- clone from scratch
         system(("git clone " + url + " " + dir).c_str());
-    } else {
-        std::string d = dir;
-        system(("git -C " + d + " pull " + url).c_str());
+    }
+    else if (info.st_mode &S_IFDIR)
+    {
+        // dir exists -- pull instead
+        system(("git -C " + std::string(dir) + " pull " + url).c_str());
+    }
+    else
+    {
+        // dir does not exist -- clone from scratch
+        system(("git clone " + url + " " + dir).c_str());
     }
 
     return true;
