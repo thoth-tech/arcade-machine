@@ -155,9 +155,9 @@ void Menu::carouselHandler()
             {
 #ifdef _WIN32
                 // Get game path
-                m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
+                m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.win_exe()).c_str();
                 // Get executable name
-                m_gameExe = strdup(this->m_button->config.exe().c_str());
+                m_gameExe = strdup(this->m_button->config.win_exe().c_str());
                 // Get game directory
                 m_gameDir = this->m_button->config.folder().c_str();
 #endif
