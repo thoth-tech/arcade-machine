@@ -12,7 +12,8 @@
 #define STAR_COUNT 1024
 #define DISTANCE_SHIFT 10
 
-const char *title = "About The Thoth Tech Arcade Machine!";
+static const char *title = "About The Thoth Tech Arcade Machine!";
+static font f = font_named("edunline.ttf");
 
 AboutScreen::AboutScreen() {
 	this->m_shouldQuit = false;
@@ -56,8 +57,8 @@ void AboutScreen::tick() {
 void AboutScreen::render() {
 	clear_screen(COLOR_BLACK);
 
-	this->renderTitle();
 	this->renderStars();
+	this->renderTitle();
 
 	refresh_screen();
 }
@@ -71,26 +72,22 @@ void AboutScreen::shiftTitle() {
 
 void AboutScreen::renderTitle() {
 	double x = this->m_titleX;
-	static font f = font_named("upheavtt.ttf");
 
 	for (int i=0; i<this->m_title.length(); ++i) {
 		double y = TITLE_FONT_Y + (sin(x / 80) * 115);
 		double fontSize = TITLE_FONT_SIZE + (sin(x / 120) * 12);
+
 		color c;
-		c.r = sin(i + 0) * 127 + ((sin(x / 80)) * 1.28);
-		c.g = sin(i + 2) * 127 + ((sin(x / 80)) * 1.28);
-		c.b = sin(i + 4) * 127 + ((sin(x / 80)) * 1.28);
+		double rd = (double)ARCADE_MACHINE_RES_X / 16;
+		double gd = (double)ARCADE_MACHINE_RES_X / 10;
+		double bd = (double)ARCADE_MACHINE_RES_X / 6;
+		double p = sin(x / rd) * 0.5;
+		double g = sin(x / gd) * 0.5;
+		double b = sin(x / bd) * 0.5;
 
-
-		// Underlay.
-		draw_text(
-			this->m_title.substr(i, 1), 
-			COLOR_GRAY,
-			f,
-			fontSize,
-			x + 2,
-			y + 2
-		);	
+		c.r = 0.5 + p;
+		c.g = 0.5 + g;
+		c.b = 0.5 + b;
 
 		draw_text(
 			this->m_title.substr(i, 1), 
