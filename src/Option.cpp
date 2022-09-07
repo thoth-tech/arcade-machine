@@ -100,7 +100,7 @@ void Option::soundMenu()
 {
     write_line("into sound options mini menu");
 
-    draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
+    //draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
 }
 
 float Option::getVolume()
