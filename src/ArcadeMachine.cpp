@@ -113,19 +113,22 @@ void ArcadeMachine::gamesMenu()
 void ArcadeMachine::optionsMenu()
 {
     Option options;
-    Audio *audio = new Audio();
     bool has_background_music = false;
+    options.createOptionsButtons();
     
-    while (!key_down(ESCAPE_KEY))
+    while (this->m_exitOptions == false)
     {
         process_events();
         clear_screen();
 
-        options.updateOption();
+        //options.updateOption();
+        options.drawOptionsMenu();
 
+        this->m_exitOptions = options.checkAction();
+        
         if(!has_background_music)
         {
-            audio->playMusic(options.getCurrentMusic(), options.getVolume());
+            //audio->playMusic(options.getCurrentMusic(), options.getVolume());
             has_background_music=false;   
         }
         
@@ -136,11 +139,15 @@ void ArcadeMachine::optionsMenu()
 
         if(options.isChangeVoLume())
         {
-            audio->setVolume(options.getVolume());
+            //audio->setVolume(options.getVolume());
         }
+
         refresh_screen(60);
     }
-    fade_music_out(500);
+
+    this->m_exitOptions = false;
+
+    //fade_music_out(500);
 }
 
 /**
