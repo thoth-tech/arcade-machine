@@ -7,6 +7,7 @@ BITMAP,games_dashboard,backgrounds/retro.bmp
 BITMAP,back_ground,back_ground.jpg
 BITMAP,in_game_bgnd,backgrounds/arcade-screen-background.png
 BITMAP,rating_bg,backgrounds/rating_background.png
+BITMAP,options_thoth,backgrounds/options_thoth.bmp
 
 // * BUTTONS */
 // Main Menu Buttons
