@@ -3,11 +3,14 @@
 #include "splashkit.h"
 #include <string>
 #include <cmath>
+#include <vector>
 
 #define TITLE_FONT_SIZE 44
 #define TITLE_FONT_CHAR_WIDTH 32
 #define TITLE_FONT_CHAR_HEIGHT 32
 #define TITLE_FONT_Y ((((ARCADE_MACHINE_RES_Y / 2) + (TITLE_FONT_CHAR_HEIGHT / 2))) / 3)
+#define STAR_COUNT 1024
+#define DISTANCE_SHIFT 10
 
 const char *title = "About The Thoth Tech Arcade Machine!";
 
@@ -17,6 +20,25 @@ AboutScreen::AboutScreen() {
 	this->m_title = std::string(title);
 	this->m_titleEnd = ((TITLE_FONT_CHAR_WIDTH * this->m_title.length()));
 	this->m_titleEnd *= -1;
+	this->m_stars = std::vector<struct s_star>();
+
+	for (int i=0; i<STAR_COUNT; ++i) {
+		struct s_star star;
+		star.x = (rand() % (ARCADE_MACHINE_RES_X - 0 + 1)  + 0);
+		star.y = (rand() % (ARCADE_MACHINE_RES_Y - 0 + 1) + 0);
+		star.distance = (rand() % (DISTANCE_SHIFT - 1 + 1) + 1);
+
+		double brightness = (rand() % (80 - 40) + 40);
+		brightness /= 100;
+
+		star.c.a = brightness;
+		star.c.r = 1;
+		star.c.g = 1;
+		star.c.b = 1;
+
+		this->m_stars.push_back(star);
+	}
+
 }
 
 void AboutScreen::readInput() {
@@ -26,6 +48,7 @@ void AboutScreen::readInput() {
 
 void AboutScreen::tick() {
 	this->shiftTitle();
+	this->shiftStars();
 
 	this->m_ticker++;
 }
@@ -34,6 +57,7 @@ void AboutScreen::render() {
 	clear_screen(COLOR_BLACK);
 
 	this->renderTitle();
+	this->renderStars();
 
 	refresh_screen();
 }
@@ -79,6 +103,19 @@ void AboutScreen::renderTitle() {
 
 		x += TITLE_FONT_CHAR_WIDTH;
 	}
+}
+
+void AboutScreen::shiftStars() {
+	for (int i=0; i<this->m_stars.size(); ++i) {
+		this->m_stars[i].x += this->m_stars[i].distance;
+		if (this->m_stars[i].x > ARCADE_MACHINE_RES_X)
+			this->m_stars[i].x = -10;
+	}
+}
+
+void AboutScreen::renderStars() {
+	for (auto star : this->m_stars)
+		fill_rectangle(star.c, star.x, star.y, star.distance / 2, star.distance / 4);
 }
 
 void AboutScreen::loop() {
