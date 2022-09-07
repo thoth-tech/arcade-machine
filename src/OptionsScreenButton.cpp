@@ -18,8 +18,8 @@ std::string OptionsScreenButton::action(std::string keyinput)
     if (this->color() == btn_color(Button::HOME))
     {
         // go to this screen
-        write_line("Play");
-        return "play";
+        write_line("Home");
+        return "home";
     }
     if (this->color() == btn_color(Button::SOUND))
     {
@@ -32,6 +32,12 @@ std::string OptionsScreenButton::action(std::string keyinput)
         // go to this screen
         write_line("Display");
         return "display";
+    }
+    if (this->color() == btn_color(Button::STATS))
+    {
+        // go to this screen
+        write_line("Stats");
+        return "stats";
     }
 
     return keyinput;
