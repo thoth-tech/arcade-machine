@@ -8,14 +8,28 @@ BITMAP,back_ground,back_ground.jpg
 BITMAP,in_game_bgnd,backgrounds/arcade-screen-background.png
 BITMAP,rating_bg,backgrounds/rating_background.png
 
-// Buttons
+// * BUTTONS */
+// Main Menu Buttons
 BITMAP,btn_play,buttons/btn_play.png
 BITMAP,btn_exit,buttons/btn_exit.png
 BITMAP,btn_opts,buttons/btn_options.png
 BITMAP,play_hghlt,buttons/btn_play_hghlt.png
 BITMAP,exit_hghlt,buttons/btn_exit_hghlt.png
 BITMAP,options_hghlt,buttons/btn_options_hghlt.png
+
+// Game Screen Buttons
 BITMAP,game_hghlt,buttons/btn_game_hghlt.png
+
+// Options Screen Buttons
+BITMAP,opts_home,buttons/Gray/Home.png
+BITMAP,opts_sound,buttons/Gray/MusicOn.png
+BITMAP,opts_display,buttons/Gray/Settings.png
+BITMAP,opts_stats,buttons/Gray/Ranking.png
+BITMAP,opts_home_hghlt,buttons/Red/Home.png
+BITMAP,opts_sound_hghlt,buttons/Red/MusicOn.png
+BITMAP,opts_display_hghlt,buttons/Red/Settings.png
+BITMAP,opts_stats_hghlt,buttons/Red/Ranking.png
+
 BITMAP,backCurrentGame,buttons/Red/Settings.png
 BITMAP,backGame_notSelected,buttons/Yellow/Settings.png
 BITMAP,changeSound,buttons/Red/Music On.png
