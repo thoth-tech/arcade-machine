@@ -11,6 +11,7 @@
 #include "Button.h"
 #include "MenuButton.h"
 #include "GameScreenButton.h"
+#include "Configuration.h"
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -19,12 +20,6 @@
 #include <string>
 #include <vector>
 #include <chrono>
-
-// --------- borrowed from ArcadeMachine.h .... bad fix tho
-#define ARCADE_MACHINE_SCALING_FACTOR 1
-#define ARCADE_MACHINE_RES_X 1920 * ARCADE_MACHINE_SCALING_FACTOR
-#define ARCADE_MACHINE_RES_Y 1080 * ARCADE_MACHINE_SCALING_FACTOR
-// --------------------------------------------------------
 
 class Menu {
 private:
