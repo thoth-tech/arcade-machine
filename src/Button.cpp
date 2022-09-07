@@ -93,6 +93,7 @@ std::string Button::btn_color(Color c)
     std::string filepath = "buttons/";
     switch(c)
     {
+        // Main Menu Buttons
         case PLAY:
             m_btnHighlightPic = bitmap_named("play_hghlt");
             m_btnHighlightText = "play_highlight";
@@ -108,12 +109,33 @@ std::string Button::btn_color(Color c)
             m_btnHighlightText = "options_highlight";
             return "btn_opts";
             break;
+        
+        // Game Screen Buttons
         case GAME:
             m_btnHighlightPic = bitmap_named("game_hghlt");
             m_btnHighlightText = "game_highlight";
             return "";
+        
+        // Options Screen Buttons
         case HOME:
-            return filepath + "Gray/home.png";
+            m_btnHighlightPic = bitmap_named("opts_home_hghlt");
+            m_btnHighlightText = "opts_home_highlight";
+            return "opts_home";
+            break;
+        case SOUND:
+            m_btnHighlightPic = bitmap_named("opts_sound_hghlt");
+            m_btnHighlightText = "opts_sound_highlight";
+            return "opts_sound";
+            break;
+        case DISPLAY:
+            m_btnHighlightPic = bitmap_named("opts_display_hghlt");
+            m_btnHighlightText = "opts_display_highlight";
+            return "opts_display";
+            break;
+        case STATS:
+            m_btnHighlightPic = bitmap_named("opts_stats_hghlt");
+            m_btnHighlightText = "opts_stats_highlight";
+            return "opts_stats";
             break;
         default:
             return "btn_play";
