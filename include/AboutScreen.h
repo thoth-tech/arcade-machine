@@ -19,6 +19,8 @@ private:
 	double m_titleX;
 	double m_titleEnd;
 	std::vector<struct s_star> m_stars;
+	int m_contributorsIndex;
+	int m_contributorTicker;
 
 	void readInput();
 	void tick();
@@ -27,6 +29,10 @@ private:
 	void render();
 	void renderTitle();
 	void renderStars();
+	void renderDescription();
+
+	void tickContributor();
+	void renderContributor();
 
 public:
 	AboutScreen();
