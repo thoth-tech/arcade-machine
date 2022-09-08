@@ -27,6 +27,7 @@ private:
 	void shiftTitle();
 	void shiftStars();
 	void render();
+	color getRainbowShade(double x);
 	void renderTitle();
 	void renderStars();
 	void renderDescription();
