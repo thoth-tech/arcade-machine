@@ -37,11 +37,12 @@ private:
 
 	void tickContributor();
 	void renderContributor();
+	void onExit();
+	void loop();
 
 public:
 	AboutScreen();
-	~AboutScreen();
-	void loop();
+	void main();
 };
 
 #endif

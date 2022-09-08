@@ -82,10 +82,9 @@ AboutScreen::AboutScreen() {
 			this->m_gitContributions.push_back(line);
 	}
 
-	play_music(bgMusic);
 }
 
-AboutScreen::~AboutScreen() {
+void AboutScreen::onExit() {
 	if (music_playing())
 		stop_music();
 }
@@ -207,7 +206,7 @@ void AboutScreen::renderDescription() {
 }
 
 void AboutScreen::loop() {
-	while (! quit_requested()) {
+	while (! this->m_shouldQuit) {
 		process_events();
 
 		this->readInput();
@@ -216,8 +215,20 @@ void AboutScreen::loop() {
 
 		delay(1000 / 60);
 	}
+
 }
 
+
+void AboutScreen::main() {
+	// Clear music and start the about screen music.
+	stop_music();
+	play_music(bgMusic);
+
+	this->loop();
+
+	// Tidy up once the loop is done.
+	this->onExit();
+}
 
 void AboutScreen::tickContributor() {
 	this->m_contributorTicker++;
