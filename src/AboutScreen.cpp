@@ -12,7 +12,8 @@
 #define STAR_COUNT 1024
 #define DISTANCE_SHIFT 10
 
-#define CONTRIBUTION_TIME (60 * 10)
+#define CONTRIBUTION_TIME (60 * 3)
+#define CONTRIBUTION_FADE_TIME 30
 
 static const char *title = "About The Thoth Tech Arcade Machine!";
 static const char *description[] =  {
@@ -20,7 +21,11 @@ static const char *description[] =  {
 	"by students undertaking capstone units",
 	"in the School of Information Technology",
 	"as a platform to designed to showcase",
-	"games built by students using SplashKit."
+	"games built by students using SplashKit.",
+	"",
+	"Lines of code: 4,325",
+	"Contributors: 11",
+	"Commit count: 178"
 };
 
 static const char *contributors[] = {
@@ -37,6 +42,8 @@ static const char *contributors[] = {
     "2  Morgaine",
     "1  sarahgos"
 };
+
+static const std::string createdBy = "Created by";
 
 static auto fontDescription = font_named("PressStart2P.ttf");
 static auto bgMusic = music_named("insert-no-coins.ogg");
@@ -156,9 +163,9 @@ void AboutScreen::renderDescription() {
 	double offset = sin(((double)this->m_ticker / 16)) * 10;
 	double offsetX = sin((double)this->m_ticker / 32) * 6;
 	double y = 520 + offset;
-	double x = 50 + offsetX;
+	double x = 160 + offsetX;
 	for (int i=0; i<sizeof(description) / sizeof(description[0]); ++i) {
-		draw_text(description[i], COLOR_WHITE, fontDescription, 16, x, y + (i * 32));
+		draw_text(description[i], COLOR_WHITE, fontDescription, 18, x, y + (i * 32));
 	}
 }
 
@@ -184,5 +191,37 @@ void AboutScreen::tickContributor() {
 }
 
 void AboutScreen::renderContributor() {
-	draw_text(contributors[this->m_contributorsIndex], COLOR_WHITE, fontDescription, 24, 400, 400);
+	int r = this->m_contributorTicker % CONTRIBUTION_TIME;
+	double ratio = 1;
+	double fontSize = 24;
+	double fontRatio = 1;
+
+	if (r < CONTRIBUTION_FADE_TIME) {
+		ratio = r / (double)CONTRIBUTION_FADE_TIME;
+		fontRatio = 1 + ((1 - ratio) * 8);
+	} else if ((CONTRIBUTION_TIME - r) < CONTRIBUTION_FADE_TIME) {
+		ratio = (CONTRIBUTION_TIME - r) / (double)CONTRIBUTION_FADE_TIME;
+		fontRatio = ratio;
+	}
+
+	fontSize = fontSize * fontRatio;
+	if (ratio > 1.0)
+		ratio = 1.0;
+
+
+	color c;
+	c.r = ratio;
+	c.g = ratio;
+	c.b = ratio;
+
+
+	draw_text(contributors[this->m_contributorsIndex], c, fontDescription, fontSize, 1100, 600);
+
+	double x = 0;
+	double y = 0;
+	for (int i=0; i<createdBy.length(); ++i) {
+		y = sin((this->m_ticker + (i * 4)) / (double)16) * (double)9;
+		x = sin(this->m_ticker / (double) 50) * (double)225;
+		draw_text(createdBy.substr(i, 1), COLOR_WHITE, fontDescription, 16, 1300 + x + (i * 16), (double)500 + y);
+	}
 }
