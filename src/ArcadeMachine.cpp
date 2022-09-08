@@ -40,6 +40,7 @@ ArcadeMachine::ArcadeMachine()
     
     Splashscreen introArcadeMachineTeam("intro_arcade_team");
     Splashscreen introSplashkit("intro_splashkit");
+    AboutScreen AboutScreen;
     
     // Set objects to private properties
     this->m_helper = helper;
@@ -343,6 +344,12 @@ void ArcadeMachine::playSplashKitIntro()
         refresh_screen();
         
     } while (!this->m_config.getFromGit("https://github.com/thoth-tech/arcade-games.git", "games"));
+}
+
+void ArcadeMachine::playAboutScreen()
+{
+    // Pass control to the about screen component.
+    this->m_aboutScreen.main();
 }
 
 /**

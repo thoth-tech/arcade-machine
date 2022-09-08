@@ -2,6 +2,7 @@
 #define ARCADE_MACHINE_H
 
 // Arcade Machine Class
+#include "AboutScreen.h"
 #include "Button.h"
 #include "MenuButton.h"
 #include "GameScreenButton.h"
@@ -58,6 +59,9 @@ private:
     /// SplashKit Production intro
     Splashscreen m_introSplashkit;
 
+    /// SplashKit about screen
+    AboutScreen m_aboutScreen;
+
     /// Main Menu Selector
     Selector m_selectorMainMenu;
 
@@ -102,6 +106,7 @@ public:
     void playThothTechIntro();
     void playArcadeTeamIntro();
     void playSplashKitIntro(); // Draws the Splashkit Productions logo to the screen and fetches new games from Git repo
+    void playAboutScreen();
     void printConfigs();
     void exitProgram();
 
