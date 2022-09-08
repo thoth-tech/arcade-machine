@@ -36,6 +36,7 @@ private:
 
 public:
 	AboutScreen();
+	~AboutScreen();
 	void loop();
 };
 

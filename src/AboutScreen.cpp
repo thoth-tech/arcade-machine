@@ -71,6 +71,11 @@ AboutScreen::AboutScreen() {
 	play_music(bgMusic);
 }
 
+AboutScreen::~AboutScreen() {
+	if (music_playing())
+		stop_music();
+}
+
 void AboutScreen::readInput() {
 	if (quit_requested() || key_down(ESCAPE_KEY))
 		this->m_shouldQuit = true;
@@ -179,6 +184,5 @@ void AboutScreen::tickContributor() {
 }
 
 void AboutScreen::renderContributor() {
-	color c;
 	draw_text(contributors[this->m_contributorsIndex], COLOR_WHITE, fontDescription, 24, 400, 400);
 }
