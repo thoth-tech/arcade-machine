@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 
-#define TITLE_FONT_SIZE 44
+#define TITLE_FONT_SIZE 38
 #define TITLE_FONT_CHAR_WIDTH 32
 #define TITLE_FONT_CHAR_HEIGHT 32
 #define TITLE_FONT_Y ((((ARCADE_MACHINE_RES_Y / 2) + (TITLE_FONT_CHAR_HEIGHT / 2))) / 3)
@@ -39,7 +39,6 @@ static const char *contributors[] = {
     "1  sarahgos"
 };
 
-static font f = font_named("edunline.ttf");
 static font fontDescription = font_named("PressStart2P.ttf");
 
 AboutScreen::AboutScreen() {
@@ -107,7 +106,7 @@ void AboutScreen::renderTitle() {
 
 	for (int i=0; i<this->m_title.length(); ++i) {
 		double y = TITLE_FONT_Y + (sin(x / 80) * 115);
-		double fontSize = TITLE_FONT_SIZE + (sin(x / 120) * 12);
+		double fontSize = TITLE_FONT_SIZE + (sin(x / 120) * 8);
 
 		color c;
 		double rd = (double)ARCADE_MACHINE_RES_X / 16;
@@ -124,7 +123,7 @@ void AboutScreen::renderTitle() {
 		draw_text(
 			this->m_title.substr(i, 1), 
 			c,
-			f,
+			fontDescription,
 			fontSize,
 			x,
 			y
