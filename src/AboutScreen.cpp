@@ -15,7 +15,6 @@
 #define CONTRIBUTION_TIME (60 * 10)
 
 static const char *title = "About The Thoth Tech Arcade Machine!";
-
 static const char *description[] =  {
 	"This arcade machine has been created",
 	"by students undertaking capstone units",
@@ -39,7 +38,8 @@ static const char *contributors[] = {
     "1  sarahgos"
 };
 
-static font fontDescription = font_named("PressStart2P.ttf");
+static auto fontDescription = font_named("PressStart2P.ttf");
+static auto bgMusic = music_named("insert-no-coins.ogg");
 
 AboutScreen::AboutScreen() {
 	this->m_shouldQuit = false;
@@ -68,6 +68,7 @@ AboutScreen::AboutScreen() {
 		this->m_stars.push_back(star);
 	}
 
+	play_music(bgMusic);
 }
 
 void AboutScreen::readInput() {
