@@ -4,6 +4,7 @@
 #include <string>
 #include <cmath>
 #include <vector>
+#include <fstream>
 
 #define TITLE_FONT_SIZE 38
 #define TITLE_FONT_CHAR_WIDTH 32
@@ -23,24 +24,7 @@ static const char *description[] =  {
 	"as a platform to designed to showcase",
 	"games built by students using SplashKit.",
 	"",
-	"Lines of code: 4,325",
-	"Contributors: 11",
-	"Commit count: 178"
-};
-
-static const char *contributors[] = {
-	"127  Anthony George",
-    "78  Richard Denton",
-    "76  lachfoy",
-    "67  Riley Dellios",
-    "36  Sarah Gosling",
-    "16  Delcari",
-    "10  zbrydon",
-    "8  studioant",
-    "5  quoch",
-    "4  huydnnk97",
-    "2  Morgaine",
-    "1  sarahgos"
+	"Lines of code"
 };
 
 static const std::string createdBy = "Created by";
@@ -73,6 +57,29 @@ AboutScreen::AboutScreen() {
 		star.c.b = 1;
 
 		this->m_stars.push_back(star);
+	}
+
+	this->m_contributors = std::vector<std::string>();
+	std::ifstream contributors("stats" ARCADE_MACHINE_PATH_SEP "contributors.txt");
+	std::string line;
+	while (std::getline(contributors, line)) {
+		if (line.length() > 0)
+			this->m_contributors.push_back(line);
+	}
+	contributors.close();
+
+	this->m_linesOfCode = std::vector<std::string>();
+	std::ifstream linesOfCode("stats" ARCADE_MACHINE_PATH_SEP "lines-of-code.txt");
+	while (std::getline(linesOfCode, line)) {
+		if (line.length() > 0)
+			this->m_linesOfCode.push_back(line);
+	}
+
+	this->m_gitContributions = std::vector<std::string>();
+	std::ifstream contributions("stats" ARCADE_MACHINE_PATH_SEP "git.txt");
+	while (std::getline(contributions, line)) {
+		if (line.length() > 0)
+			this->m_gitContributions.push_back(line);
 	}
 
 	play_music(bgMusic);
@@ -174,11 +181,29 @@ void AboutScreen::renderStars() {
 void AboutScreen::renderDescription() {
 	double offset = sin(((double)this->m_ticker / 16)) * 12;
 	double offsetX = sin((double)this->m_ticker / 24) * 19;
-	double y = 520 + offset;
+	double y = 480 + offset;
 	double x = 140 + offsetX;
+	int maxIOffset = 0;
 	for (int i=0; i<sizeof(description) / sizeof(description[0]); ++i) {
-		draw_text(description[i], COLOR_WHITE, fontDescription, 18, x, y + (i * 32));
+		maxIOffset = (i * 32);
+		draw_text(description[i], COLOR_WHITE, fontDescription, 18, x, y + maxIOffset);
 	}
+
+	y = y + maxIOffset + 32;
+	for (int i=0; i<this->m_linesOfCode.size(); ++i) {
+		maxIOffset = (i * 32);
+		draw_text(this->m_linesOfCode[i], COLOR_WHITE, fontDescription, 18, x, y + (maxIOffset));
+	}
+
+	y = y + maxIOffset + 64;
+	draw_text("Contributions", COLOR_WHITE, fontDescription, 18, x, y);
+	y += 32;
+
+	for (int i=0; i<this->m_gitContributions.size(); ++i) {
+		maxIOffset = (i * 32);
+		draw_text(this->m_gitContributions[i], COLOR_WHITE, fontDescription, 18, x, y + (maxIOffset));
+	}
+
 }
 
 void AboutScreen::loop() {
@@ -198,19 +223,19 @@ void AboutScreen::tickContributor() {
 	this->m_contributorTicker++;
 	if (this->m_contributorTicker >= CONTRIBUTION_TIME) {
 		this->m_contributorTicker = 0;
-		this->m_contributorsIndex = (this->m_contributorsIndex + 1) % (sizeof(contributors) / sizeof(contributors[0]));
+		this->m_contributorsIndex = (this->m_contributorsIndex + 1) % this->m_contributors.size();
 	}
 }
 
 void AboutScreen::renderContributor() {
 	int r = this->m_contributorTicker % CONTRIBUTION_TIME;
 	double ratio = 1;
-	double fontSize = 24;
+	double fontSize = 32;
 	double fontRatio = 1;
 
 	if (r < CONTRIBUTION_FADE_TIME) {
 		ratio = r / (double)CONTRIBUTION_FADE_TIME;
-		fontRatio = 1 + ((1 - ratio) * 8);
+		fontRatio = 1 + ((1 - ratio) * 4);
 	} else if ((CONTRIBUTION_TIME - r) < CONTRIBUTION_FADE_TIME) {
 		ratio = (CONTRIBUTION_TIME - r) / (double)CONTRIBUTION_FADE_TIME;
 		fontRatio = ratio;
@@ -226,7 +251,7 @@ void AboutScreen::renderContributor() {
 	c.b = ratio;
 
 
-	draw_text(contributors[this->m_contributorsIndex], c, fontDescription, fontSize, 1100, 600);
+	draw_text(this->m_contributors[this->m_contributorsIndex], c, fontDescription, fontSize, 1100, 600);
 
 	double x = 0;
 	double y = 0;

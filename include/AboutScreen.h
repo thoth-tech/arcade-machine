@@ -21,6 +21,9 @@ private:
 	std::vector<struct s_star> m_stars;
 	int m_contributorsIndex;
 	int m_contributorTicker;
+	std::vector<std::string> m_contributors;
+	std::vector<std::string> m_linesOfCode;
+	std::vector<std::string> m_gitContributions;
 
 	void readInput();
 	void tick();
