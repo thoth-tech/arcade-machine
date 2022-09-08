@@ -1,9 +1,8 @@
-119	Anthony George
-76	Richard Denton
-62	Riley Dellios
-60	GitHub
-60	lachfoy
-30	Sarah Gosling
-16	Delcari
-10	zbrydon
-5	quoch
+119    Anthony George
+78    Richard Denton
+62    Riley Dellios
+60    lachfoy
+30    Sarah Gosling
+16    Delcari
+10    zbrydon
+5    quoch

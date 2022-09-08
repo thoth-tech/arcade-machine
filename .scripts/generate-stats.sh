@@ -17,4 +17,4 @@ echo -n "Contributors: $CONTRIBUTORCOUNT" >> stats/git.txt
 
 rm stats/contributors.txt
 touch stats/contributors.txt
-git shortlog -snc | sed 's/^ *//;s/ *$//' > stats/contributors.txt
+git shortlog -snc | sed 's/^ *//;s/ *$//' | sed 's/\t/    /g' | sed '\|GitHub|d' > stats/contributors.txt
