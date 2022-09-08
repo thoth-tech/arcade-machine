@@ -93,6 +93,12 @@ void AboutScreen::tick() {
 	this->shiftStars();
 	this->tickContributor();
 
+	// Every 1/4 second.
+	if (this->m_ticker % 15 == 0) {
+		if (! music_playing())
+			play_music(bgMusic);
+	}
+
 	this->m_ticker++;
 }
 
@@ -114,6 +120,22 @@ void AboutScreen::shiftTitle() {
 		this->m_titleX = ARCADE_MACHINE_RES_X;
 }
 
+color AboutScreen::getRainbowShade(double x) {
+	color c;
+	double rd = (double)ARCADE_MACHINE_RES_X / 16;
+	double gd = (double)ARCADE_MACHINE_RES_X / 10;
+	double bd = (double)ARCADE_MACHINE_RES_X / 6;
+	double p = sin(x / rd) * 0.5;
+	double g = sin(x / gd) * 0.5;
+	double b = sin(x / bd) * 0.5;
+
+	c.r = 0.5 + p;
+	c.g = 0.5 + g;
+	c.b = 0.5 + b;
+
+	return c;
+}
+
 void AboutScreen::renderTitle() {
 	double x = this->m_titleX;
 
@@ -121,17 +143,7 @@ void AboutScreen::renderTitle() {
 		double y = TITLE_FONT_Y + (sin(x / 80) * 115);
 		double fontSize = TITLE_FONT_SIZE + (sin(x / 120) * 8);
 
-		color c;
-		double rd = (double)ARCADE_MACHINE_RES_X / 16;
-		double gd = (double)ARCADE_MACHINE_RES_X / 10;
-		double bd = (double)ARCADE_MACHINE_RES_X / 6;
-		double p = sin(x / rd) * 0.5;
-		double g = sin(x / gd) * 0.5;
-		double b = sin(x / bd) * 0.5;
-
-		c.r = 0.5 + p;
-		c.g = 0.5 + g;
-		c.b = 0.5 + b;
+		color c = this->getRainbowShade(x);
 
 		draw_text(
 			this->m_title.substr(i, 1), 
@@ -160,10 +172,10 @@ void AboutScreen::renderStars() {
 }
 
 void AboutScreen::renderDescription() {
-	double offset = sin(((double)this->m_ticker / 16)) * 10;
-	double offsetX = sin((double)this->m_ticker / 32) * 6;
+	double offset = sin(((double)this->m_ticker / 16)) * 12;
+	double offsetX = sin((double)this->m_ticker / 24) * 19;
 	double y = 520 + offset;
-	double x = 160 + offsetX;
+	double x = 140 + offsetX;
 	for (int i=0; i<sizeof(description) / sizeof(description[0]); ++i) {
 		draw_text(description[i], COLOR_WHITE, fontDescription, 18, x, y + (i * 32));
 	}
@@ -208,7 +220,6 @@ void AboutScreen::renderContributor() {
 	if (ratio > 1.0)
 		ratio = 1.0;
 
-
 	color c;
 	c.r = ratio;
 	c.g = ratio;
@@ -219,9 +230,17 @@ void AboutScreen::renderContributor() {
 
 	double x = 0;
 	double y = 0;
+	fontSize = 24;
 	for (int i=0; i<createdBy.length(); ++i) {
 		y = sin((this->m_ticker + (i * 4)) / (double)16) * (double)9;
 		x = sin(this->m_ticker / (double) 50) * (double)225;
-		draw_text(createdBy.substr(i, 1), COLOR_WHITE, fontDescription, 16, 1300 + x + (i * 16), (double)500 + y);
+		double actualX = 1300 + x + (i * 28);
+
+		fontRatio = sin((actualX + 190) / (double)80) * (double)1.5;
+		if (fontRatio < 1)
+			fontRatio = (double)1;
+
+		color c = this->getRainbowShade(actualX - 350);
+		draw_text(createdBy.substr(i, 1), c, fontDescription, (double)24 * fontRatio, actualX, (double)500 + y);
 	}
 }
