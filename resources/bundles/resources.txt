@@ -33,8 +33,8 @@ BITMAP,opts_stats_hghlt,buttons/Red/Ranking.png
 
 BITMAP,backCurrentGame,buttons/Red/Settings.png
 BITMAP,backGame_notSelected,buttons/Yellow/Settings.png
-BITMAP,changeSound,buttons/Red/Music On.png
-BITMAP,sound_notSelected,buttons/Yellow/Music On.png
+BITMAP,changeSound,buttons/Red/MusicOn.png
+BITMAP,sound_notSelected,buttons/Yellow/MusicOn.png
 BITMAP,backMenu_notSelected,buttons/Yellow/Home.png
 BITMAP,backMenu,buttons/Red/Home.png
 
