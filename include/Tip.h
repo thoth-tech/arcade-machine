@@ -16,8 +16,7 @@
 #define WBORDER_OFFSET 20
 
 // Possible locations of the container
-enum location
-{
+enum location {
     TOPLEFT,
     TOPRIGHT,
     TOPCENTER,
@@ -30,32 +29,32 @@ class Tip
 {
 private:
     bitmap m_image;
-    //bitmap dimensions
+    // bitmap dimensions
     int m_bmpWidth;
     int m_bmpHeight;
     string m_text;
-    //Length of the string, text
+    // Length of the string, text
     int m_textLength;
-    //Number of characters per line
+    // Number of characters per line
     int m_charsPerLine = 0;
-    //Number of lines
+    // Number of lines
     int m_numLines;
-    //Location within the window where the container lies
+    // Location within the window where the container lies
     location m_loc;
-    //Where the container will be anchored within the screen.
+    // Where the container will be anchored within the screen.
     int m_xOffset;
     int m_yOffset;
     std::chrono::time_point<std::chrono::steady_clock> m_startTime;
     int m_duration;
 
-    //Height of the container
+    // Height of the container
     int m_containerHeight;
-    //Width of the container
+    // Width of the container
     int m_containerWidth;
 
-    //Stores the animation
+    // Stores the animation
     animation m_anim = nullptr;
-    //Drawing options required to load the animation
+    // Drawing options required to load the animation
     drawing_options m_opt = option_defaults();
 
     int m_i = 30;
@@ -63,14 +62,16 @@ private:
     void calculatePosition();
 
 public:
-    Tip() {}
+    Tip()
+    {
+    }
     Tip(string text, bitmap image, int duration = 3000, int charsPerLine = 30, location loc = TOPCENTER);
-    Tip(string text, bitmap image, animation anim, drawing_options opt, int duration = 3000, int charsPerLine = 30, location loc = TOPCENTER);
+    Tip(string text, bitmap image, animation anim, drawing_options opt, int duration = 3000, int charsPerLine = 30,
+        location loc = TOPCENTER);
 
     ~Tip();
 
     void draw();
-
 };
 
 #endif

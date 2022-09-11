@@ -1,8 +1,8 @@
 #ifndef ARCADE_MACHINE_SPLASH_SCREEN_H
 #define ARCADE_MACHINE_SPLASH_SCREEN_H
 
-#include <string>
 #include "splashkit.h"
+#include <string>
 
 class Splashscreen
 {
@@ -11,13 +11,17 @@ private:
 
 public:
     // Default constructor
-    Splashscreen() {}
+    Splashscreen()
+    {
+    }
 
     // Overloaded constructor
-    Splashscreen(std::string bitmap) { this->m_bmp = bitmap; }
+    Splashscreen(std::string bitmap)
+    {
+        this->m_bmp = bitmap;
+    }
 
     void drawTitlePage();
-    
 };
 
 #endif

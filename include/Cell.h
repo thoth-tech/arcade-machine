@@ -1,8 +1,7 @@
 #ifndef ARCADE_MACHINE_CELL_H
 #define ARCADE_MACHINE_CELL_H
 
-enum item
-{
+enum item {
     EMPTY,
     BMP,
     SPT,

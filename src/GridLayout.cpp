@@ -1,14 +1,14 @@
 #include "GridLayout.h"
 
-#include <stdexcept> // used for std::out_of_range
 #include <iostream>
+#include <stdexcept> // used for std::out_of_range
 
 /**
-* Construct a new grid object with a fixed number of columns/rows
-* @param rows number of rows
-* @param cols number of columns
-* @param scaleToFit scale the image to fill the cell
-*/
+ * Construct a new grid object with a fixed number of columns/rows
+ * @param rows number of rows
+ * @param cols number of columns
+ * @param scaleToFit scale the image to fill the cell
+ */
 GridLayout::GridLayout(int rows, int cols, bool scaleToFit)
 {
     _scaleToFit = scaleToFit;
@@ -24,12 +24,12 @@ GridLayout::GridLayout(int rows, int cols, bool scaleToFit)
 }
 
 /**
-* @brief Construct a new Grid object with a dynamic number of columns per row
-* 
-* @param rows number of rows
-* @param colsArray array of columns per row
-* @param scaleToFit scale the image to fill the cell
-*/
+ * @brief Construct a new Grid object with a dynamic number of columns per row
+ *
+ * @param rows number of rows
+ * @param colsArray array of columns per row
+ * @param scaleToFit scale the image to fill the cell
+ */
 GridLayout::GridLayout(int rows, int colsArray[], bool scaleToFit)
 {
     // Add check to ensure that the length of colsArray matches the number of rows
@@ -38,8 +38,7 @@ GridLayout::GridLayout(int rows, int colsArray[], bool scaleToFit)
     _rows = rows;
     m_colsArray = colsArray;
     // Calculate the number of cells in the grid
-    for (size_t i = 0; i < rows; i++)
-    {
+    for (size_t i = 0; i < rows; i++) {
         // Sum of all columns in each row
         _cells += colsArray[i];
     }
@@ -56,32 +55,32 @@ void GridLayout::destroy()
 }
 
 /**
-* @brief Set the background
-* 
-* @param bmp bitmap to use as background
-*/
+ * @brief Set the background
+ *
+ * @param bmp bitmap to use as background
+ */
 void GridLayout::setBackground(bitmap bmp)
 {
     m_background = bmp;
 }
 
 /**
-* @brief Calculate the bitmap scaling factor
-* 
-* @param bmp bitmap to scale
-* @param cellWidth width of the cell
-* @param cellHeight height of the cell
-* @return drawing_options options
-*/
+ * @brief Calculate the bitmap scaling factor
+ *
+ * @param bmp bitmap to scale
+ * @param cellWidth width of the cell
+ * @param cellHeight height of the cell
+ * @return drawing_options options
+ */
 drawing_options GridLayout::bitmapScaleOpt(int bmpWidth, int bmpHeight, double cellWidth, double cellHeight, int span)
 {
     return option_scale_bmp((cellWidth / bmpWidth) * span, cellHeight / bmpHeight);
 }
 
 /**
-* @brief Draw the cell boundaries, to help with placement
-* 
-*/
+ * @brief Draw the cell boundaries, to help with placement
+ *
+ */
 void GridLayout::drawCells()
 {
     // Vertical offset between each cell
@@ -95,19 +94,16 @@ void GridLayout::drawCells()
 
     int index = 0;
     // Iterate over rows
-    for (size_t i = 0; i < _rows; i++)
-    {
+    for (size_t i = 0; i < _rows; i++) {
         // If user specified dynamic number of columns per row
-        if (_useColsArray)
-        {
+        if (_useColsArray) {
             // Update horizontal offset each row
             xOffset = current_window_width() / m_colsArray[i];
             // Number of columns to iterate over
             _cols = m_colsArray[i];
         }
         // Iterate over columns
-        for (size_t j = 0; j < _cols; j++)
-        {
+        for (size_t j = 0; j < _cols; j++) {
             draw_rectangle(COLOR_BLACK, (double)(xOffset * j), (double)(yOffset * i), (double)xOffset, (double)yOffset);
             ++index;
         }
@@ -115,9 +111,9 @@ void GridLayout::drawCells()
 }
 
 /**
-* @brief Draw the items in the grid
-* 
-*/
+ * @brief Draw the items in the grid
+ *
+ */
 void GridLayout::drawGrid()
 {
     if (m_background)
@@ -136,42 +132,35 @@ void GridLayout::drawGrid()
 
     int index = 0;
     // Iterate over rows
-    for (size_t i = 0; i < _rows; i++)
-    {
+    for (size_t i = 0; i < _rows; i++) {
         // If user specified dynamic number of columns per row
-        if (_useColsArray)
-        {
+        if (_useColsArray) {
             // Update horizontal offset each row
             xOffset = current_window_width() / m_colsArray[i];
             // Number of columns to iterate over
             _cols = m_colsArray[i];
         }
         // Iterate over columns
-        for (size_t j = 0; j < _cols; j++)
-        {
+        for (size_t j = 0; j < _cols; j++) {
             // Skip an iteration
-            if (skipIterations > 0)
-            {
+            if (skipIterations > 0) {
                 --skipIterations;
                 ++index;
                 continue;
             }
             // If the cell is not empty
-            if (_grid[index].cellType != EMPTY)
-            {
+            if (_grid[index].cellType != EMPTY) {
                 double x = (xOffset * j);
                 double y = (yOffset * i);
 
                 // Draw object into cell, centre using dimensions
-                switch (_grid[index].cellType)
-                {
+                switch (_grid[index].cellType) {
                 case BMP:
-                    if (_scaleToFit)
-                    {
-                        options = bitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp), xOffset, yOffset, _grid[index].span);
+                    if (_scaleToFit) {
+                        options = bitmapScaleOpt(bitmap_width(_grid[index].bmp), bitmap_height(_grid[index].bmp),
+                                                 xOffset, yOffset, _grid[index].span);
                     }
-                    if (_grid[index].centre)
-                    {
+                    if (_grid[index].centre) {
                         x = x + (((xOffset * _grid[index].span) - bitmap_width(_grid[index].bmp)) / 2);
                         y = y + ((yOffset - bitmap_height(_grid[index].bmp)) / 2);
                     }
@@ -180,8 +169,7 @@ void GridLayout::drawGrid()
                 case SPT:
                     if (_scaleToFit)
                         write("ScaleToFit: Feature not currently available with use of sprites.\n");
-                    if (_grid[index].centre)
-                    {
+                    if (_grid[index].centre) {
                         x = x + (((xOffset * _grid[index].span) - sprite_width(_grid[index].spr)) / 2);
                         y = y + ((yOffset - sprite_height(_grid[index].spr)) / 2);
                     }
@@ -190,8 +178,7 @@ void GridLayout::drawGrid()
                 case BTN:
                     if (_scaleToFit)
                         write("ScaleToFit: Feature not currently available with use of sprites.\n");
-                    if (_grid[index].centre)
-                    {
+                    if (_grid[index].centre) {
                         x = x + ((xOffset * _grid[index].span) / 2) - _grid[index].button->centreX();
                         y = y + _grid[index].button->centreY();
                     }
@@ -208,8 +195,7 @@ void GridLayout::drawGrid()
                 }
             }
             // If the cell spans multiple columns, skip the next iterations
-            if (_grid[index].span > 1)
-            {
+            if (_grid[index].span > 1) {
                 skipIterations = _grid[index].span - 1;
             }
             ++index;
@@ -218,47 +204,41 @@ void GridLayout::drawGrid()
 }
 
 /**
-* @brief Find a cell in the grid using row/col
-* 
-* @param row row of the cell
-* @param col column of the cell
-* @return int index of the cell
-*/
+ * @brief Find a cell in the grid using row/col
+ *
+ * @param row row of the cell
+ * @param col column of the cell
+ * @return int index of the cell
+ */
 int GridLayout::findCell(int row, int col)
 {
     int cellNum = 0;
     // Selected row is out of bounds
-    if (_rows <= row)
-    {
+    if (_rows <= row) {
         throw std::out_of_range("Row index out of range");
         return -1;
     }
     // Dynamic number of columns/row
-    if (_useColsArray)
-    {
+    if (_useColsArray) {
         // Selected column is out of bounds
-        if (m_colsArray[row] < col + 1)
-        {
+        if (m_colsArray[row] < col + 1) {
             throw std::out_of_range("Column index out of range");
             return -1;
         }
         // Calculate the cell number
-        for (size_t i = 0; i < row; i++)
-        {
+        for (size_t i = 0; i < row; i++) {
             cellNum += m_colsArray[i];
         }
 
         cellNum += col;
     }
     // Selected column is out of bounds
-    else if (_cols <= col)
-    {
+    else if (_cols <= col) {
         throw std::out_of_range("Column index out of range");
         return -1;
     }
     // Fixed number of columns
-    else
-    {
+    else {
         // Calculate the cell number
         cellNum = row * _cols + col;
     }
@@ -266,29 +246,29 @@ int GridLayout::findCell(int row, int col)
 }
 
 /**
-* @brief Get a cell from the grid using row/col
-* 
-* @param row row of the cell
-* @param col column of the cell
-* @return cell* pointer to the cell
-*/
+ * @brief Get a cell from the grid using row/col
+ *
+ * @param row row of the cell
+ * @param col column of the cell
+ * @return cell* pointer to the cell
+ */
 Cell GridLayout::getCell(int row, int col)
 {
     return _grid[findCell(row, col)];
 }
 
 /**
-* @brief Update a cell with a specified bitmap
-* 
-* @param bmp bitmap to update the cell with
-* @param row row of the cell
-* @param col column of the cell
-* @param span number of columns the bitmap spans
-* @param centre whether the bitmap should be centered
-*/
+ * @brief Update a cell with a specified bitmap
+ *
+ * @param bmp bitmap to update the cell with
+ * @param row row of the cell
+ * @param col column of the cell
+ * @param span number of columns the bitmap spans
+ * @param centre whether the bitmap should be centered
+ */
 void GridLayout::updateCell(const bitmap &bmp, int row, int col, int span, bool centre)
 {
-    _gridEmpty=false;
+    _gridEmpty = false;
     // Stores the index of the cell
     int cellNum = findCell(row, col);
     // Selected row is out of bounds
@@ -302,17 +282,17 @@ void GridLayout::updateCell(const bitmap &bmp, int row, int col, int span, bool 
 }
 
 /**
-* @brief Update a cell with a specified sprite
-* 
-* @param sprite sprite to update the cell with
-* @param row row of the cell
-* @param col column of the cell
-* @param span number of columns the sprite spans
-* @param centre whether the sprite should be centered
-*/
+ * @brief Update a cell with a specified sprite
+ *
+ * @param sprite sprite to update the cell with
+ * @param row row of the cell
+ * @param col column of the cell
+ * @param span number of columns the sprite spans
+ * @param centre whether the sprite should be centered
+ */
 void GridLayout::updateCell(const sprite &sprite, int row, int col, int span, bool centre)
 {
-    _gridEmpty=false;
+    _gridEmpty = false;
     // Stores the index of the cell
     int cellNum = findCell(row, col);
     // Selected row is out of bounds
@@ -326,17 +306,17 @@ void GridLayout::updateCell(const sprite &sprite, int row, int col, int span, bo
 }
 
 /**
-* @brief Update a cell with a specified button
-* 
-* @param button button to update the cell with
-* @param row row of the cell
-* @param col column of the cell
-* @param span number of columns the button spans
-* @param centre whether the button should be centered
-*/
+ * @brief Update a cell with a specified button
+ *
+ * @param button button to update the cell with
+ * @param row row of the cell
+ * @param col column of the cell
+ * @param span number of columns the button spans
+ * @param centre whether the button should be centered
+ */
 void GridLayout::updateCell(Button *button, int row, int col, int span, bool centre)
 {
-    _gridEmpty=false;
+    _gridEmpty = false;
     // Stores the index of the cell
     int cellNum = findCell(row, col);
     // Selected row is out of bounds
@@ -350,17 +330,16 @@ void GridLayout::updateCell(Button *button, int row, int col, int span, bool cen
 }
 
 /**
-* @brief Update all cells with a specified bitmap
-* 
-* @param bmp bitmap to update the cells with
-* @param centre whether the bitmaps should be centered
-*/
+ * @brief Update all cells with a specified bitmap
+ *
+ * @param bmp bitmap to update the cells with
+ * @param centre whether the bitmaps should be centered
+ */
 void GridLayout::updateAllCells(bitmap bmp, bool centre)
 {
-    _gridEmpty=false;
+    _gridEmpty = false;
     // Iterate over all the cells
-    for (size_t i = 0; i < _cells; i++)
-    {
+    for (size_t i = 0; i < _cells; i++) {
         // Update bitmap
         _grid[i].cellType = BMP;
         _grid[i].spr = NULL;
@@ -370,17 +349,16 @@ void GridLayout::updateAllCells(bitmap bmp, bool centre)
 }
 
 /**
-* @brief Update all cells with a specified sprite
-* 
-* @param sprite sprite to update the cells with
-* @param centre whether the sprites should be centered
-*/
+ * @brief Update all cells with a specified sprite
+ *
+ * @param sprite sprite to update the cells with
+ * @param centre whether the sprites should be centered
+ */
 void GridLayout::updateAllCells(sprite sprite, bool centre)
 {
-    _gridEmpty=false;
+    _gridEmpty = false;
     // Iterate over all the cells
-    for (size_t i = 0; i < _cells; i++)
-    {
+    for (size_t i = 0; i < _cells; i++) {
         // Update bitmap
         _grid[i].cellType = SPT;
         _grid[i].spr = sprite;
@@ -390,9 +368,9 @@ void GridLayout::updateAllCells(sprite sprite, bool centre)
 }
 
 /**
-* @brief Log the dimensions of the cells to console
-* 
-*/
+ * @brief Log the dimensions of the cells to console
+ *
+ */
 void GridLayout::drawLayout()
 {
     int colWidth = 0;
@@ -400,16 +378,13 @@ void GridLayout::drawLayout()
     write("rowHeight: " + std::to_string(current_window_height() / _rows) + "\n");
     if (!_useColsArray)
         colWidth = current_window_width() / _cols;
-    for (size_t i = 0; i < _rows; i++)
-    {
-        if (_useColsArray)
-        {
+    for (size_t i = 0; i < _rows; i++) {
+        if (_useColsArray) {
             colWidth = current_window_width() / m_colsArray[i];
             _cols = m_colsArray[i];
         }
         write("Row " + std::to_string(i) + " (colWidth: " + std::to_string(colWidth) + "): ");
-        for (size_t j = 0; j < _cols; j++)
-        {
+        for (size_t j = 0; j < _cols; j++) {
             string content = "[" + std::to_string(i) + "," + std::to_string(j) + "]";
             write(content);
         }
@@ -418,16 +393,15 @@ void GridLayout::drawLayout()
 }
 
 /**
-* @brief Clear the grid
-* 
-*/
+ * @brief Clear the grid
+ *
+ */
 void GridLayout::clearGrid()
 {
     if (_gridEmpty)
         return;
     // Iterate over all the cells
-    for (size_t i = 0; i < _cells; i++)
-    {
+    for (size_t i = 0; i < _cells; i++) {
         // Reset cell to default
         _grid[i].cellType = EMPTY;
         _grid[i].spr = NULL;
@@ -436,26 +410,24 @@ void GridLayout::clearGrid()
         _grid[i].centre = true;
     }
     // Grid is now empty
-    _gridEmpty = true;  
+    _gridEmpty = true;
 }
 
 /**
-* @brief Find the nearest cells row/col from x, y coordinates
-* 
-* @param x x-coordinate (px)
-* @param y y-coordinate (px)
-* @return point_2d 
-*/
+ * @brief Find the nearest cells row/col from x, y coordinates
+ *
+ * @param x x-coordinate (px)
+ * @param y y-coordinate (px)
+ * @return point_2d
+ */
 point_2d GridLayout::findCellFromLoc(int x, int y)
 {
     int rowNum;
     // Selected row is out of bounds
     int yOffset = current_window_height() / _rows;
     int runningSum = 0;
-    for (int i = 0; i < _rows; i++)
-    {
-        if (y >= runningSum && y < runningSum + yOffset)
-        {
+    for (int i = 0; i < _rows; i++) {
+        if (y >= runningSum && y < runningSum + yOffset) {
             rowNum = i;
         }
         runningSum += yOffset;
@@ -467,10 +439,8 @@ point_2d GridLayout::findCellFromLoc(int x, int y)
         xOffset = (current_window_width() / _cols);
     runningSum = 0;
     int colNum;
-    for (int i = 0; i < _cols; i++)
-    {
-        if (x >= runningSum && x < runningSum  + xOffset)
-        {
+    for (int i = 0; i < _cols; i++) {
+        if (x >= runningSum && x < runningSum + xOffset) {
             colNum = i;
         }
         runningSum += xOffset;
@@ -482,9 +452,9 @@ point_2d GridLayout::findCellFromLoc(int x, int y)
 }
 
 /**
-* @brief Clear the cell
-* 
-*/
+ * @brief Clear the cell
+ *
+ */
 void GridLayout::clearCell(int row, int col)
 {
     // Gets the index of the cell

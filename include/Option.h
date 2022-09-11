@@ -1,19 +1,19 @@
 #ifndef ARCADE_MACHINE_OPTION_H
 #define ARCADE_MACHINE_OPTION_H
 
+#include "ArcadeMachine.h"
+#include "Audio.h"
+#include "Button.h"
+#include "GridLayout.h"
+#include "OptionsScreenButton.h"
+#include "Selector.h"
 #include "splashkit.h"
 #include <string>
-#include "GridLayout.h"
-#include "Button.h"
-#include "ArcadeMachine.h"
-#include "Selector.h"
-#include "OptionsScreenButton.h"
-#include "Audio.h"
 
 // Options class
 class Option
 {
-private: 
+private:
     int m_displayStyle = 1;
     int _selector = 1;
     bool m_isSelected = false;
@@ -24,11 +24,11 @@ private:
 
     GridLayout m_grid;
     Audio m_audio;
-    std::vector<Button*> m_optionsBtns;
+    std::vector<Button *> m_optionsBtns;
     ButtonNode *m_optionsButtonNode = nullptr;
     Selector m_selectorOptionsMenu;
     point_2d m_mouse;
-    std::string m_action; 
+    std::string m_action;
 
 public:
     Option();
@@ -37,7 +37,6 @@ public:
     void drawOptionsMenu();
     bool checkAction();
     void soundMenu();
-
 
     float getVolume();
     int getCurrentMusic();

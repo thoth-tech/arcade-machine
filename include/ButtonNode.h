@@ -1,8 +1,8 @@
 #ifndef ARCADE_MACHINE_BUTTON_NODE_H
 #define ARCADE_MACHINE_BUTTON_NODE_H
 
-#include "ConfigData.h"
 #include "Button.h"
+#include "ConfigData.h"
 #include "GameData.h"
 
 class ButtonNode
@@ -18,7 +18,7 @@ public:
 
     /**
      * @brief construct a new Button Node object
-     * 
+     *
      * @param button the button to be stored in the node
      */
     ButtonNode(Button *button)
@@ -30,7 +30,7 @@ public:
 
     /**
      * @brief construct a new Button Node object
-     * 
+     *
      * @param button the button to be stored in the node
      * @param next the next node
      * @param prev the previous node
@@ -44,7 +44,7 @@ public:
 
     /**
      * @brief add a node after the current node
-     * 
+     *
      * @param button the button to be linked to the node
      */
     void addAfter(ButtonNode *node)
@@ -57,7 +57,7 @@ public:
 
     /**
      * @brief add a node before the current node
-     * 
+     *
      * @param button the button to be linked to the node
      */
     void addBefore(ButtonNode *node)
@@ -70,7 +70,7 @@ public:
 
     /**
      * @brief remove this node from the list
-     * 
+     *
      */
     void remove()
     {
@@ -80,17 +80,17 @@ public:
 
     /**
      * @brief get the next node in the list
-     * 
+     *
      * @return ButtonNode* the next node in the list
      */
     ButtonNode *getNext()
     {
         return this->m_next;
     }
-    
+
     /**
      * @brief get the previous node in the list
-     * 
+     *
      * @return ButtonNode* the previous node in the list
      */
     ButtonNode *getPrev()
