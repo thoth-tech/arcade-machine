@@ -1,5 +1,110 @@
 #include "Option.h"
 
+Option::Option() {}
+
+void Option::createOptionsButtons()
+{
+    // Initialise grid 
+    GridLayout grid(ROWS, COLS);
+    this->m_grid = grid;
+
+    // Initialise audio
+    Audio audio;
+    this->m_audio = audio;
+
+    // Do we need config data in the options menu ?? maybe we will..
+    //this->m_configs = this->m_helper.ConfigDataList();
+    // Create options buttons
+    Button *home = new OptionsScreenButton(Button::HOME, 0.5);
+    Button *sound = new OptionsScreenButton(Button::SOUND, 0.5);
+    Button *stats = new OptionsScreenButton(Button::STATS, 0.5);
+    Button *display = new OptionsScreenButton(Button::DISPLAY, 0.5);
+    
+    // Add options buttons to local vector
+    this->m_optionsBtns.push_back(home);
+    this->m_optionsBtns.push_back(sound);
+    this->m_optionsBtns.push_back(stats);
+    this->m_optionsBtns.push_back(display);
+
+    // Fetch options menu background
+    bitmap options_thoth = bitmap_named("options_thoth");
+    
+    // Update grid cells with brackground asset
+    this->m_grid.setBackground(options_thoth);
+
+    // Make new nodes with buttons.
+    this->m_optionsButtonNode = new ButtonNode(home);
+    this->m_optionsButtonNode->addAfter(new ButtonNode(sound));
+    this->m_optionsButtonNode->addBefore(new ButtonNode(display));
+    this->m_optionsButtonNode->getPrev()->addBefore(new ButtonNode(stats));
+
+    // Update grid with nodes.
+    this->m_grid.updateCell(m_optionsButtonNode->button, 0, 1);
+    this->m_grid.updateCell(m_optionsButtonNode->getNext()->button, 1, 1);
+    this->m_grid.updateCell(m_optionsButtonNode->getPrev()->button, 3, 1);
+    this->m_grid.updateCell(m_optionsButtonNode->getPrev()->getPrev()->button, 2, 1);
+}
+
+void Option::drawOptionsMenu() 
+{
+    // Get mouse position
+    this->m_mouse = mouse_position();
+
+    // Draw grid
+    this->m_grid.drawGrid();
+
+    // Draw cursor -- no need for cursor in options menu, highlights work well
+    // draw_sprite(this->m_selectorMainMenu.getCursor());
+
+    // Get button postions
+    Cell home = this->m_grid.getCell(0,1);
+    Cell sound = this->m_grid.getCell(1,1);
+    Cell display = this->m_grid.getCell(3,1);
+    Cell stats = this->m_grid.getCell(2,1);
+
+    // Options title text
+    int font_size = 100;
+    draw_text("Options", COLOR_BLACK, "font_title", font_size, (ARCADE_MACHINE_RES_X/4), 50);
+
+    // Check input in selector class.
+    this->m_optionsButtonNode = this->m_selectorOptionsMenu.checkKeyInput(this->m_optionsButtonNode);
+
+    int x_pos = home.button->x() + (sprite_width(home.button->btn()) - 40);
+    int y_pos;
+
+         if (this->m_optionsButtonNode->button->color() == "opts_home")    y_pos = home.button->y() + ((sprite_width(home.button->btn())*0.5)-30);
+    else if (this->m_optionsButtonNode->button->color() == "opts_sound")   y_pos = sound.button->y() + ((sprite_width(sound.button->btn())*0.5)-30);
+    else if (this->m_optionsButtonNode->button->color() == "opts_display") y_pos = display.button->y() + ((sprite_width(display.button->btn())*0.5)-30);
+    else if (this->m_optionsButtonNode->button->color() == "opts_stats")   y_pos = stats.button->y() + ((sprite_width(stats.button->btn())*0.5)-30);
+
+    draw_text(this->m_optionsButtonNode->button->color().substr(5), 
+                COLOR_BLACK,  // colour 
+                "font_title", // font
+                60,           // size
+                x_pos,        // x position
+                y_pos         // y position
+            );
+
+    // Check input in selector class.
+    this->m_action = this->m_selectorOptionsMenu.checkForSelection(this->m_optionsButtonNode);
+}
+
+bool Option::checkAction()
+{
+    if (this->m_action == "home") return true;
+
+    if (this->m_action == "sound") soundMenu();
+
+    return false;
+}
+
+void Option::soundMenu()
+{
+    write_line("into sound options mini menu");
+
+    //draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
+}
+
 float Option::getVolume()
 { 
     return m_volume / 100;
@@ -144,6 +249,7 @@ void Option::updateOption()
 
 void Option::drawIntinialHub()
 {
+
     draw_bitmap("back_ground", bitmap_width("backCurrentGame"), 0);
 
     if (_selector == 1)

@@ -71,7 +71,10 @@ public:
         EXIT,
         OPTS, 
         GAME,
-        HOME
+        HOME,
+        SOUND,
+        DISPLAY,
+        STATS
     };
 
     // Default Constructor
