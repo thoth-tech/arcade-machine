@@ -1,5 +1,10 @@
 #include "Option.h"
 
+Option::Option()
+{
+    m_selectorOptionsMenu.setNoRenderCursor();
+}
+
 void Option::createOptionsButtons()
 {
     // Initialise grid 
@@ -52,7 +57,7 @@ void Option::drawOptionsMenu()
     this->m_grid.drawGrid();
 
     // Draw cursor -- no need for cursor in options menu, highlights work well
-    //draw_sprite(this->m_selectorMainMenu.getCursor());
+    // draw_sprite(this->m_selectorMainMenu.getCursor());
 
     // Get button postions
     Cell home = this->m_grid.getCell(0,1);

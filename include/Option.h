@@ -31,7 +31,7 @@ private:
     std::string m_action; 
 
 public:
-    Option(){}
+    Option();
 
     void createOptionsButtons();
     void drawOptionsMenu();
