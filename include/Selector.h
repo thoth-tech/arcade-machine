@@ -17,6 +17,7 @@ private:
     bool m_isSlidingRight = false;
     /// Checks if current button is from game menu.
     bool m_isFromGameMenu;
+    bool m_renderCursor = true;
 
 public:
     Selector() {}
@@ -35,6 +36,7 @@ public:
     std::string checkForSelection(ButtonNode* buttonNode, bool isFromGameMenu = false);
     void highlightFirst(ButtonNode* buttonNode);
     void highlightButton(ButtonNode* buttonNode, std::string direction);
+    void setNoRenderCursor();
     
 };
 
