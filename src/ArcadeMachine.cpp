@@ -1,23 +1,19 @@
 #include "ArcadeMachine.h"
 
-#include <iostream>
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 // Helper function to load developer names into m_arcadeTeamDeveloperNames
 // Called in the constructor
-void ArcadeMachine::loadDeveloperNames(const char* filePath)
+void ArcadeMachine::loadDeveloperNames(const char *filePath)
 {
     std::string line;
     std::ifstream developerNamesFile(filePath);
-    if (developerNamesFile.fail())
-    {
+    if (developerNamesFile.fail()) {
         std::cout << "error: unable to open developer names file\n";
-    }
-    else if (developerNamesFile.is_open())
-    {
-        while(std::getline(developerNamesFile, line))
-        {
+    } else if (developerNamesFile.is_open()) {
+        while (std::getline(developerNamesFile, line)) {
             m_arcadeTeamDeveloperNames.push_back(line);
         }
     }
@@ -36,10 +32,10 @@ ArcadeMachine::ArcadeMachine()
 
     // load developer names into m_arcadeTeamDeveloperNames
     loadDeveloperNames("developer_names.txt");
-    
+
     Splashscreen introArcadeMachineTeam("intro_arcade_team");
     Splashscreen introSplashkit("intro_splashkit");
-    
+
     // Set objects to private properties
     this->m_helper = helper;
     this->m_config = config;
@@ -53,9 +49,11 @@ ArcadeMachine::~ArcadeMachine()
 {
     std::cout << "Destructor called on ArcadeMachine\n";
     std::cout << "ArcadeMachine: clearing memory...\n";
-    for (const auto& button : m_menuBtns) delete button;
+    for (const auto &button : m_menuBtns)
+        delete button;
     m_menuBtns.clear();
-    for (const auto& button : m_gameBtns) delete button;
+    for (const auto &button : m_gameBtns)
+        delete button;
     m_gameBtns.clear();
     m_grid.destroy();
 }
@@ -65,8 +63,7 @@ ArcadeMachine::~ArcadeMachine()
 */
 void ArcadeMachine::mainMenu()
 {
-    while (!quit_requested())
-    {
+    while (!quit_requested()) {
         process_events();
         clear_screen();
         drawMainMenu();
@@ -90,12 +87,11 @@ void ArcadeMachine::gamesMenu()
     write_line("got buttons");
     write_line("set image");
     this->m_gameBtns = menu.getButtons();
-    
-    while ((!key_typed(ESCAPE_KEY) && !overlayActive) || overlayActive)
-    {
-        //write_line("into while");
+
+    while ((!key_typed(ESCAPE_KEY) && !overlayActive) || overlayActive) {
+        // write_line("into while");
         overlayActive = menu.getOverlayState();
-        process_events();   
+        process_events();
         clear_screen();
         // Get mouse position
         this->m_mouse = mouse_position();
@@ -115,31 +111,27 @@ void ArcadeMachine::optionsMenu()
     Option options;
     bool has_background_music = false;
     options.createOptionsButtons();
-    
-    while (this->m_exitOptions == false)
-    {
+
+    while (this->m_exitOptions == false) {
         process_events();
         clear_screen();
 
-        //options.updateOption();
+        // options.updateOption();
         options.drawOptionsMenu();
 
         this->m_exitOptions = options.checkAction();
-        
-        if(!has_background_music)
-        {
-            //audio->playMusic(options.getCurrentMusic(), options.getVolume());
-            has_background_music=false;   
-        }
-        
-        if(options.isChangeMusic())
-        {
-            has_background_music=false;
+
+        if (!has_background_music) {
+            // audio->playMusic(options.getCurrentMusic(), options.getVolume());
+            has_background_music = false;
         }
 
-        if(options.isChangeVoLume())
-        {
-            //audio->setVolume(options.getVolume());
+        if (options.isChangeMusic()) {
+            has_background_music = false;
+        }
+
+        if (options.isChangeVoLume()) {
+            // audio->setVolume(options.getVolume());
         }
 
         refresh_screen(60);
@@ -147,7 +139,7 @@ void ArcadeMachine::optionsMenu()
 
     this->m_exitOptions = false;
 
-    //fade_music_out(500);
+    // fade_music_out(500);
 }
 
 /**
@@ -158,22 +150,20 @@ void ArcadeMachine::optionsMenu()
 void ArcadeMachine::buttonClicked(point_2d point)
 {
     // Play
-    if ( this->m_action == "play" || (sprite_at(this->m_menuBtns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-    {
+    if (this->m_action == "play" || (sprite_at(this->m_menuBtns[0]->btn(), point) && mouse_clicked(LEFT_BUTTON))) {
         gamesMenu();
         write_line("Play button clicked");
     }
 
     // Options
-    else if ( this->m_action == "options" || (sprite_at(this->m_menuBtns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-    {
+    else if (this->m_action == "options" ||
+             (sprite_at(this->m_menuBtns[1]->btn(), point) && mouse_clicked(LEFT_BUTTON))) {
         optionsMenu();
         write_line("Options button clicked");
     }
 
     // Exit
-    else if ( this->m_action == "exit" || (sprite_at(this->m_menuBtns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON)) )
-    {
+    else if (this->m_action == "exit" || (sprite_at(this->m_menuBtns[2]->btn(), point) && mouse_clicked(LEFT_BUTTON))) {
         write_line("Exit button clicked");
         exitProgram();
     }
@@ -182,7 +172,7 @@ void ArcadeMachine::buttonClicked(point_2d point)
 /**
     Draws the Main Menu
 */
-void ArcadeMachine::drawMainMenu() 
+void ArcadeMachine::drawMainMenu()
 {
     // Get mouse position
     this->m_mouse = mouse_position();
@@ -195,12 +185,15 @@ void ArcadeMachine::drawMainMenu()
     Cell options = this->m_grid.getCell(3, 10);
     Cell exit = this->m_grid.getCell(4, 10);
     // Arcade Machine title
-    draw_text("Arcade",  COLOR_BLACK, "font_title", 100, 1180, 100);
+    draw_text("Arcade", COLOR_BLACK, "font_title", 100, 1180, 100);
     draw_text("Machine", COLOR_BLACK, "font_title", 100, 1150, 200);
     // Draw text on buttons
-    draw_text("play!", COLOR_BLACK, "font_btn", 70, play.button->x() + (play.button->centreX()/2) + 5, play.button->y() + 5);
-    draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centreX()/2) - 20, options.button->y() + 5);
-    draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centreX()/2) + 20, exit.button->y() + 5);
+    draw_text("play!", COLOR_BLACK, "font_btn", 70, play.button->x() + (play.button->centreX() / 2) + 5,
+              play.button->y() + 5);
+    draw_text("options", COLOR_BLACK, "font_btn", 70, options.button->x() + (options.button->centreX() / 2) - 20,
+              options.button->y() + 5);
+    draw_text("exit", COLOR_BLACK, "font_btn", 70, exit.button->x() + (exit.button->centreX() / 2) + 20,
+              exit.button->y() + 5);
 
     // Check input in selector class.
     this->m_menuButtonNode = this->m_selectorMainMenu.checkKeyInput(this->m_menuButtonNode);
@@ -216,8 +209,8 @@ void ArcadeMachine::prepareMainMenu()
 {
     // Get the data from the config files.
     this->m_configs = this->m_helper.ConfigDataList();
-    
-    // Initialise grid 
+
+    // Initialise grid
     GridLayout grid(ROWS, COLS);
     this->m_grid = grid;
 
@@ -233,7 +226,7 @@ void ArcadeMachine::prepareMainMenu()
 
     // Fetch menu background
     bitmap thoth = bitmap_named("thoth");
-    
+
     // Update grid cells with assets
     this->m_grid.setBackground(thoth);
 
@@ -248,7 +241,8 @@ void ArcadeMachine::prepareMainMenu()
     this->m_grid.updateCell(m_menuButtonNode->getNext()->button, 3, 10);
 
     // Play main menu music
-    if (this->m_playMusic) play_music("music_mainmenu");
+    if (this->m_playMusic)
+        play_music("music_mainmenu");
 }
 
 /// Plays the Thoth Tech splashscreen animation
@@ -258,25 +252,24 @@ void ArcadeMachine::playThothTechIntro()
     double alpha = 1.0;
     // Set iterations
     int i = 60;
-    // Play Thoth Tech Company sound 
+    // Play Thoth Tech Company sound
     play_sound_effect("intro_thoth");
 
-    while(i != 0)
-    {
+    while (i != 0) {
         process_events();
         clear_screen();
         // Draw logo
         m_introThothTech.drawTitlePage();
         // Fill screen with white at alpha value (opacity)
         fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
-        // Decrement i and alpha 
-        i--; alpha = alpha - 0.05;
+        // Decrement i and alpha
+        i--;
+        alpha = alpha - 0.05;
         // If alpha is == 0, hold image for 1.5 seconds
-        if (std::abs(alpha - 0.0) < 1e-9)
-        {
+        if (std::abs(alpha - 0.0) < 1e-9) {
             delay(2000);
             /*  After this has happened, the alpha value will continue into the negatives
-                The colour function continues to accept negative alpha values, 
+                The colour function continues to accept negative alpha values,
                 effectively creating a fade out animation for the remainder of the while loop
             */
         }
@@ -292,11 +285,10 @@ void ArcadeMachine::playArcadeTeamIntro()
     double alpha = 1.0;
     // Set iterations
     int i = 60;
-    // Play Thoth Tech Company sound 
+    // Play Thoth Tech Company sound
     play_sound_effect("intro_coin");
 
-    while(i != 0)
-    {
+    while (i != 0) {
         process_events();
         clear_screen();
 
@@ -305,28 +297,23 @@ void ArcadeMachine::playArcadeTeamIntro()
 
         int developerNameSpacing = 32;
         int developerNameIndex = 0;
-        for  (const auto& developerName : m_arcadeTeamDeveloperNames)
-        {
-            draw_text(developerName,
-                COLOR_BLACK,
-                "font_text",
-                26,
-                (ARCADE_MACHINE_RES_X / 2) - 180,
-                (ARCADE_MACHINE_RES_Y / 2) + 220 + developerNameSpacing * developerNameIndex);
+        for (const auto &developerName : m_arcadeTeamDeveloperNames) {
+            draw_text(developerName, COLOR_BLACK, "font_text", 26, (ARCADE_MACHINE_RES_X / 2) - 180,
+                      (ARCADE_MACHINE_RES_Y / 2) + 220 + developerNameSpacing * developerNameIndex);
             developerNameIndex++;
         }
 
         // Fill screen with white at alpha value (opacity)
         fill_rectangle(rgba_color(1.0, 1.0, 1.0, alpha), 0, 0, ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
-        // Decrement i and alpha 
-        i--; alpha = alpha - 0.05;
+        // Decrement i and alpha
+        i--;
+        alpha = alpha - 0.05;
         // If alpha is == 0, hold image for 1.5 seconds
-        if (std::abs(alpha - 0.0) < 1e-9)
-        {
+        if (std::abs(alpha - 0.0) < 1e-9) {
             play_sound_effect("intro_start");
             delay(2000);
             /*  After this has happened, the alpha value will continue into the negatives
-                The colour function continues to accept negative alpha values, 
+                The colour function continues to accept negative alpha values,
                 effectively creating a fade out animation for the remainder of the while loop
             */
         }
@@ -336,19 +323,19 @@ void ArcadeMachine::playArcadeTeamIntro()
 }
 
 /**
-    Draws the Splashkit Productions logo to the screen and 
+    Draws the Splashkit Productions logo to the screen and
     fetches new games from Git repo
 */
 void ArcadeMachine::playSplashKitIntro()
 {
     // Pull the most recent version of the arcade-games repo.
-    do
-    {
+    do {
         // Draw SplashKit productions screen
         this->m_introSplashkit.drawTitlePage();
-        draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, ARCADE_MACHINE_RES_X / 2 - 100, ARCADE_MACHINE_RES_Y / 2 + 350);
+        draw_text("Loading...", COLOR_SLATE_GRAY, "font_text", 60, ARCADE_MACHINE_RES_X / 2 - 100,
+                  ARCADE_MACHINE_RES_Y / 2 + 350);
         refresh_screen();
-        
+
     } while (!this->m_config.getFromGit("https://github.com/thoth-tech/arcade-games.git", "games"));
 }
 

@@ -1,24 +1,24 @@
 #ifndef ARCADE_MACHINE_MENU_H
 #define ARCADE_MACHINE_MENU_H
 
-#include "Tip.h"
-#include "Selector.h"
-#include "GameData.h"
-#include "Database.h"
-#include "Rating.h"
-#include "Table.h"
-#include "GridLayout.h"
 #include "Button.h"
-#include "MenuButton.h"
+#include "Database.h"
+#include "GameData.h"
 #include "GameScreenButton.h"
+#include "GridLayout.h"
+#include "MenuButton.h"
+#include "Rating.h"
+#include "Selector.h"
+#include "Table.h"
+#include "Tip.h"
 
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
+#include <chrono>
 #include <string>
 #include <vector>
-#include <chrono>
 
 // --------- borrowed from ArcadeMachine.h .... bad fix tho
 #define ARCADE_MACHINE_SCALING_FACTOR 1
@@ -26,7 +26,8 @@
 #define ARCADE_MACHINE_RES_Y 1080 * ARCADE_MACHINE_SCALING_FACTOR
 // --------------------------------------------------------
 
-class Menu {
+class Menu
+{
 private:
     std::string m_background = "games_dashboard";
     // Vector to store the config data of each game
@@ -63,7 +64,7 @@ private:
     // Checks if program has exited
     bool m_programExit;
     // Vector of buttons
-    std::vector<Button*> m_btns;
+    std::vector<Button *> m_btns;
     // Vector to store game images
     std::vector<std::string> m_gameImages;
     // Menu grid
@@ -106,31 +107,37 @@ public:
     ~Menu();
 
     // Getters
-    auto getButtons() const -> const std::vector<Button*> { return this->m_btns; }
-    bool getOverlayState() { return m_overlayActive; }
+    auto getButtons() const -> const std::vector<Button *>
+    {
+        return this->m_btns;
+    }
+    bool getOverlayState()
+    {
+        return m_overlayActive;
+    }
 
-    std::vector<std::string> getGameSprites(std::vector<ConfigData> configs); // gets game images from the config files and returns vector
+    std::vector<std::string> getGameSprites(
+        std::vector<ConfigData> configs); // gets game images from the config files and returns vector
 
-    void createGrid(); // Create a GridLayout object
+    void createGrid();    // Create a GridLayout object
     void createButtons(); // Create a list of games
-    void createTip(); // create a tip to display to the user.
+    void createTip();     // create a tip to display to the user.
     void updateCarousel();
     void carouselHandler();
     void drawMenuPage();
     void updateSlide(sprite buttonSprite, int position); // Method to update the sprite positions and draw sprite.
-    void drawUpdateSlideLeft(); // Slide the game buttons on left key input.
-    void drawUpdateSlideRight(); // Slide the game buttons on right key input.
+    void drawUpdateSlideLeft();                          // Slide the game buttons on left key input.
+    void drawUpdateSlideRight();                         // Slide the game buttons on right key input.
     void drawOverlay(ConfigData config, GameData stats); // Draw an overlay over the game, using data from the config.
 
 #ifdef _WIN32
     bool focusWindow(std::string windowName, int timeout = 2000);
-    void startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory);
+    void startGame(LPCSTR gamePath, LPSTR gameExe, LPCSTR gameDirectory);
     void checkGameExit();
 #endif
 
     void backToGamesMenu(); // Fade back to games menu
     void fade(double alphaStart, double alphaEnd, double alphaStep);
-
 };
 
 #endif

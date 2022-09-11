@@ -1,14 +1,14 @@
 #ifndef ARCADE_MACHINE_BUTTON_H
 #define ARCADE_MACHINE_BUTTON_H
 
-#include <string>
 #include "splashkit.h"
+#include <string>
 
 /**
  * @brief Abstract Button Class
- * 
+ *
  * This abstract class is the base class for all derived classes
- * Contains three overloaded contructors and three virtual methods 
+ * Contains three overloaded contructors and three virtual methods
  */
 class Button
 {
@@ -26,7 +26,7 @@ public:
     point_2d m_btnLocation;
 
     /// This buttons position in the window in pixels
-    int m_x; 
+    int m_x;
     int m_y;
 
     /// This buttons centre point offset width in pixels
@@ -46,30 +46,65 @@ public:
     std::string m_imagePath;
 
     /// Getters:
-    auto id()       const -> const int&         { return m_id;          }
-    auto pic()      const -> const bitmap&      { return m_pic;         }
-    auto btn()      const -> const sprite&      { return m_btn;         }
-    auto location() const -> const point_2d&    { return m_btnLocation; }
-    auto x()        const -> const int&         { return m_x;           }
-    auto y()        const -> const int&         { return m_y;           }
-    auto centreX()  const -> const int&         { return m_centreX;     }
-    auto centreY()  const -> const int&         { return m_centreY;     }
-    auto color()    const -> const std::string& { return m_btnColor;    }
+    auto id() const -> const int &
+    {
+        return m_id;
+    }
+    auto pic() const -> const bitmap &
+    {
+        return m_pic;
+    }
+    auto btn() const -> const sprite &
+    {
+        return m_btn;
+    }
+    auto location() const -> const point_2d &
+    {
+        return m_btnLocation;
+    }
+    auto x() const -> const int &
+    {
+        return m_x;
+    }
+    auto y() const -> const int &
+    {
+        return m_y;
+    }
+    auto centreX() const -> const int &
+    {
+        return m_centreX;
+    }
+    auto centreY() const -> const int &
+    {
+        return m_centreY;
+    }
+    auto color() const -> const std::string &
+    {
+        return m_btnColor;
+    }
 
     /// Setters
-    void setId(int id)      { this->m_id = id; }
-    void setX(const int &x) { this->m_x  = x;  }
-    void setY(const int &y) { this->m_y  = y;  }
+    void setId(int id)
+    {
+        this->m_id = id;
+    }
+    void setX(const int &x)
+    {
+        this->m_x = x;
+    }
+    void setY(const int &y)
+    {
+        this->m_y = y;
+    }
 
     /**
-    * @brief Enumeration of button types
-    * 
-    */
-    enum Color
-    {
+     * @brief Enumeration of button types
+     *
+     */
+    enum Color {
         PLAY,
         EXIT,
-        OPTS, 
+        OPTS,
         GAME,
         HOME,
         SOUND,
@@ -78,13 +113,17 @@ public:
     };
 
     // Default Constructor
-    Button() {}
+    Button()
+    {
+    }
     Button(Color c, float scale = 1);
     Button(Color c, float x, float y, int xCell, int yCell, float scale = 1);
     Button(Color c, std::string image, float scale = 1);
 
     // Destructor
-    virtual ~Button() {}
+    virtual ~Button()
+    {
+    }
 
     // Virtual fucntions
     virtual void btnImage(std::string image) = 0;
@@ -92,7 +131,6 @@ public:
     virtual std::string action(std::string keyinput = "") = 0;
 
     std::string btn_color(Color c);
-
 };
 
 #endif

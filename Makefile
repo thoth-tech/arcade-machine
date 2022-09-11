@@ -1,6 +1,7 @@
 INCDIRS = -Iinclude
 CXX = skm g++ $(INCDIRS)
 src = $(wildcard src/*.cpp)
+headers = $(wildcard include/*.h)
 obj = $(src:.cpp=.o)
 
 LDFLAGS = -std=c++14
@@ -21,3 +22,7 @@ ArcadeMachine: $(obj)
 
 clean:
 	rm $(obj)
+
+format:
+	clang-format -i $(src)
+	clang-format -i $(headers)

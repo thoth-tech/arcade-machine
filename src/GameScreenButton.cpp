@@ -1,25 +1,21 @@
 #include "GameScreenButton.h"
 
 // First constructor
-GameScreenButton::GameScreenButton(Color c, float scale)
-     : Button(c, scale)
+GameScreenButton::GameScreenButton(Color c, float scale) : Button(c, scale)
 {
-
 }
 
 // Third constructor
-GameScreenButton::GameScreenButton(Color c, std::string s, float scale)
-     : Button(c, s, scale)
+GameScreenButton::GameScreenButton(Color c, std::string s, float scale) : Button(c, s, scale)
 {
-
 }
 
 /**
-* @brief returns the action 
-* 
-* @param keyinput 
-* @return string 
-*/
+ * @brief returns the action
+ *
+ * @param keyinput
+ * @return string
+ */
 std::string GameScreenButton::action(std::string keyinput)
 {
     return keyinput;
