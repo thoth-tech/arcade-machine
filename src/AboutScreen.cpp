@@ -29,9 +29,6 @@ static const char *description[] =  {
 
 static const std::string createdBy = "Created by";
 
-static auto fontDescription = font_named("PressStart2P.ttf");
-static auto bgMusic = music_named("insert-no-coins.ogg");
-
 AboutScreen::AboutScreen() {
 	this->m_shouldQuit = false;
 	this->m_titleX = ARCADE_MACHINE_RES_X;
@@ -102,7 +99,7 @@ void AboutScreen::tick() {
 	// Every 1/4 second.
 	if (this->m_ticker % 15 == 0) {
 		if (! music_playing())
-			play_music(bgMusic);
+			play_music("music_about");
 	}
 
 	this->m_ticker++;
@@ -154,7 +151,7 @@ void AboutScreen::renderTitle() {
 		draw_text(
 			this->m_title.substr(i, 1), 
 			c,
-			fontDescription,
+			"font_about",
 			fontSize,
 			x,
 			y
@@ -185,22 +182,22 @@ void AboutScreen::renderDescription() {
 	int maxIOffset = 0;
 	for (int i=0; i<sizeof(description) / sizeof(description[0]); ++i) {
 		maxIOffset = (i * 32);
-		draw_text(description[i], COLOR_WHITE, fontDescription, 18, x, y + maxIOffset);
+		draw_text(description[i], COLOR_WHITE, "font_about", 18, x, y + maxIOffset);
 	}
 
 	y = y + maxIOffset + 32;
 	for (int i=0; i<this->m_linesOfCode.size(); ++i) {
 		maxIOffset = (i * 32);
-		draw_text(this->m_linesOfCode[i], COLOR_WHITE, fontDescription, 18, x, y + (maxIOffset));
+		draw_text(this->m_linesOfCode[i], COLOR_WHITE, "font_about", 18, x, y + (maxIOffset));
 	}
 
 	y = y + maxIOffset + 64;
-	draw_text("Contributions", COLOR_WHITE, fontDescription, 18, x, y);
+	draw_text("Contributions", COLOR_WHITE, "font_about", 18, x, y);
 	y += 32;
 
 	for (int i=0; i<this->m_gitContributions.size(); ++i) {
 		maxIOffset = (i * 32);
-		draw_text(this->m_gitContributions[i], COLOR_WHITE, fontDescription, 18, x, y + (maxIOffset));
+		draw_text(this->m_gitContributions[i], COLOR_WHITE, "font_about", 18, x, y + (maxIOffset));
 	}
 
 }
@@ -222,7 +219,7 @@ void AboutScreen::loop() {
 void AboutScreen::main() {
 	// Clear music and start the about screen music.
 	stop_music();
-	play_music(bgMusic);
+	play_music("music_about");
 
 	this->loop();
 
@@ -262,7 +259,7 @@ void AboutScreen::renderContributor() {
 	c.b = ratio;
 
 
-	draw_text(this->m_contributors[this->m_contributorsIndex], c, fontDescription, fontSize, 1100, 600);
+	draw_text(this->m_contributors[this->m_contributorsIndex], c, "font_about", fontSize, 1100, 600);
 
 	double x = 0;
 	double y = 0;
@@ -277,6 +274,6 @@ void AboutScreen::renderContributor() {
 			fontRatio = (double)1;
 
 		color c = this->getRainbowShade(actualX - 350);
-		draw_text(createdBy.substr(i, 1), c, fontDescription, (double)24 * fontRatio, actualX, (double)500 + y);
+		draw_text(createdBy.substr(i, 1), c, "font_about", (double)24 * fontRatio, actualX, (double)500 + y);
 	}
 }
