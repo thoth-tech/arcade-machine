@@ -188,6 +188,7 @@ void ArcadeMachine::drawMainMenu()
     this->m_mouse = mouse_position();
     this->m_grid.drawGrid();
     // Draw cursor
+    this->m_selectorMainMenu.setRenderCursor(true);
     draw_sprite(this->m_selectorMainMenu.getCursor());
     // Get button postions
     Cell play = this->m_grid.getCell(2, 10);

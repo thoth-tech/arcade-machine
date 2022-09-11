@@ -17,7 +17,8 @@ private:
     bool m_isSlidingRight = false;
     /// Checks if current button is from game menu.
     bool m_isFromGameMenu;
-    bool m_renderCursor = true;
+    /// Check to render cursor on Selector
+    bool m_renderCursor = false;
 
 public:
     Selector() {}
@@ -26,9 +27,9 @@ public:
     // Properties used to detect if game menu slide is occurring.
     auto getSlideLeft() const -> const bool& { return this->m_isSlidingLeft; }
     auto getSlideRight() const -> const bool& { return this->m_isSlidingRight; }
-    auto setSlideLeft(bool left) { m_isSlidingLeft = left; }
-    auto setSlideRight(bool right) { m_isSlidingRight = right; }
-
+    auto setSlideLeft(bool left) { this->m_isSlidingLeft = left; }
+    auto setSlideRight(bool right) { this->m_isSlidingRight = right; }
+    auto setRenderCursor(bool cursor) { this->m_renderCursor = cursor; }
     // Return the cursor sprite
     sprite getCursor() { return this->m_cursorSprite; }
 

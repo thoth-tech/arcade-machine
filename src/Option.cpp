@@ -1,9 +1,6 @@
 #include "Option.h"
 
-Option::Option()
-{
-    m_selectorOptionsMenu.setNoRenderCursor();
-}
+Option::Option() {}
 
 void Option::createOptionsButtons()
 {
