@@ -1,6 +1,7 @@
 #ifndef ARCADE_MACHINE_OPTION_H
 #define ARCADE_MACHINE_OPTION_H
 
+#include "AboutScreen.h"
 #include "splashkit.h"
 #include <string>
 #include "GridLayout.h"
@@ -29,6 +30,7 @@ private:
     Selector m_selectorOptionsMenu;
     point_2d m_mouse;
     std::string m_action; 
+    AboutScreen m_aboutScreen;
 
 public:
     Option();
@@ -44,6 +46,7 @@ public:
     void setCurrentMusic();
     void volumeControl();
     void changeDisplay();
+    void playAboutScreen();
     bool isChangeMusic();
     bool isChangeVoLume();
     void changeSelector();
