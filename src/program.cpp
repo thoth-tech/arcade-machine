@@ -2,7 +2,6 @@
 #include "ArcadeMachine.h"
 #define PLAY_INTRO true
 #define LOAD_GAMES true
-#define PLAY_ABOUT_SCREEN true
 
 int main(void)
 {
@@ -21,11 +20,6 @@ int main(void)
     // Play Thoth Tech intro
     Arcade.playThothTechIntro();
     Arcade.playArcadeTeamIntro();
-#endif
-
-#if PLAY_ABOUT_SCREEN == true
-    // Play about screen.
-    Arcade.playAboutScreen();
 #endif
 
 #if LOAD_GAMES == true
