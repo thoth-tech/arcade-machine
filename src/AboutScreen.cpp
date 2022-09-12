@@ -38,6 +38,7 @@ AboutScreen::AboutScreen() {
 	this->m_stars = std::vector<struct s_star>();
 	this->m_contributorsIndex = 0;
 	this->m_contributorTicker = 0;
+	this->m_ticker = 0;
 
 	for (int i=0; i<STAR_COUNT; ++i) {
 		struct s_star star;
