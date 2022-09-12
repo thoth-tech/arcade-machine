@@ -8,3 +8,4 @@ games/*
 **/*.o
 ArcadeMachine
 **/.DS_Store
+stats/*

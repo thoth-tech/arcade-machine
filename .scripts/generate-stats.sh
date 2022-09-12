@@ -1,4 +1,6 @@
 #!/bin/bash
+rm -rf stats
+mkdir -p stats
 rm stats/lines-of-code.txt
 touch stats/lines-of-code.txt
 CPPLINES=$(find . -not -path "./games/*" -name '*.cpp' | xargs wc -l | tail -1 | sed 's/[^0-9]*//g')
