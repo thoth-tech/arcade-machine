@@ -87,6 +87,8 @@ private:
     // Called in the constructor
     void loadDeveloperNames(const char* filePath);
 
+    /// Check for Options menu exit 
+    bool m_exitOptions = false;
 public:
     // Default Constructor
     ArcadeMachine();

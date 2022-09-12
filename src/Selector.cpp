@@ -59,7 +59,8 @@ ButtonNode* Selector::checkKeyInput(ButtonNode* buttonNode, bool isFromGameMenu)
             // Highlight the current button.
             highlightButton(buttonNode, "prev");
             // move cursor
-            sprite_set_y(this->m_cursorSprite, sprite_y(buttonNode->button->btn()));
+            if (this->m_renderCursor)
+                sprite_set_y(this->m_cursorSprite, sprite_y(buttonNode->button->btn()));
         }
         // Move the selector down.
         if (key_typed(DOWN_KEY) || key_typed(S_KEY))
@@ -69,7 +70,8 @@ ButtonNode* Selector::checkKeyInput(ButtonNode* buttonNode, bool isFromGameMenu)
             // Highlight the current button.
             highlightButton(buttonNode, "next");
             // Move cursor.
-            sprite_set_y(this->m_cursorSprite, sprite_y(buttonNode->button->btn()));
+            if (this->m_renderCursor)
+                sprite_set_y(this->m_cursorSprite, sprite_y(buttonNode->button->btn()));
         }
     }
 
@@ -122,8 +124,10 @@ void Selector::highlightFirst(ButtonNode* buttonNode)
     // Set start location of cursor.
     if (! m_isFromGameMenu)
     {
-        sprite_set_x(this->m_cursorSprite, sprite_x(buttonNode->button->btn()) - 200);
-        sprite_set_y(this->m_cursorSprite, sprite_y(buttonNode->button->btn()));
+        if (this->m_renderCursor) {
+            sprite_set_x(this->m_cursorSprite, sprite_x(buttonNode->button->btn()) - 200);
+            sprite_set_y(this->m_cursorSprite, sprite_y(buttonNode->button->btn()));
+        }
     }
 
     m_isFirstButton = false;
@@ -155,4 +159,9 @@ void Selector::highlightButton(ButtonNode* buttonNode, std::string direction)
 
     // Toggle previous sprite highlight layer off.
     sprite_toggle_layer_visible(prevSprite, 1);
+}
+
+void Selector::setNoRenderCursor()
+{
+    this->m_renderCursor = false;
 }
