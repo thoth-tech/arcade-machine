@@ -216,3 +216,29 @@ void ConfigData::printConfigData()
     write_line("Folder = " + folder());
     write_line("========================");
 }
+
+struct s_ExecutablePath ConfigData::getExecutablePath()
+{
+    struct s_ExecutablePath result;
+    result.path = this->folder();
+
+#ifdef _WIN32
+    result.file = this->win_exe();
+    result.filePath = result.path + "\\" + result.file;
+#else
+    #if __APPLE__
+        write_line("APPLE!");
+        result.file = this->mac_exe();
+    #else
+        #ifdef __arm__
+            result.file = this->lin_exe() + "-arm";
+        #else
+            result.file = this->lin_exe();
+        #endif
+    #endif
+
+    result.filePath = result.path + "/" + result.file;
+#endif
+
+    return result;
+}
