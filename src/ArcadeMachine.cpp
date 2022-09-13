@@ -1,4 +1,5 @@
 #include "ArcadeMachine.h"
+#include "Configuration.h"
 
 #include <iostream>
 #include <cstdlib>

@@ -91,9 +91,14 @@ void Option::drawOptionsMenu()
 
 bool Option::checkAction()
 {
-    if (this->m_action == "home") return true;
+    if (this->m_action == "home") 
+        return true;
 
-    if (this->m_action == "sound") soundMenu();
+    if (this->m_action == "sound") 
+        this->soundMenu();
+
+    if (this->m_action == "stats")
+        this->playAboutScreen();
 
     return false;
 }
@@ -316,4 +321,9 @@ void Option::drawIntinialHub()
         // draw_bitmap();
         draw_bitmap("backGame_notSelected", 0, 0);
     }
+}
+
+void Option::playAboutScreen()
+{
+    this->m_aboutScreen.main();
 }

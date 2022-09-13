@@ -17,6 +17,7 @@ endif
 OSFLAGS = -O3
 
 ArcadeMachine: $(obj)
+	-.scripts/generate-stats.sh
 	$(CXX) -o $@ $^ $(LDFLAGS) $(OSFLAGS)
 
 clean:
