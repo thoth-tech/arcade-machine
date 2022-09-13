@@ -226,8 +226,14 @@ struct s_ExecutablePath ConfigData::getExecutablePath()
     result.file = this->win_exe();
     result.filePath = result.path + "\\" + result.file;
 #else
+
+    // TODO.
+    // Try to find automatically built files by convention.
+    // Check if gameDir/builds/[name]-[arm?]-[os].[ext] exists
+    // If it does, use this by default. Otherwise, fall back
+    // to manualy configuration code below.
+
     #if __APPLE__
-        write_line("APPLE!");
         result.file = this->mac_exe();
     #else
         #ifdef __arm__
