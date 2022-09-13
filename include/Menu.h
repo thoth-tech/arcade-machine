@@ -1,6 +1,7 @@
 #ifndef ARCADE_MACHINE_MENU_H
 #define ARCADE_MACHINE_MENU_H
 
+#include "ConfigData.h"
 #include "Tip.h"
 #include "Selector.h"
 #include "GameData.h"
@@ -128,7 +129,7 @@ public:
     bool focusWindow(std::string windowName, int timeout = 2000);
     void startGame(LPCSTR gamePath, LPSTR gameExe, LPCSTR gameDirectory);
 #else
-    void startGame(std::string filePath);
+    void startGame(struct s_ExecutablePath path);
 #endif
     void checkGameExit();
 
