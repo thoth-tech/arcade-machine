@@ -3,6 +3,7 @@
 #include <regex>
 #include <iostream>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 /**
 * @brief Construct a new Config Data object
@@ -76,14 +77,16 @@ void ConfigData::collectConfigData(std::vector<std::string> configs)
 
             if(std::regex_search(s.begin(), s.end(), sm, std::regex("(.*)=(.*)")))
             {
-                if      (sm[1] == "title")       this->m_title = sm[2]; 
+                     if (sm[1] == "title")       this->m_title = sm[2]; 
                 else if (sm[1] == "author")      this->m_author = sm[2];
                 else if (sm[1] == "genre")       this->m_genre = sm[2];
                 else if (sm[1] == "description") this->m_description = sm[2];
                 else if (sm[1] == "rating")      this->m_rating = sm[2];
                 else if (sm[1] == "language")    this->m_language = sm[2];
                 else if (sm[1] == "image")       this->m_image = sm[2];
-                else if (sm[1] == "executable")  this->m_exe = sm[2];
+                else if (sm[1] == "win-exe")     this->m_win_exe = sm[2];
+                else if (sm[1] == "linux-bin")   this->m_lin_exe = sm[2];
+                else if (sm[1] == "macos-bin")   this->m_mac_exe = sm[2];
                 else if (sm[1] == "repository")  this->m_repo = sm[2];
             }
         }
@@ -116,7 +119,9 @@ void ConfigData::collectJsonData(json json_configs)
     this->m_genre    = json_read_string(json_configs, "genre");
     this->m_rating   = json_read_string(json_configs, "rating");
     this->m_author   = json_read_string(json_configs, "author");
-    this->m_exe      = json_read_string(json_configs, "exe");
+    this->m_win_exe  = json_read_string(json_configs, "win-exe");
+    this->m_lin_exe  = json_read_string(json_configs, "lin-exe");
+    this->m_mac_exe  = json_read_string(json_configs, "mac-exe");
 }
 
 /**
@@ -129,13 +134,22 @@ void ConfigData::collectJsonData(json json_configs)
 */
 bool ConfigData::getFromGit(std::string url, const char* dir)
 {
+    // info struct lets us query the directory to see if it exists
     struct stat info;
-
-    if (stat(dir, &info) != 0){
+    if (stat(dir, &info) != 0)
+    {
+        // cant access dir -- clone from scratch
         system(("git clone " + url + " " + dir).c_str());
-    } else {
-        std::string d = dir;
-        system(("git -C " + d + " pull " + url).c_str());
+    }
+    else if (info.st_mode &S_IFDIR)
+    {
+        // dir exists -- pull instead
+        system(("git -C " + std::string(dir) + " pull " + url).c_str());
+    }
+    else
+    {
+        // dir does not exist -- clone from scratch
+        system(("git clone " + url + " " + dir).c_str());
     }
 
     return true;
@@ -196,7 +210,9 @@ void ConfigData::printConfigData()
     write_line("Repo = " + repo());
     write_line("Language = " + language());
     write_line("Image = " + image());
-    write_line("Exe = " + exe());
+    write_line("Windows Exe = " + win_exe());
+    write_line("Linux Bin = " + lin_exe());
+    write_line("MacOS Bin = " + mac_exe());
     write_line("Folder = " + folder());
     write_line("========================");
 }

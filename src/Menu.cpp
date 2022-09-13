@@ -2,6 +2,7 @@
 
 #ifndef _WIN32
 #include "Process.h"
+#include "ConfigData.h"
 #endif
 
 #include <cmath>
@@ -156,6 +157,15 @@ void Menu::carouselHandler()
             if (m_overlayActive)
             {
 
+#ifdef _WIN32
+                // Get game path
+                m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.win_exe()).c_str();
+                // Get executable name
+                m_gameExe = strdup(this->m_button->config.win_exe().c_str());
+                // Get game directory
+                m_gameDir = this->m_button->config.folder().c_str();
+#endif
+
                 // Set the center of the game
                 this->m_x = m_centreX;
                 this->m_y = m_centreY;
@@ -182,19 +192,14 @@ void Menu::carouselHandler()
                 // Get game path
                 m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()).c_str();
                 // Get executable name
-                m_gameExe = strdup(this->m_button->config.exe().c_str());
+                m_gameExe = strdup(this->m_button->config.win_exe().c_str());
                 // Get game directory
                 m_gameDir = this->m_button->config.folder().c_str();
 
                 // Call method to open game executable
                 startGame(m_gamePath, m_gameExe, m_gameDir);
 #else
-    #ifdef __APPLE__
-                std::string gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()) + "-macos";
-    #else
-                std::string gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.exe()) + "-linux";
-    #endif
-                startGame(gamePath);
+                startGame(this->m_button->config.getExecutablePath());
 #endif
 
                 return;
@@ -441,13 +446,9 @@ void Menu::startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
     }
 }
 #else
-void Menu::startGame(std::string filePath) {
+void Menu::startGame(struct s_ExecutablePath path) {
     if (!this->m_inGame) {
-
-        // TODO: Ensure that spaces in filePath are escaped with \ to
-        // ensure execution works on unix environments.
-
-        this->m_processId = spawnProcess(filePath);
+        this->m_processId = spawnProcess(path.path, path.file);
         this->m_inGame = true;
     }
 }
