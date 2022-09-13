@@ -3,9 +3,9 @@ rm -rf stats
 mkdir -p stats
 rm stats/lines-of-code.txt
 touch stats/lines-of-code.txt
-CPPLINES=$(find . -not -path "./games/*" -name '*.cpp' | xargs wc -l | tail -1 | sed 's/[^0-9]*//g')
+CPPLINES=$(find -L . -not -path "./games/*" -name '*.cpp' | xargs wc -l | tail -1 | sed 's/[^0-9]*//g')
 echo "C++ (code): $CPPLINES" >> stats/lines-of-code.txt
-HLINES=$(find . -not -path "./games/*" -name '*.h' | xargs wc -l | tail -1 | sed 's/[^0-9]*//g')
+HLINES=$(find -L . -not -path "./games/*" -name '*.h' | xargs wc -l | tail -1 | sed 's/[^0-9]*//g')
 echo -n "C++ (header): $HLINES" >> stats/lines-of-code.txt
 
 rm stats/git.txt
