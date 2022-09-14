@@ -53,6 +53,7 @@ FONT,font_btn,MindPlay.ttf
 FONT,font_title,Retroking.ttf
 FONT,font_text,Roboto-Regular.ttf
 FONT,font_star,Stars.ttf
+FONT,font_about,PressStart2P.ttf
 
 // Sounds
 SOUND,intro_thoth,intro1.wav
@@ -64,6 +65,7 @@ MUSIC,music_mainmenu,main_menu.mp3
 MUSIC, 1, 1.mp3
 MUSIC, 2, 2.mp3
 MUSIC, 3, 3.mp3
+MUSIC, music_about, insert-no-coins.ogg
 
 // Animations
 ANIM,info-script,information.txt

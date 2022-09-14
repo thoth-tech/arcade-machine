@@ -1,6 +1,9 @@
+#include "Configuration.h"
 #include "ArcadeMachine.h"
+#define PLAY_INTRO true
+#define LOAD_GAMES true
 
-int main()
+int main(void)
 {
     // Load all resources
     set_resources_path("resources" ARCADE_MACHINE_PATH_SEP);
@@ -13,19 +16,16 @@ int main()
     open_window("arcade-machine", ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
     window_toggle_border("arcade-machine");
 
-    // Do you want to play the intros and fetch new games? 
-    bool play_intro = true;
-    bool load_games = true;
-
+#if PLAY_INTRO == true
     // Play Thoth Tech intro
-    if (play_intro) 
-    {
-        Arcade.playThothTechIntro();
-        Arcade.playArcadeTeamIntro();
-    }
+    Arcade.playThothTechIntro();
+    Arcade.playArcadeTeamIntro();
+#endif
 
+#if LOAD_GAMES == true
     // Play SplashKit intro
-    if (load_games) Arcade.playSplashKitIntro();
+    Arcade.playSplashKitIntro();
+#endif
     
     // Prepare the main menu
     Arcade.prepareMainMenu();
