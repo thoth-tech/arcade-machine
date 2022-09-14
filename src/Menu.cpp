@@ -199,7 +199,11 @@ void Menu::carouselHandler()
                 // Call method to open game executable
                 startGame(m_gamePath, m_gameExe, m_gameDir);
 #else
-                startGame(this->m_button->config.getExecutablePath());
+                try {
+                    startGame(this->m_button->config.getExecutablePath());
+                } catch(const std::runtime_error &error) {
+                    write_line(error.what());
+                }
 #endif
 
                 return;
