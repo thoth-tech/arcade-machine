@@ -17,14 +17,15 @@
 #define ARCADE_MACHINE_INSTRUCTION_SET "x86"
 #endif
 
-#define ARCADE_MACHINE_BINARY_EXT ""
 #ifdef _WIN32
 #define ARCADE_MACHINE_OS "windows"
 #define ARCADE_MACHINE_BINARY_EXT ".exe"
 #elif __APPLE__
 #define ARCADE_MACHINE_OS "macos"
+#define ARCADE_MACHINE_BINARY_EXT ""
 #else
 #define ARCADE_MACHINE_OS "linux"
+#define ARCADE_MACHINE_BINARY_EXT ""
 #endif
 
 #endif
