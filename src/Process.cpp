@@ -8,6 +8,8 @@
 
 pid_t spawnProcess(std::string directory, std::string fileName) {
 
+#ifndef _WIN32
+
 	// First, fork the current process into a new process.
 	// This is required to ensure that process execution occurs concurrently.
 	pid_t processId = fork();
@@ -38,8 +40,13 @@ pid_t spawnProcess(std::string directory, std::string fileName) {
 	pclose(pipe);
 
 	exit(EXIT_SUCCESS);
+
+#endif
+
 }
 
 bool processRunning(pid_t processId) {
+#ifndef _WIN32
 	return getpgid(processId) >= 0;
+#endif
 }
