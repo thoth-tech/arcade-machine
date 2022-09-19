@@ -1,5 +1,10 @@
 #include "Menu.h"
 
+#ifndef _WIN32
+#include "Process.h"
+#include "ConfigData.h"
+#endif
+
 #include <cmath>
 
 Menu::Menu()
@@ -139,9 +144,7 @@ void Menu::carouselHandler()
     this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
     this->m_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
 
-#ifdef _WIN32
     checkGameExit();
-#endif
 
     if (this->m_button)
     {
@@ -153,6 +156,7 @@ void Menu::carouselHandler()
         {
             if (m_overlayActive)
             {
+
 #ifdef _WIN32
                 // Get game path
                 m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.win_exe()).c_str();
@@ -185,8 +189,21 @@ void Menu::carouselHandler()
                 m_gameData.setGameName(this->m_button->config.title());
 
 #ifdef _WIN32
+                // Get game path
+                m_gamePath = (this->m_button->config.folder() + "/" + this->m_button->config.win_exe()).c_str();
+                // Get executable name
+                m_gameExe = strdup(this->m_button->config.win_exe().c_str());
+                // Get game directory
+                m_gameDir = this->m_button->config.folder().c_str();
+
                 // Call method to open game executable
                 startGame(m_gamePath, m_gameExe, m_gameDir);
+#else
+                try {
+                    startGame(this->m_button->config.getExecutablePath());
+                } catch(const std::runtime_error &error) {
+                    write_line(error.what());
+                }
 #endif
 
                 return;
@@ -432,6 +449,15 @@ void Menu::startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
         this->m_inGame = true;
     }
 }
+#else
+void Menu::startGame(struct s_ExecutablePath path) {
+    if (!this->m_inGame) {
+        this->m_processId = spawnProcess(path.path, path.file);
+        this->m_inGame = true;
+    }
+}
+#endif
+
 
 /**
 * @brief Waits for game to exit.
@@ -442,6 +468,7 @@ void Menu::checkGameExit()
 {
     if (this->m_inGame == true)
     {
+#ifdef _WIN32
         this->m_gameStarted = true;
         // Check if game has been exited.
         this->m_programExit = GetExitCodeProcess(m_processInfo.hProcess, &m_exitCode);
@@ -453,9 +480,16 @@ void Menu::checkGameExit()
             m_gameData.setEndTime(time(0));
             m_gameData.setHighScore(highScore);
         }
+#else
+        if (! processRunning(this->m_processId)) {
+            this->m_inGame = false;
+            int highScore = 0;
+            m_gameData.setEndTime(time(0));
+            m_gameData.setHighScore(highScore);
+        }
+#endif
     }
 }
-#endif
 
 /** 
 * @brief Fade back to games menu

@@ -1,6 +1,7 @@
 #ifndef ARCADE_MACHINE_MENU_H
 #define ARCADE_MACHINE_MENU_H
 
+#include "ConfigData.h"
 #include "Tip.h"
 #include "Selector.h"
 #include "GameData.h"
@@ -43,6 +44,8 @@ private:
     LPCSTR m_gameDir;
     // m_handle for game window.
     HWND m_handle;
+#else
+    int m_processId;
 #endif
 
     // Used to find x centre of screen
@@ -119,9 +122,11 @@ public:
 
 #ifdef _WIN32
     bool focusWindow(std::string windowName, int timeout = 2000);
-    void startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory);
-    void checkGameExit();
+    void startGame(LPCSTR gamePath, LPSTR gameExe, LPCSTR gameDirectory);
+#else
+    void startGame(struct s_ExecutablePath path);
 #endif
+    void checkGameExit();
 
     void backToGamesMenu(); // Fade back to games menu
     void fade(double alphaStart, double alphaEnd, double alphaStep);

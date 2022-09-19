@@ -1,9 +1,14 @@
 #include "ConfigData.h"
 
+#include "Configuration.h"
 #include <regex>
 #include <iostream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <exception>
+
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 /**
 * @brief Construct a new Config Data object
@@ -215,4 +220,47 @@ void ConfigData::printConfigData()
     write_line("MacOS Bin = " + mac_exe());
     write_line("Folder = " + folder());
     write_line("========================");
+}
+
+struct s_ExecutablePath ConfigData::getExecutablePath()
+{
+    struct s_ExecutablePath result;
+    result.path = this->folder();
+
+    std::string binaryName = ARCADE_MACHINE_OS "-" ARCADE_MACHINE_INSTRUCTION_SET ARCADE_MACHINE_BINARY_EXT;
+    std::string buildsDirectory = result.path + ARCADE_MACHINE_PATH_SEP + "builds";
+    std::string binaryFp = buildsDirectory + ARCADE_MACHINE_PATH_SEP + binaryName;
+
+    // This checks if an automatic build exists.
+    // If it does (for the current platform-instruction set combination),
+    // the automated build will be returned.
+    if (fs::exists(binaryFp)) {
+        result.file = binaryName;
+        result.filePath = binaryFp;
+
+        return result;
+    }
+
+    // If there's no automated build, fall-back to the config-data
+    // specified binary file.
+
+#ifdef _WIN32
+    result.file = this->win_exe();
+#elif __APPLE__
+    result.file = this->mac_exe();
+#else
+    result.file = this->lin_exe();
+#endif
+
+    if (result.file.length() < 1)
+        throw std::runtime_error("No binary file for the platform " ARCADE_MACHINE_OS  "-" ARCADE_MACHINE_INSTRUCTION_SET " has been specified. No game can be executed.");
+
+    result.filePath = result.path + ARCADE_MACHINE_PATH_SEP + result.file;
+
+    write_line(result.filePath);
+    write_line(fs::exists(result.filePath));
+    if (! fs::exists(result.filePath))
+        throw std::runtime_error("The determined binary file path " + result.filePath + " doesn't exist. No game can be executed.");
+
+    return result;
 }

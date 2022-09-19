@@ -5,6 +5,12 @@
 #include <fstream>
 #include "splashkit.h"
 
+struct s_ExecutablePath {
+    std::string path;
+    std::string file;
+    std::string filePath;
+};
+
 /**
 * @brief Parses the configuration data from config.txt files to a data object
 * 
@@ -82,6 +88,7 @@ public:
     void renameDir(const char* dir);
     void deleteDir(std::string dir);
     void printConfigData();
+    struct s_ExecutablePath getExecutablePath();
 
 };
 
