@@ -43,10 +43,18 @@ pid_t spawnProcess(std::string directory, std::string fileName) {
 
 #endif
 
+	// TODO: Add Windows support.
+	return 0;
+
 }
 
 bool processRunning(pid_t processId) {
+
 #ifndef _WIN32
 	return getpgid(processId) >= 0;
 #endif
+
+	// TODO: Add Windows support.
+	return false;
+
 }
