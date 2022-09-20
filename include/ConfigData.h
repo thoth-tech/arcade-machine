@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <fstream>
+#include <cstring>
+#include <experimental/filesystem>
 #include "splashkit.h"
 
 struct s_ExecutablePath {
