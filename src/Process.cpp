@@ -23,7 +23,7 @@ pid_t spawnProcess(std::string directory, std::string fileName) {
 	// executes.
 	chdir(directory.c_str());
 
-	std::string cmd = "./" + fileName;
+	std::string cmd = "./builds/" + fileName;
 	auto pipe = popen(cmd.c_str(), "r");
 	if (! pipe) {
 		std::cerr << "Error executing popen" << std::endl;

@@ -25,7 +25,7 @@
 #define ARCADE_MACHINE_BINARY_EXT ""
 #else
 #define ARCADE_MACHINE_OS "linux"
-#define ARCADE_MACHINE_BINARY_EXT ""
+#define ARCADE_MACHINE_BINARY_EXT ".out"
 #endif
 
 #endif
