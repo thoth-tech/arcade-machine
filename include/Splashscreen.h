@@ -16,8 +16,9 @@ public:
     // Overloaded constructor
     Splashscreen(std::string bitmap) { this->m_bmp = bitmap; }
 
-    void drawTitlePage();
-    
+    void drawTitlePage() { 
+        draw_bitmap(this->m_bmp, 0, 0); 
+    }
 };
 
 #endif
