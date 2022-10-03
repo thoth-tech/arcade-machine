@@ -1,5 +1,8 @@
 #include "Configuration.h"
 #include "ArcadeMachine.h"
+#include "wtypes.h"
+#include <iostream>
+using namespace std;
 #define PLAY_INTRO true
 #define LOAD_GAMES true
 
@@ -12,8 +15,14 @@ int main(void)
     // Instantiate Arcade Machine
     ArcadeMachine Arcade;
 
+    // Full screen
+    RECT desktop;
+    const HWND hDesktop = GetDesktopWindow();
+    GetWindowRect(hDesktop, &desktop);
+    int horizontal = desktop.right;
+    int vertical = desktop.bottom;
     // Open window and toggle border off.
-    open_window("arcade-machine", ARCADE_MACHINE_RES_X, ARCADE_MACHINE_RES_Y);
+    open_window("arcade-machine", horizontal, vertical);
     window_toggle_border("arcade-machine");
 
 #if PLAY_INTRO == true
