@@ -3,8 +3,3 @@ logs/
 **/*.log
 **/*.exe
 **/*.out*
-resources/databases/*
-games/*
-**/*.o
-ArcadeMachine
-**/.DS_Store

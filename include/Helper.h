@@ -1,16 +1,9 @@
 #ifndef ARCADE_MACHINE_HELPER_H
 #define ARCADE_MACHINE_HELPER_H
 
-#if __cplusplus >= 201703L
-#include <filesystem>
-namespace fs = std::filesystem;
-#else
-#define _LIBCPP_NO_EXPERIMENTAL_DEPRECATION_WARNING_FILESYSTEM
 #include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
-#endif
 
-#include "GridLayout.h"
+namespace fs = std::experimental::filesystem;
 
 // Remove definition to use JSON config.
 #define ARCADE_MACHINE_USE_TEXT_CONFIG
@@ -97,7 +90,7 @@ class Helper {
          * 
          * @param grid 
          */
-        void resetScreen(GridLayout grid)
+        void resetScreen(Grid grid)
         {
             process_events();
             clear_screen(COLOR_DARK_SLATE_GRAY);
@@ -120,7 +113,7 @@ class Helper {
             int rows = 5;
             int cols = 5;
             //#rows, #cols, ScaletoFit
-            GridLayout grid(rows, cols, true);
+            Grid grid(rows, cols, true);
             //Grid grid(rows,colsArray, true);
 
             resetScreen(grid);
