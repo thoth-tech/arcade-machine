@@ -69,7 +69,11 @@ void ArcadeMachine::mainMenu()
 {
     while (!quit_requested())
     {
-        this->audio.playMusic("4",100);
+        this->audio.playMusic(4,100);
+        if(key_typed(K_KEY)){
+            this->audio.setSongId(1);
+            write_line("qweqweqeqweqe");
+        }
         process_events();
         clear_screen();
         drawMainMenu();

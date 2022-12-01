@@ -6,7 +6,7 @@
 class Audio {
     private:
         vector<music> m_music;
-        int songId = 1;
+        int songId = 4;
     public:
         Audio()
         {
@@ -15,13 +15,18 @@ class Audio {
 
         void setSongId(int id)
         {
-            this->songId = id;
+            if(this->songId != id){
+                this->songId = id;
+                write_line("dasd");
+                stop_music();
+                playMusic(id,100);
+            }
         }
 
-        void playMusic(string _currentMusic,float volume)
+        void playMusic(int _currentMusic,float volume)
         {
             if(!music_playing()){
-                play_music(_currentMusic);
+                play_music(std::to_string(_currentMusic));
             }
             
             set_music_volume(volume);
