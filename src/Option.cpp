@@ -1,7 +1,145 @@
 #include "Option.h"
 
 Option::Option() {}
+// class Audio{
+//     private: 
+//         int _selector;
+//         bool has_background_music = false;
+//     public:
+//         Audio(){}
+        
+//         void playMusic(int _currentMusic,float volume)
+//         {
+//             play_music(to_string(_currentMusic));
+//             set_music_volume(volume);
+//         }  
 
+//         void setVolume(float volume)
+//         {
+//             set_music_volume(volume);
+//         }
+//         void VolumeControl()
+//         {
+//             if(_selector==2&&_isSelected&&key_typed(RIGHT_KEY)&&_volume<100&&_insideSeletor==1)
+//             {
+//                 _volume=_volume+20;
+//             }
+//             if(_selector==2&&_isSelected&&key_typed(LEFT_KEY)&&_volume>0&&_insideSeletor==1)
+//             {
+//                 _volume=_volume-20;
+//             }
+//         }
+
+//         void setCurrentMusic()
+//         {
+//             if(_selector==2&&_isSelected&&_volume<100&&_insideSeletor==2)
+//             {
+//                 if(key_typed(LEFT_KEY)&&_currentMusic>1)
+//                 {
+//                     _currentMusic=_currentMusic-1;
+//                 }
+//                 if(key_typed(RIGHT_KEY)&&_currentMusic<3)
+//                 {
+//                     _currentMusic=_currentMusic+1;
+//                 }
+//             }
+//         }
+
+//         int getCurrentMusic()
+//         {
+//             return _currentMusic;
+//         }  
+//         void play_music_in_loop(){
+//             if(!has_background_music)
+//                 {
+//                     audio->playMusic(options.getCurrentMusic(), options.getVolume());
+//                     has_background_music=true;   
+//                 }
+//         }
+//          void drawIntinialHub()
+//         {
+//         const string settingImage = path_to_resource("back_ground", IMAGE_RESOURCE);
+//         bitmap back =load_bitmap("back_ground",settingImage);
+//         _grid->SetBackground(back);
+//         _grid->UpdateCell(homeReturn,0,0);
+//         _grid->UpdateCell(soundSetting,1,0);
+//         // _grid->UpdateCell(menuSetting,2,0);
+//         _grid->UpdateCell(gameReturn,3,0); 
+            
+//             draw_bitmap("back_ground", bitmap_width("backCurrentGame"), 0);
+
+//             if(_selector==1)
+//             {
+//                 // draw_bitmap("backCurrentGame", 0, 0);
+//                 // draw_bitmap("sound_notSelected", 0, bitmap_height("backCurrentGame"));
+//                 // // draw_bitmap();
+//                 // draw_bitmap("backMenu_notSelected", 0, 3*bitmap_height("backCurrentGame"));
+//                 _grid->DrawGrid();
+//                 draw_text("RESET DEFAULT", color_red(), 400, 100);
+//                 draw_text("yes", color_red(), 300, 300);
+//                 draw_text("no", color_red(), 700, 300);
+                
+//             }
+
+//             if(_selector==2)
+//             {
+//                 // draw_bitmap("changeSound",0,bitmap_height("backCurrentGame"));
+//                 // draw_bitmap("backGame_notSelected",0,0);
+//                 // // draw_bitmap();
+//                 // draw_bitmap("backMenu_notSelected",0,3*bitmap_height("backCurrentGame"));
+//                 _grid->DrawGrid();
+                
+//                 fill_rectangle(color_red(),bitmap_width("backCurrentGame")+200,200,screen_width()-bitmap_width("backCurrentGame")-400,50);
+//                 double a=screen_width()-bitmap_width("backCurrentGame")-400;
+//                 double b=a/100*_volume;
+//                 fill_rectangle(color_yellow(),bitmap_width("backCurrentGame")+200,200,b,50);
+//                 draw_text(to_string(screen_width()-bitmap_width("backCurrentGame")),color_red(),300,300);
+
+//                 if (_insideSeletor==1)
+//                 {
+//                     draw_text("CHANGE SOUND",color_white(),bitmap_width("backCurrentGame")+100,200);
+//                 }
+
+//                 if(_insideSeletor==2)
+//                 {
+//                     draw_text("CHANGE MUSIC",color_white(),bitmap_width("backCurrentGame")+100,500);
+//                     draw_text(to_string(_currentMusic),color_white(),bitmap_width("backCurrentGame")+250,500);
+//                 }
+//             }
+
+//             if(_selector==3)
+//             {
+//                 double x=screen_width();
+//                 double y=screen_height();
+//                 double a=bitmap_width("backCurrentGame");
+//                 double rec_width=(x-a-450)/2;
+//                 double rec_height=(y-450)/2;
+//                 double first_column_x=150+a;
+//                 double secong_column_x=a+300+rec_width;
+//                 double first_row_y=150;
+//                 double second_row_y=300+rec_height;
+//                 fill_rectangle(color_white(),first_column_x,first_row_y,rec_width,rec_height);
+//                 fill_rectangle(color_white(),secong_column_x,first_row_y,rec_width,rec_height);
+//                 fill_rectangle(color_white(),first_column_x,second_row_y,rec_width,rec_height);
+//                 fill_rectangle(color_white(),secong_column_x,second_row_y,rec_width,rec_height);
+//                 if(_displayStyle==1){fill_rectangle(color_red(),first_column_x,first_row_y,rec_width,rec_height);}
+//                 if(_displayStyle==2){fill_rectangle(color_red(),secong_column_x,first_row_y,rec_width,rec_height);}
+//                 if(_displayStyle==3){fill_rectangle(color_red(),first_column_x,second_row_y,rec_width,rec_height);}
+//                 if(_displayStyle==4){fill_rectangle(color_red(),secong_column_x,second_row_y,rec_width,rec_height);}
+//             }
+
+//             if(_selector==4)
+//             {
+//                 // draw_bitmap("backMenu",0,3*bitmap_height("backCurrentGame"));
+//                 // draw_bitmap("sound_notSelected",0,bitmap_height("backCurrentGame"));
+//                 // // draw_bitmap();
+//                 // draw_bitmap("backGame_notSelected",0,0);
+//                 _grid->DrawGrid();
+//             }
+            
+//         }
+// };
+ 
 void Option::createOptionsButtons()
 {
     // Initialise grid 

@@ -79,6 +79,9 @@ private:
     /// Turn menu music on/off
     bool m_playMusic = true;
 
+    ///Music controller
+    Audio audio;
+
     /// Menu button node
     ButtonNode *m_menuButtonNode = nullptr;
 

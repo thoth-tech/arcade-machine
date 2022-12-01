@@ -40,7 +40,7 @@ ArcadeMachine::ArcadeMachine()
     
     Splashscreen introArcadeMachineTeam("intro_arcade_team");
     Splashscreen introSplashkit("intro_splashkit");
-    
+    Audio audio;
     // Set objects to private properties
     this->m_helper = helper;
     this->m_config = config;
@@ -48,6 +48,7 @@ ArcadeMachine::ArcadeMachine()
     this->m_introThothTech = introThothTech;
     this->m_introArcadeTeam = introArcadeMachineTeam;
     this->m_introSplashkit = introSplashkit;
+    this->audio = audio;
 }
 
 ArcadeMachine::~ArcadeMachine()
@@ -249,7 +250,8 @@ void ArcadeMachine::prepareMainMenu()
     this->m_grid.updateCell(m_menuButtonNode->getNext()->button, 3, 10);
 
     // Play main menu music
-    if (this->m_playMusic) play_music("music_mainmenu");
+    // if (this->m_playMusic) play_music("music_mainmenu");
+    this->audio.playMusic("music_mainmenu",100);
 }
 
 /// Plays the Thoth Tech splashscreen animation

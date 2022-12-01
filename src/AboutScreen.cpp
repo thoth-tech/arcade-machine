@@ -83,8 +83,8 @@ AboutScreen::AboutScreen() {
 }
 
 void AboutScreen::onExit() {
-	if (music_playing())
-		stop_music();
+	// if (music_playing())
+	// 	stop_music();
 }
 
 void AboutScreen::readInput() {
@@ -98,10 +98,10 @@ void AboutScreen::tick() {
 	this->tickContributor();
 
 	// Every 1/4 second.
-	if (this->m_ticker % 15 == 0) {
-		if (! music_playing())
-			play_music("music_about");
-	}
+	// if (this->m_ticker % 15 == 0) {
+	// 	if (! music_playing())
+	// 		play_music("music_about");
+	// }
 
 	this->m_ticker++;
 }
@@ -219,8 +219,8 @@ void AboutScreen::loop() {
 
 void AboutScreen::main() {
 	// Clear music and start the about screen music.
-	stop_music();
-	play_music("music_about");
+	// stop_music();
+	// play_music("music_about");
 
 	this->loop();
 

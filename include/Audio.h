@@ -18,32 +18,17 @@ class Audio {
             this->songId = id;
         }
 
-        void playMusic(float volume)
+        void playMusic(string _currentMusic,float volume)
         {
-            play_music(m_music[0]);
-            set_music_volume(volume);
-            setSongId(0);
-        }
-
-        void playMusic(std::string song, float volume)
-        {
-            play_music(song);
-            set_music_volume(volume);
-            music thisSong = music_named(song);
-
-            for (int i = 0; i < this->m_music.size(); i++)
-            {
-                if (thisSong == this->m_music[i])
-                {
-                    write_line("same song");
-                    setSongId(i);
-                }
+            if(!music_playing()){
+                play_music(_currentMusic);
             }
-        }
+            
+            set_music_volume(volume);
+        }  
 
-        void playMusic(int _currentMusic, float volume)
+        void setVolume(float volume)
         {
-            play_music(std::to_string(_currentMusic));
             set_music_volume(volume);
         }
 
@@ -53,11 +38,6 @@ class Audio {
                 play_music(this->m_music[this->songId + 1]);
             else
                 play_music(this->m_music[0]);
-        }
-
-        void setVolume(float volume)
-        {
-            set_music_volume(volume);
         }
 
         void getAllMusic()
