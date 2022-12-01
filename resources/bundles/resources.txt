@@ -61,7 +61,7 @@ SOUND,intro_coin,coin.wav
 SOUND,intro_start,completed.wav
 
 // Music
-MUSIC,music_mainmenu,main_menu.mp3
+MUSIC,4,main_menu.mp3
 MUSIC, 1, 1.mp3
 MUSIC, 2, 2.mp3
 MUSIC, 3, 3.mp3
