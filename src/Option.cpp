@@ -243,8 +243,9 @@ bool Option::checkAction()
 
 void Option::soundMenu()
 {
-    write_line("into sound options mini menu");
-
+    // AudioSetting audioSetting;
+    // audioSetting.drawHub();
+    this->m_audio_setting.drawHub();
     //draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
 }
 

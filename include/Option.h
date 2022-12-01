@@ -10,6 +10,7 @@
 #include "Selector.h"
 #include "OptionsScreenButton.h"
 #include "Audio.h"
+#include "AudioSetting.h"
 
 // Options class
 class Option
@@ -22,7 +23,7 @@ private:
     int m_insideSeletor = 1;
     float m_volume = 40;
     bool m_isOptionOpen = true;
-
+    AudioSetting m_audio_setting;
     GridLayout m_grid;
     Audio m_audio;
     std::vector<Button*> m_optionsBtns;

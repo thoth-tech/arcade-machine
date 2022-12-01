@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include "AudioSetting.h"
 
 // Define number of rows and columns in grid
 #define ROWS 7
