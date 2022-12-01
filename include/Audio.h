@@ -6,7 +6,7 @@
 class Audio {
     private:
         vector<music> m_music;
-        int songId;
+        int songId = 1;
     public:
         Audio()
         {
@@ -26,7 +26,7 @@ class Audio {
             
             set_music_volume(volume);
         }  
-
+        void set_song(float song);
         void setVolume(float volume)
         {
             set_music_volume(volume);

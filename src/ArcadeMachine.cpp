@@ -69,6 +69,7 @@ void ArcadeMachine::mainMenu()
 {
     while (!quit_requested())
     {
+        this->audio.playMusic("4",100);
         process_events();
         clear_screen();
         drawMainMenu();
@@ -251,7 +252,7 @@ void ArcadeMachine::prepareMainMenu()
 
     // Play main menu music
     // if (this->m_playMusic) play_music("music_mainmenu");
-    this->audio.playMusic("music_mainmenu",100);
+    
 }
 
 /// Plays the Thoth Tech splashscreen animation

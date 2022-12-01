@@ -245,7 +245,15 @@ void Option::soundMenu()
 {
     // AudioSetting audioSetting;
     // audioSetting.drawHub();
-    this->m_audio_setting.drawHub();
+    while (! key_down(K_KEY))
+    {
+        process_events();
+        clear_screen();
+        draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
+        
+        refresh_screen();
+    }
+    
     //draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
 }
 
