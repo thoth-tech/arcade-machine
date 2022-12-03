@@ -35,16 +35,34 @@ private:
 
 public:
     Option();
-
     void createOptionsButtons();
     void drawOptionsMenu();
-    bool checkAction();
-    void soundMenu();
-
-
+    bool checkAction(Audio &audio);
+    void soundMenu(Audio &audio);
     float getVolume();
     int getCurrentMusic();
-    void setCurrentMusic();
+    void setCurrentMusic(Audio &audio)
+    {
+        
+        if(key_down(K_KEY))
+        {
+            audio.setSongId(2);
+        }
+        
+        if(key_typed(LEFT_KEY))
+        {
+            if(audio.getCurrentMusic()>1)
+            audio.setSongId(audio.getCurrentMusic()-1);
+            else
+            audio.setSongId(4);
+
+        }
+        if(key_typed(RIGHT_KEY)){
+        if(audio.getCurrentMusic()<4)     
+        audio.setSongId(audio.getCurrentMusic()+1);
+        else
+        audio.setSongId(1);}
+    }
     void volumeControl();
     void changeDisplay();
     void playAboutScreen();

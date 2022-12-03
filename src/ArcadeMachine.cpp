@@ -41,6 +41,7 @@ ArcadeMachine::ArcadeMachine()
     Splashscreen introArcadeMachineTeam("intro_arcade_team");
     Splashscreen introSplashkit("intro_splashkit");
     Audio audio;
+    
     // Set objects to private properties
     this->m_helper = helper;
     this->m_config = config;
@@ -69,11 +70,7 @@ void ArcadeMachine::mainMenu()
 {
     while (!quit_requested())
     {
-        this->audio.playMusic(4,100);
-        if(key_typed(K_KEY)){
-            this->audio.setSongId(1);
-            write_line("qweqweqeqweqe");
-        }
+        this->audio.playMusic(this->audio.getCurrentMusic(),100);
         process_events();
         clear_screen();
         drawMainMenu();
@@ -127,17 +124,11 @@ void ArcadeMachine::optionsMenu()
     {
         process_events();
         clear_screen();
-
         //options.updateOption();
         options.drawOptionsMenu();
-
-        this->m_exitOptions = options.checkAction();
+        this->m_exitOptions = options.checkAction(this->audio);
         
-        if(!has_background_music)
-        {
-            //audio->playMusic(options.getCurrentMusic(), options.getVolume());
-            has_background_music=false;   
-        }
+        
         
         if(options.isChangeMusic())
         {

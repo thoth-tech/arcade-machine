@@ -227,13 +227,13 @@ void Option::drawOptionsMenu()
     this->m_action = this->m_selectorOptionsMenu.checkForSelection(this->m_optionsButtonNode);
 }
 
-bool Option::checkAction()
+bool Option::checkAction(Audio &audio)
 {
     if (this->m_action == "home") 
         return true;
 
     if (this->m_action == "sound") 
-        this->soundMenu();
+        this->soundMenu(audio);
 
     if (this->m_action == "stats")
         this->playAboutScreen();
@@ -241,15 +241,18 @@ bool Option::checkAction()
     return false;
 }
 
-void Option::soundMenu()
+void Option::soundMenu(Audio &audio)
 {
     // AudioSetting audioSetting;
     // audioSetting.drawHub();
-    while (! key_down(K_KEY))
+    while (! key_down(ESCAPE_KEY))
     {
         process_events();
         clear_screen();
-        draw_text("Volume", COLOR_BLACK, "font_title", 60, 300, 200);
+        this->setCurrentMusic(audio);
+        write_line(audio.getCurrentMusic());
+        draw_text(std::to_string(audio.getCurrentMusic()), COLOR_BLACK, "Times New Roman", 60, 300, 200);
+        draw_text("Volume", COLOR_BLACK, "font_title", 60, 500, 500);
         
         refresh_screen();
     }
@@ -271,16 +274,8 @@ void Option::volumeControl()
         m_volume -= 20;
 }
 
-void Option::setCurrentMusic()
-{
-    if(_selector == 2 && m_isSelected && m_volume < 100 && m_insideSeletor == 2)
-    {
-        if(key_typed(LEFT_KEY) && m_currentMusic > 1)
-            m_currentMusic = m_currentMusic-1;
-        if(key_typed(RIGHT_KEY) && m_currentMusic < 3)
-            m_currentMusic = m_currentMusic+1;
-    }
-}
+
+
 
 int Option::getCurrentMusic()
 {
@@ -385,7 +380,7 @@ void Option::updateOption()
     {
         changeSelector();
         changeDisplay();
-        setCurrentMusic();
+        // setCurrentMusic();
         volumeControl();
         drawIntinialHub();
     }

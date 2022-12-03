@@ -17,7 +17,6 @@ class Audio {
         {
             if(this->songId != id){
                 this->songId = id;
-                write_line("dasd");
                 stop_music();
                 playMusic(id,100);
             }
@@ -44,7 +43,9 @@ class Audio {
             else
                 play_music(this->m_music[0]);
         }
-
+        int getCurrentMusic(){
+            return songId;
+        }
         void getAllMusic()
         {
             m_music.push_back(music_named("music_mainmenu"));
