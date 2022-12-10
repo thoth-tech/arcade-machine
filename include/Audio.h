@@ -7,6 +7,7 @@ class Audio {
     private:
         vector<music> m_music;
         int songId = 4;
+        // int volume = 50;
     public:
         Audio()
         {
@@ -21,7 +22,12 @@ class Audio {
                 playMusic(id,100);
             }
         }
-
+        // int getCurrentVolumn(){
+        //     return this->volume;
+        // }
+        // void changeVolume(int volume){
+            
+        // }
         void playMusic(int _currentMusic,float volume)
         {
             if(!music_playing()){

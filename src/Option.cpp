@@ -250,7 +250,7 @@ void Option::soundMenu(Audio &audio)
         process_events();
         clear_screen();
         this->setCurrentMusic(audio);
-        write_line(audio.getCurrentMusic());
+        this->changeVolume();
         draw_text(std::to_string(audio.getCurrentMusic()), COLOR_BLACK, "Times New Roman", 60, 300, 200);
         draw_text("Volume", COLOR_BLACK, "font_title", 60, 500, 500);
         

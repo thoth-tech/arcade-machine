@@ -82,6 +82,7 @@ void ArcadeMachine::mainMenu()
 /**
     Starts the Games Menu
 */
+
 void ArcadeMachine::gamesMenu()
 {
     // Instantiate new menu
@@ -110,7 +111,6 @@ void ArcadeMachine::gamesMenu()
         refresh_screen(60);
     }
 }
-
 /**
     Starts the Options Menu
 */
@@ -119,16 +119,14 @@ void ArcadeMachine::optionsMenu()
     Option options;
     bool has_background_music = false;
     options.createOptionsButtons();
-    
+    options.changeVolume();
     while (this->m_exitOptions == false)
     {
         process_events();
         clear_screen();
         //options.updateOption();
         options.drawOptionsMenu();
-        this->m_exitOptions = options.checkAction(this->audio);
-        
-        
+        this->m_exitOptions = options.checkAction(this->audio);  
         
         if(options.isChangeMusic())
         {

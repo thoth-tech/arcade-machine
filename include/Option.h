@@ -43,12 +43,7 @@ public:
     int getCurrentMusic();
     void setCurrentMusic(Audio &audio)
     {
-        
-        if(key_down(K_KEY))
-        {
-            audio.setSongId(2);
-        }
-        
+
         if(key_typed(LEFT_KEY))
         {
             if(audio.getCurrentMusic()>1)
@@ -62,6 +57,21 @@ public:
         audio.setSongId(audio.getCurrentMusic()+1);
         else
         audio.setSongId(1);}
+    }
+    void changeVolume(){
+        if(key_typed(K_KEY)){
+            if(music_volume()>0){
+                set_music_volume(music_volume()-0.1);
+            }
+        }
+        if(key_typed(L_KEY)){
+            if(music_volume()<1){
+                set_music_volume(music_volume()+0.1);
+            }
+        }
+        if(key_typed(J_KEY)){
+            write_line(music_volume());
+        }
     }
     void volumeControl();
     void changeDisplay();
