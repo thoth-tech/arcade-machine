@@ -37,6 +37,12 @@ BITMAP,changeSound,buttons/Red/MusicOn.png
 BITMAP,sound_notSelected,buttons/Yellow/MusicOn.png
 BITMAP,backMenu_notSelected,buttons/Yellow/Home.png
 BITMAP,backMenu,buttons/Red/Home.png
+BITMAP,volumeDown,volumeDown.png
+BITMAP,volumeUp,volumeUp.png
+BITMAP,sound_image,sound_image.jpg
+BITMAP,sound_image2,sound_image2.jpg
+BITMAP,sound_image3,sound_image3.jpg
+BITMAP,sound_image4,sound_image4.png
 
 // Cursors
 BITMAP,cursor,splashkit_cursor.png

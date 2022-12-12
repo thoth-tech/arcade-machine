@@ -245,15 +245,59 @@ void Option::soundMenu(Audio &audio)
 {
     // AudioSetting audioSetting;
     // audioSetting.drawHub();
+    vector<sprite> images;
+    images.push_back(create_sprite(bitmap_named("sound_image")));
+    images.push_back(create_sprite(bitmap_named("sound_image2")));
+    images.push_back(create_sprite(bitmap_named("sound_image3")));
+    images.push_back(create_sprite(bitmap_named("sound_image4")));
+    for(int i=0;i<4;i++){
+        sprite_set_x(images[i],screen_width()/2-300+20+i*560);
+        sprite_set_y(images[i],220);
+    }
     while (! key_down(ESCAPE_KEY))
     {
         process_events();
         clear_screen();
+        for(int i=0; i<4;i++){
+            draw_sprite(images[i]);
+            
+            // update_sprite(images[i]);
+        }
+        if(key_typed(J_KEY)){
+            write_line("ok");
+                int a = 0;
+                while(a<560){
+                    for(int i=0; i<4;i++){
+                    // process_events();
+                    sprite_set_dx(images[i],1);
+                    update_sprite(images[i]);
+                    draw_sprite(images[i]);
+                    // delay(1);
+                    }
+                    a++;
+                    refresh_screen();
+                }
+                
+                write_line(a);
+                for(int i=0; i<4;i++){
+                    sprite_set_dx(images[i],0);
+                    update_sprite(images[i]);
+                    }
+            
+            }
+         if(key_typed(H_KEY)){
+            
+         }   
         this->setCurrentMusic(audio);
         this->changeVolume();
+        fill_rectangle(color_blue(), screen_width()/2-300, 200, 600, 300);
+        // fill_rectangle(color_white(), screen_width()/2-300+20, 200+20, 600-40, 300-40);
+        // draw_bitmap("sound_image",0, 0);
+        draw_bitmap("volumeDown",200, 700);
         draw_text(std::to_string(audio.getCurrentMusic()), COLOR_BLACK, "Times New Roman", 60, 300, 200);
-        draw_text("Volume", COLOR_BLACK, "font_title", 60, 500, 500);
-        
+        draw_bitmap("volumeDown",200, 700);
+        draw_bitmap("volumeUp",screen_width()-200-bitmap_width("volumeUp"),700);
+        fill_rectangle(color_red(), screen_width()/2-500, 700, 1000, bitmap_height("volumeUp"));
         refresh_screen();
     }
     
@@ -277,10 +321,7 @@ void Option::volumeControl()
 
 
 
-int Option::getCurrentMusic()
-{
-    return m_currentMusic;
-}
+
 
 void Option::changeDisplay()
 {

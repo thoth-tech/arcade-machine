@@ -40,7 +40,6 @@ public:
     bool checkAction(Audio &audio);
     void soundMenu(Audio &audio);
     float getVolume();
-    int getCurrentMusic();
     void setCurrentMusic(Audio &audio)
     {
 
@@ -69,9 +68,7 @@ public:
                 set_music_volume(music_volume()+0.1);
             }
         }
-        if(key_typed(J_KEY)){
-            write_line(music_volume());
-        }
+        
     }
     void volumeControl();
     void changeDisplay();
