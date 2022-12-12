@@ -60,12 +60,14 @@ public:
     void changeVolume(){
         if(key_typed(K_KEY)){
             if(music_volume()>0){
-                set_music_volume(music_volume()-0.1);
+                float a = (music_volume()*10-2)/10;
+                set_music_volume(a);
             }
         }
         if(key_typed(L_KEY)){
             if(music_volume()<1){
-                set_music_volume(music_volume()+0.1);
+                float a = (music_volume()*10-2)/10;
+                set_music_volume(a);
             }
         }
         

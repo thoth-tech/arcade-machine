@@ -254,6 +254,29 @@ void Option::soundMenu(Audio &audio)
         sprite_set_x(images[i],screen_width()/2-300+20+i*560);
         sprite_set_y(images[i],220);
     }
+    int current = audio.getCurrentMusic();
+    if(current == 1){
+        sprite_set_x(images[0],screen_width()/2-300+20);
+        sprite_set_y(images[0],220);
+        sprite_set_x(images[3],screen_width()/2-300+20-560);
+        sprite_set_y(images[3],220);
+        sprite_set_x(images[1],screen_width()/2-300+20+560);
+        sprite_set_y(images[1],220);
+        sprite_set_x(images[2],screen_width()/2-300+20+2*560);
+        sprite_set_y(images[2],220);
+    }else{
+        for(int i = current-1;i<=4;i++){
+        sprite_set_x(images[i-1],screen_width()/2-300+20+(i-current)*560);
+        sprite_set_y(images[i-1],220);
+    }
+    for(int i =1;i<current-1;i++){
+        sprite_set_x(images[i-1],screen_width()/2-300+20+(4-current+i)*560);
+        sprite_set_y(images[i-1],220);
+    }
+    }
+    
+    bool moveLeft = false;
+    bool moveRight =false;
     while (! key_down(ESCAPE_KEY))
     {
         process_events();
@@ -261,43 +284,55 @@ void Option::soundMenu(Audio &audio)
         for(int i=0; i<4;i++){
             draw_sprite(images[i]);
             
-            // update_sprite(images[i]);
+            update_sprite(images[i]);
         }
-        if(key_typed(J_KEY)){
-            write_line("ok");
-                int a = 0;
-                while(a<560){
-                    for(int i=0; i<4;i++){
-                    // process_events();
-                    sprite_set_dx(images[i],1);
-                    update_sprite(images[i]);
-                    draw_sprite(images[i]);
-                    // delay(1);
-                    }
-                    a++;
-                    refresh_screen();
-                }
-                
-                write_line(a);
-                for(int i=0; i<4;i++){
-                    sprite_set_dx(images[i],0);
-                    update_sprite(images[i]);
-                    }
-            
+        if(key_typed(RIGHT_KEY)){
+            moveRight = true; 
+            current = audio.getCurrentMusic();          
+        }
+        if(key_typed(LEFT_KEY)){
+            moveLeft = true;
+            current = audio.getCurrentMusic();            
+        }
+        if(moveRight == true && sprite_x(images[current-1])>screen_width()/2-300+20-560){
+            for(int i=0;i<4;i++){
+                sprite_set_dx(images[i],-1);
             }
-         if(key_typed(H_KEY)){
-            
-         }   
+        }
+        else if(moveLeft == true && sprite_x(images[current-1])<screen_width()/2-300+20+560){
+            for(int i=0;i<4;i++){
+                sprite_set_dx(images[i],1);
+            }
+        }
+        else{
+            for(int i=0;i<4;i++){
+                sprite_set_dx(images[i],0);
+            }
+            moveLeft = false;
+            moveRight =false;
+        }
+        for(int i=0;i<4;i++){
+            if(sprite_x(images[i])==screen_width()/2-300+20+3*560){
+                sprite_set_x(images[i],screen_width()/2-300+20-560);
+            }
+        }
+        for(int i=0;i<4;i++){
+            if(sprite_x(images[i])==screen_width()/2-300+20-2*560){
+                sprite_set_x(images[i],screen_width()/2-300+20+2*560);
+            }
+        }
         this->setCurrentMusic(audio);
         this->changeVolume();
-        fill_rectangle(color_blue(), screen_width()/2-300, 200, 600, 300);
-        // fill_rectangle(color_white(), screen_width()/2-300+20, 200+20, 600-40, 300-40);
-        // draw_bitmap("sound_image",0, 0);
+        // fill_rectangle(color_blue(), screen_width()/2-300, 200, 600, 300);
+        fill_rectangle(color_white(), 0, 200+20, screen_width()/2-560/2, 300-40);
+        fill_rectangle(color_white(), screen_width()/2+560/2, 200+20, screen_width()/2-560/2, 300-40);
+    
         draw_bitmap("volumeDown",200, 700);
         draw_text(std::to_string(audio.getCurrentMusic()), COLOR_BLACK, "Times New Roman", 60, 300, 200);
         draw_bitmap("volumeDown",200, 700);
         draw_bitmap("volumeUp",screen_width()-200-bitmap_width("volumeUp"),700);
         fill_rectangle(color_red(), screen_width()/2-500, 700, 1000, bitmap_height("volumeUp"));
+        fill_rectangle(color_blue(), screen_width()/2-500, 700, 1000*music_volume(), bitmap_height("volumeUp"));
         refresh_screen();
     }
     
