@@ -70,7 +70,11 @@ void ArcadeMachine::mainMenu()
 {
     while (!quit_requested())
     {
-        this->audio.playMusic(this->audio.getCurrentMusic(),100);
+        this->audio.playMusic(this->audio.getCurrentMusic());
+        audio.set_volume_for_machine();
+        if(key_typed(P_KEY)){
+            write_line(audio.getVolume());
+        }
         process_events();
         clear_screen();
         drawMainMenu();
@@ -119,7 +123,7 @@ void ArcadeMachine::optionsMenu()
     Option options;
     bool has_background_music = false;
     options.createOptionsButtons();
-    options.changeVolume();
+    
     while (this->m_exitOptions == false)
     {
         process_events();

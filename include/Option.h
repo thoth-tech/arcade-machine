@@ -57,18 +57,14 @@ public:
         else
         audio.setSongId(1);}
     }
-    void changeVolume(){
+    void changeVolume(Audio &audio){
         if(key_typed(K_KEY)){
-            if(music_volume()>0){
-                float a = (music_volume()*10-2)/10;
-                set_music_volume(a);
-            }
+            audio.setVolume(audio.getVolume()-1);
+            set_music_volume(audio.getVolume()/10);
         }
         if(key_typed(L_KEY)){
-            if(music_volume()<1){
-                float a = (music_volume()*10-2)/10;
-                set_music_volume(a);
-            }
+            audio.setVolume(audio.getVolume()+1);
+            set_music_volume(audio.getVolume()/10);
         }
         
     }

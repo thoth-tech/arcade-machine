@@ -322,7 +322,7 @@ void Option::soundMenu(Audio &audio)
             }
         }
         this->setCurrentMusic(audio);
-        this->changeVolume();
+        this->changeVolume(audio);
         // fill_rectangle(color_blue(), screen_width()/2-300, 200, 600, 300);
         fill_rectangle(color_white(), 0, 200+20, screen_width()/2-560/2, 300-40);
         fill_rectangle(color_white(), screen_width()/2+560/2, 200+20, screen_width()/2-560/2, 300-40);

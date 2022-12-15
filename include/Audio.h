@@ -7,11 +7,10 @@ class Audio {
     private:
         vector<music> m_music;
         int songId = 4;
-        // int volume = 50;
+        float volume = 5;
     public:
         Audio()
         {
-            getAllMusic();
         }
 
         void setSongId(int id)
@@ -19,46 +18,30 @@ class Audio {
             if(this->songId != id){
                 this->songId = id;
                 stop_music();
-                playMusic(id,100);
+                playMusic(id);
             }
         }
-        // int getCurrentVolumn(){
-        //     return this->volume;
-        // }
-        // void changeVolume(int volume){
-            
-        // }
-        void playMusic(int _currentMusic,float volume)
+        void playMusic(int _currentMusic)
         {
             if(!music_playing()){
                 play_music(std::to_string(_currentMusic));
+                set_music_volume(this->volume/10);
             }
-            
-            set_music_volume(volume);
         }  
-        void set_song(float song);
+        void set_volume_for_machine(){
+            set_music_volume(this->volume/10);
+        }
         void setVolume(float volume)
         {
-            set_music_volume(volume);
+            this->volume = volume;
         }
-
-        void playNextSong()
-        {
-            if (this->songId != (this->m_music.size() - 1))
-                play_music(this->m_music[this->songId + 1]);
-            else
-                play_music(this->m_music[0]);
+        float getVolume(){
+            return this->volume;
         }
         int getCurrentMusic(){
             return songId;
         }
-        void getAllMusic()
-        {
-            m_music.push_back(music_named("music_mainmenu"));
-            m_music.push_back(music_named("1"));
-            m_music.push_back(music_named("2"));
-            m_music.push_back(music_named("3"));
-        }
+        
 };
 
 #endif
