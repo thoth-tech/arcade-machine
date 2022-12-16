@@ -1,4 +1,4 @@
-#include "Menu.h"
+#include "AbstractMenu.h"
 
 #ifndef _WIN32
 #include "Process.h"
@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-Menu::Menu()
+AbstractMenu::Menu()
 {
     this->m_db = new Database();
     Table *gameDataTable = new Table("gameData", {{"gameName", "TEXT"}, {"startTime", "TEXT"}, {"endTime", "TEXT"}, {"rating", "TEXT"}, {"highScore", "TEXT"}});
@@ -15,7 +15,7 @@ Menu::Menu()
     this->m_rating = Rating();
 }
 
-Menu::Menu(std::vector<ConfigData> configs)
+AbstractMenu::Menu(std::vector<ConfigData> configs)
 {
     this->m_games = configs;
     this->m_db = new Database();
@@ -27,7 +27,7 @@ Menu::Menu(std::vector<ConfigData> configs)
 #endif
 }
 
-Menu::~Menu()
+AbstractMenu::~Menu()
 {
     std::cout << "Destructor called on Menu\n";
     std::cout << "Menu: clearing memory...\n";
@@ -35,13 +35,13 @@ Menu::~Menu()
     delete m_tip;
 }
 
-/** 
-* @brief Gets the game images from the config files and returns vector of game images.
-* 
-* @param configs Vector of config data.
-* @return vector of game images.
-*/
-std::vector<std::string> Menu::getGameSprites(std::vector<ConfigData> configs)
+/**
+ * @brief Gets the game images from the config files and returns vector of game images.
+ *
+ * @param configs Vector of config data.
+ * @return vector of game images.
+ */
+std::vector<std::string> AbstractMenu::getGameSprites(std::vector<ConfigData> configs)
 {
     std::vector<std::string> gameImages;
 
@@ -55,11 +55,10 @@ std::vector<std::string> Menu::getGameSprites(std::vector<ConfigData> configs)
     return gameImages;
 }
 
-
 /**
-* @brief Create a grid object
-*/
-void Menu::createGrid()
+ * @brief Create a grid object
+ */
+void AbstractMenu::createGrid()
 {
     // Instantiate grid object
     GridLayout grid(8, 14);
@@ -69,10 +68,10 @@ void Menu::createGrid()
 }
 
 /**
-* @brief Create a list of games.
-* 
-*/
-void Menu::createButtons()
+ * @brief Create a list of games.
+ *
+ */
+void AbstractMenu::createButtons()
 {
     // Call function to get game images.
     m_gameImages = getGameSprites(m_games);
@@ -96,10 +95,10 @@ void Menu::createButtons()
     }
 }
 
-/** 
-* @brief create a tip to display to the user.
-*/
-void Menu::createTip()
+/**
+ * @brief create a tip to display to the user.
+ */
+void AbstractMenu::createTip()
 {
     bitmap bmpTip = bitmap_named("information");
     bitmap_set_cell_details(bmpTip, 50, 50, 4, 3, 12);
@@ -108,24 +107,24 @@ void Menu::createTip()
     drawing_options opt = option_with_animation(anim);
 
     std::string tipText[3] = {
-        "Use the left and right arrow keys to cycle through the carousel", 
-        "Press escape to return to the main menu", 
-        "Press enter to start the game"
-    };
-    this->m_tip = new Tip(tipText[rand()%3], bmpTip, anim, opt, 3000, 25);
+        "Use the left and right arrow keys to cycle through the carousel",
+        "Press escape to return to the main menu",
+        "Press enter to start the game"};
+    this->m_tip = new Tip(tipText[rand() % 3], bmpTip, anim, opt, 3000, 25);
 }
 
 /**
-* @brief draw the game buttons to the window, using the carousel layout
-*/
-void Menu::updateCarousel()
+ * @brief draw the game buttons to the window, using the carousel layout
+ */
+void AbstractMenu::updateCarousel()
 {
     // If menu is sliding then clear the grid.
     if (this->m_menuSliding)
     {
         this->m_grid.clearGrid();
     }
-    else {
+    else
+    {
         if (this->m_button && !this->m_inGame)
         {
             this->m_grid.updateCell(this->m_button->getPrev()->button, 2, 0, 1, false);
@@ -136,15 +135,15 @@ void Menu::updateCarousel()
 }
 
 /**
-* @brief m_handle carousel input
-*/
-void Menu::carouselHandler()
+ * @brief m_handle carousel input
+ */
+void AbstractMenu::carouselHandler()
 {
     /// Check for input in selector class.
     this->m_button = this->m_selectorGamesMenu.checkKeyInput(this->m_button, m_gameMenu);
     this->m_action = this->m_selectorGamesMenu.checkForSelection(this->m_button, m_gameMenu);
 
-    checkGameExit();
+    AbstractMenu::checkGameExit();
 
     if (this->m_button)
     {
@@ -179,7 +178,7 @@ void Menu::carouselHandler()
                 this->m_grid.clearGrid();
                 // set new background
                 this->m_grid.setBackground(bitmap_named("in_game_bgnd"));
-                //turn off overlay
+                // turn off overlay
                 this->m_overlayActive = false;
                 // turn off menu music
                 fade_music_out(1000);
@@ -197,11 +196,14 @@ void Menu::carouselHandler()
                 m_gameDir = this->m_button->config.folder().c_str();
 
                 // Call method to open game executable
-                startGame(m_gamePath, m_gameExe, m_gameDir);
+                AbstractMenu::startGame(m_gamePath, m_gameExe, m_gameDir);
 #else
-                try {
+                try
+                {
                     startGame(this->m_button->config.getExecutablePath());
-                } catch(const std::runtime_error &error) {
+                }
+                catch (const std::runtime_error &error)
+                {
                     write_line(error.what());
                 }
 #endif
@@ -214,12 +216,12 @@ void Menu::carouselHandler()
 }
 
 /**
-* @brief draw the menu page
-*/
-void Menu::drawMenuPage()
+ * @brief draw the menu page
+ */
+void AbstractMenu::drawMenuPage()
 {
     // if the game has ended, go back to games menu
-    if(!this->m_inGame && this->m_gameStarted)
+    if (!this->m_inGame && this->m_gameStarted)
     {
         this->m_gameStarted = false;
         backToGamesMenu();
@@ -227,9 +229,9 @@ void Menu::drawMenuPage()
         m_gameData.writeData(this->m_db);
         this->m_button->stats = m_gameData.getStats(this->m_db, m_gameData.getGameName());
     }
-    
+
     this->m_grid.drawGrid();
-    
+
     // Wait for selector to key input to determine slide direction.
     if (m_selectorGamesMenu.getSlideLeft())
         drawUpdateSlideLeft();
@@ -246,13 +248,13 @@ void Menu::drawMenuPage()
 }
 
 /**
-* @brief Method to update the sprite positions and draw sprite.
-* 
-* @param buttonSprite The buttons sprite.
-* @param position The position to move the sprite.
-* @return ** void 
-*/
-void Menu::updateSlide(sprite buttonSprite, int position)
+ * @brief Method to update the sprite positions and draw sprite.
+ *
+ * @param buttonSprite The buttons sprite.
+ * @param position The position to move the sprite.
+ * @return ** void
+ */
+void AbstractMenu::updateSlide(sprite buttonSprite, int position)
 {
     // Show the base layer of sprite.
     sprite_show_layer(buttonSprite, 0);
@@ -267,11 +269,11 @@ void Menu::updateSlide(sprite buttonSprite, int position)
 }
 
 /**
-* @brief Slide the game buttons on left key input.
-* 
-* @return ** void 
-*/
-void Menu::drawUpdateSlideLeft()
+ * @brief Slide the game buttons on left key input.
+ *
+ * @return ** void
+ */
+void AbstractMenu::drawUpdateSlideLeft()
 {
     this->m_menuSliding = true;
 
@@ -304,11 +306,11 @@ void Menu::drawUpdateSlideLeft()
 }
 
 /**
-* @brief Slide the game buttons on right key input.
-* 
-* @return ** void 
-*/
-void Menu::drawUpdateSlideRight()
+ * @brief Slide the game buttons on right key input.
+ *
+ * @return ** void
+ */
+void AbstractMenu::drawUpdateSlideRight()
 {
     this->m_menuSliding = true;
 
@@ -340,11 +342,11 @@ void Menu::drawUpdateSlideRight()
 }
 
 /**
-* @brief Draw an overlay over the game, using data from the config.
-* 
-* @param config the game config.
-*/
-void Menu::drawOverlay(ConfigData config, GameData stats)
+ * @brief Draw an overlay over the game, using data from the config.
+ *
+ * @param config the game config.
+ */
+void AbstractMenu::drawOverlay(ConfigData config, GameData stats)
 {
     int xOffset = (current_window_width() / 2) + (current_window_width() / 14);
     int yStart = current_window_height() / 6;
@@ -358,38 +360,38 @@ void Menu::drawOverlay(ConfigData config, GameData stats)
     draw_text("Language: " + config.language(), COLOR_WHITE, "font_text", yOffset, xOffset, yStart + (3 * yOffset));
     draw_text("Classification: " + config.rating(), COLOR_WHITE, "font_text", yOffset, xOffset, yStart + (4 * yOffset));
     draw_text("Repository: " + config.repo(), COLOR_WHITE, "font_text", yOffset, xOffset, yStart + (5 * yOffset));
-    draw_text("Playtime: " + std::to_string(stats.getStartTime()/60) + "mins", COLOR_WHITE, "font_text", yOffset, xOffset, yStart + (6*yOffset));
+    draw_text("Playtime: " + std::to_string(stats.getStartTime() / 60) + "mins", COLOR_WHITE, "font_text", yOffset, xOffset, yStart + (6 * yOffset));
     draw_text("Rating: ", COLOR_WHITE, "font_text", yOffset, xOffset, yStart + (7 * yOffset));
     string rating = string(stats.getRating(), 'J');
-    rating += string(5-rating.size(),'I');
-    draw_text(rating, COLOR_WHITE, "font_star", yOffset+10, xOffset + 90,  yStart + (7 * yOffset));
+    rating += string(5 - rating.size(), 'I');
+    draw_text(rating, COLOR_WHITE, "font_star", yOffset + 10, xOffset + 90, yStart + (7 * yOffset));
 }
 
 #ifdef _WIN32
 /**
-* @brief  Find the game window and bring it to focus, if it exists
-* 
-* @param windowName the name of the window
-* @param timeout time in ms to search for the window
-* @return true/false if window was found.
-*/
-bool Menu::focusWindow(std::string windowName, int timeout)
+ * @brief  Find the game window and bring it to focus, if it exists
+ *
+ * @param windowName the name of the window
+ * @param timeout time in ms to search for the window
+ * @return true/false if window was found.
+ */
+bool AbstractMenu::focusWindow(std::string windowName, int timeout)
 {
-    LPCSTR gameWindow =  windowName.c_str();
+    LPCSTR gameWindow = windowName.c_str();
     HWND gameWindowHandle = NULL;
 
     int timeElapsed;
     auto startTime = std::chrono::steady_clock::now();
 
-    //Find the window m_handle
-    do {
-        gameWindowHandle = FindWindowEx(NULL,NULL,NULL, gameWindow);
+    // Find the window m_handle
+    do
+    {
+        gameWindowHandle = FindWindowEx(NULL, NULL, NULL, gameWindow);
         timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count();
         delay(250);
-    }
-    while (gameWindowHandle == NULL && timeElapsed <= timeout);
+    } while (gameWindowHandle == NULL && timeElapsed <= timeout);
 
-    //Maximise the Window
+    // Maximise the Window
     if (gameWindowHandle != NULL)
     {
         ShowWindow(gameWindowHandle, SW_SHOWMAXIMIZED);
@@ -404,14 +406,14 @@ bool Menu::focusWindow(std::string windowName, int timeout)
 }
 
 /**
-* @brief Starts up the selected game by starting a new process.
-* 
-* @param gamePath The filepath of the game to open.
-* @param gameExe The executable of the game.
-* @param gameDirectory // The directory of the game.
-* @return ** void 
-*/
-void Menu::startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
+ * @brief Starts up the selected game by starting a new process.
+ *
+ * @param gamePath The filepath of the game to open.
+ * @param gameExe The executable of the game.
+ * @param gameDirectory // The directory of the game.
+ * @return ** void
+ */
+void AbstractMenu::startGame(LPCSTR gamePath, LPSTR gameExe, LPCSTR gameDirectory)
 {
     if (!this->m_inGame)
     {
@@ -424,47 +426,47 @@ void Menu::startGame(LPCSTR gamePath,LPSTR gameExe, LPCSTR gameDirectory)
         ZeroMemory(&m_processInfo, sizeof(m_processInfo));
 
         // Start the program up
-        WINBOOL gameProcess = CreateProcessA
-        (
-            gamePath,               // the path
-            gameExe,                // Command line
-            NULL,                   // Process m_handle not inheritable
-            NULL,                   // Thread m_handle not inheritable
-            FALSE,                  // Set m_handle inheritance to FALSE
-            NORMAL_PRIORITY_CLASS,     // Don't open file in a separate console
-            NULL,                    // Use parent's environment block
-            gameDirectory,           // Use parent's starting directory
-            &startupInfo,            // Pointer to STARTUPINFO structure
-            &m_processInfo           // Pointer to PROCESS_INFORMATION structure
+        WINBOOL gameProcess = CreateProcessA(
+            gamePath,              // the path
+            gameExe,               // Command line
+            NULL,                  // Process m_handle not inheritable
+            NULL,                  // Thread m_handle not inheritable
+            FALSE,                 // Set m_handle inheritance to FALSE
+            NORMAL_PRIORITY_CLASS, // Don't open file in a separate console
+            NULL,                  // Use parent's environment block
+            gameDirectory,         // Use parent's starting directory
+            &startupInfo,          // Pointer to STARTUPINFO structure
+            &m_processInfo         // Pointer to PROCESS_INFORMATION structure
         );
 
-        OpenProcess(PROCESS_QUERY_INFORMATION,TRUE, gameProcess);
+        OpenProcess(PROCESS_QUERY_INFORMATION, TRUE, gameProcess);
 
         std::string windowName = gameExe;
-        //Remove the extension from the application name (.exe)
+        // Remove the extension from the application name (.exe)
         windowName = windowName.substr(0, windowName.find("."));
-        //Focus the window
+        // Focus the window
         focusWindow(windowName);
 
         this->m_inGame = true;
     }
 }
 #else
-void Menu::startGame(struct s_ExecutablePath path) {
-    if (!this->m_inGame) {
+void AbstractMenu::startGame(struct s_ExecutablePath path)
+{
+    if (!this->m_inGame)
+    {
         this->m_processId = spawnProcess(path.path, path.file);
         this->m_inGame = true;
     }
 }
 #endif
 
-
 /**
-* @brief Waits for game to exit.
-* 
-* @return ** void 
-*/
-void Menu::checkGameExit()
+ * @brief Waits for game to exit.
+ *
+ * @return ** void
+ */
+void AbstractMenu::checkGameExit()
 {
     if (this->m_inGame == true)
     {
@@ -475,13 +477,14 @@ void Menu::checkGameExit()
         if ((this->m_programExit) && (STILL_ACTIVE != m_exitCode))
         {
             this->m_inGame = false;
-            
+
             int highScore = 0;
             m_gameData.setEndTime(time(0));
             m_gameData.setHighScore(highScore);
         }
 #else
-        if (! processRunning(this->m_processId)) {
+        if (!processRunning(this->m_processId))
+        {
             this->m_inGame = false;
             int highScore = 0;
             m_gameData.setEndTime(time(0));
@@ -491,10 +494,10 @@ void Menu::checkGameExit()
     }
 }
 
-/** 
-* @brief Fade back to games menu
-*/
-void Menu::backToGamesMenu()
+/**
+ * @brief Fade back to games menu
+ */
+void AbstractMenu::backToGamesMenu()
 {
     // fade to black
     fade(0, 1, 0.1);
@@ -505,13 +508,13 @@ void Menu::backToGamesMenu()
 }
 
 /**
-* @brief Creates a fading effect
-* 
-* @param alphaStart The starting alpha value.
-* @param alphaEnd The ending alpha value.
-* @param alphaStep The alpha value to increment/decrement by.
-*/
-void Menu::fade(double alphaStart, double alphaEnd, double alphaStep)
+ * @brief Creates a fading effect
+ *
+ * @param alphaStart The starting alpha value.
+ * @param alphaEnd The ending alpha value.
+ * @param alphaStep The alpha value to increment/decrement by.
+ */
+void AbstractMenu::fade(double alphaStart, double alphaEnd, double alphaStep)
 {
     if (alphaStart > alphaEnd)
         alphaStep = -std::abs(alphaStep);
