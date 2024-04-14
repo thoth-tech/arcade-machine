@@ -1,0 +1,138 @@
+using System;
+using SplashKit;
+
+public class Controls
+{
+    private static Json _controlsJson;
+
+    // Constructor to load controls from JSON file
+    public Controls(string filePath)
+    {
+        _controlsJson = SplashKit.JsonFromFile(filePath);
+    }
+
+    // Method to look up the KeyCode for a given control key
+    public static KeyCode KeyLookup(string key)
+    {
+        if (!_controlsJson.HasKey(key))
+            return KeyCode.UnknownKey;
+
+        string keyCodeString = _controlsJson.ReadString(key);
+
+        if (Enum.TryParse(keyCodeString, out KeyCode keyCode))
+        {
+            return keyCode;
+        }
+        else
+        {
+            return KeyCode.UnknownKey;
+        }
+    }
+}
+
+public class ArcadeMachineValidator
+{
+    private const int StartButtonHoldDuration = 5000;
+    private const int PowerButtonHoldDuration = 5000;
+
+    private bool startButtonPressed = false;
+    private bool player1ButtonPressed = false;
+    private bool player2ButtonPressed = false;
+
+    private Controls controls;
+
+    public ArcadeMachineValidator(string controlsFilePath)
+    {
+        controls = new Controls(controlsFilePath);
+    }
+
+    public void StartValidation()
+    {
+        Thread startButtonThread = new Thread(StartButtonValidation);
+        startButtonThread.Start();
+
+        Thread powerButtonThread = new Thread(PowerButtonValidation);
+        powerButtonThread.Start();
+    }
+
+    private void StartButtonValidation()
+    {
+        while (true)
+        {
+            if (IsKeyPressed("Start"))
+            {
+                startButtonPressed = true;
+                Thread.Sleep(StartButtonHoldDuration);
+                if (startButtonPressed)
+                {
+                    ConfirmStartButtonEngaged();
+                }
+            }
+            else
+            {
+                startButtonPressed = false;
+            }
+
+            Thread.Sleep(100);
+        }
+    }
+
+    private void PowerButtonValidation()
+    {
+        while (true)
+        {
+            if (IsKeyPressed("Player1_Button") && IsKeyPressed("Player2_Button"))
+            {
+                player1ButtonPressed = true;
+                player2ButtonPressed = true;
+                Thread.Sleep(PowerButtonHoldDuration);
+                if (player1ButtonPressed && player2ButtonPressed)
+                {
+                    ConfirmPowerOn();
+                }
+            }
+            else
+            {
+                player1ButtonPressed = false;
+                player2ButtonPressed = false;
+            }
+
+            Thread.Sleep(100);
+        }
+    }
+
+    private bool IsKeyPressed(string controlKey)
+    {
+        KeyCode keyCode = Controls.KeyLookup(controlKey);
+        if (keyCode != KeyCode.UnknownKey)
+        {
+            return SplashKit.KeyDown(keyCode);
+        }
+        return false;
+    }
+
+    private void ConfirmStartButtonEngaged()
+    {
+        Console.WriteLine("Start button engaged or coin inserted confirmed.");
+    }
+
+    private void ConfirmPowerOn()
+    {
+        Console.WriteLine("Arcade machine is connected to power and switched on confirmed.");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        string controlsFilePath = "Controls.json";
+        ArcadeMachineValidator validator = new ArcadeMachineValidator(controlsFilePath);
+        validator.StartValidation();
+
+        while (true)
+        {
+            Thread.Sleep(1000);
+        }
+    }
+}
