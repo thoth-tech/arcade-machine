@@ -1,0 +1,10 @@
+[Unit]
+Description=arcade-machine user inactivity timeout 
+
+[Service]
+ExecStart=python3 /home/deakin/IdleTimeout.py
+Restart=no
+Group=input
+
+[Install]
+WantedBy=multi-user.target
