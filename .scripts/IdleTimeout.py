@@ -1,5 +1,4 @@
 #Note this script requires super user privilages if the the user is not in the "input" group
-import struct
 from time import sleep
 from datetime import datetime, timedelta
 from os import set_blocking, listdir, path
