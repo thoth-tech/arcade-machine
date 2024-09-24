@@ -12,7 +12,7 @@ namespace fs = std::filesystem;
 const string GIT_URL = "https://github.com";
 const string GAME_BINARY_NAME = "DEBUG_GAME_BUILD";
 const string CWD = fs::current_path();
-const int STRING_MAX_SIZE = 100; //Cap input size to prevent overflows
+const int STRING_MAX_SIZE = 256; //Cap input size to prevent overflows
 
 //Handle terminal colours with escape codes
 const string TERM_TEXT_RED = "\033[31m";
@@ -68,7 +68,7 @@ unsigned char get_key_press(){
     return c;
 }
 
-void setup_filestructure(string dir){
+void setup_filestructure(const string &dir){
     printf("Creating up files in: %s\n", dir.c_str());
     //Clean slate for each test
     if(fs::is_directory(dir)){
@@ -105,7 +105,7 @@ void traverse_string(const string &s, int &pos, char input){
     }
 }
 
-string get_string_from_user(string message, string sin){
+string get_string_from_user(const string &message, string &sin){
     int pos = 0;
     char c = sin[0];
     unsigned char kbInput;
@@ -145,17 +145,17 @@ string get_string_from_user(string message, string sin){
     return sin;
 }
 
-string set_repo_url(string url, string uname, string repo){
-    string out; 
+string set_repo_url(const string &url, string &uname, string &repo){
+    string out;
     out += url + "/" + uname + "/" + repo + ".git";
     printf("Repo URL: %s\n", out.c_str());
     return out;
 }
 
-void clone_repo_to(string repo, string dir){
+void clone_repo_to(const string &repo, const string &dir){
     auto p = fs::current_path();
     fs::current_path(p /= dir);
-    
+
     // //Doesnt sanitize input
     string command = "git clone ";
     command+= + repo.c_str();
@@ -167,13 +167,29 @@ void clone_repo_to(string repo, string dir){
 auto init_config_items(){
     map<string, string> m = {
         {"tempDir", ""},
-        {"repoUrl", ""},
         {"gitUserName", ""},
         {"gitRepoName", ""},
         {"arcadeLaunchDir", "/home/will/Games/LaunchScripts"},
         {"compileCmd", "skm clang++ *.cpp -o " + GAME_BINARY_NAME}
     };
     return m;
+}
+
+void save_config_to_file(map<string, string> conf){
+    std::map<std::string, string>::iterator iterator = conf.begin();
+    string text = "";
+    printf("Saving config file.....\n");
+    while(iterator != conf.end()){
+        text += iterator->first + "=" + iterator->second + "\n";
+        ++iterator;
+    }
+
+    //Write out to file
+    fs::current_path(CWD);
+    ofstream configFile;
+    configFile.open("config.cfg");
+    configFile << text.c_str();
+    configFile.close();
 }
 
 void read_config_from_file(map<string, string> &c){
@@ -195,10 +211,11 @@ void read_config_from_file(map<string, string> &c){
             }
         }
     }
+    //Create a generic config file. 
     else{
-        throw std::runtime_error("Couldn't open config file for reading.");
+        auto conf = init_config_items();
+        save_config_to_file(conf);
     }
-    c["repoUrl"] = set_repo_url(GIT_URL, c["gitUserName"], c["gitRepoName"]);
 }
 
 void print_config(map<string, string> conf){
@@ -209,23 +226,6 @@ void print_config(map<string, string> conf){
         ++iterator;
     }
     printf("\n");
-}
-
-void save_config_to_file(map<string, string> conf){
-    std::map<std::string, string>::iterator iterator = conf.begin();
-    string text = "";
-    printf("Saving config file.....\n");
-    while(iterator != conf.end()){
-        text += iterator->first + "=" + iterator->second + "\n";
-        ++iterator;
-    }
-
-    //Write out to file
-    fs::current_path(CWD);
-    ofstream configFile;
-    configFile.open("config.cfg");
-    configFile << text.c_str();
-    configFile.close();
 }
 
 void update_config(map<string, string> &conf){
@@ -241,7 +241,7 @@ void update_config(map<string, string> &conf){
         printf("Select option with %s, Press %s key to return\n", INPUT_ARCADE_MAP[INPUT_KEY_SELECT].c_str(), INPUT_ARCADE_MAP[INPUT_KEY_QUIT].c_str());
         kbInput = get_key_press();
         if(kbInput == INPUT_KEY_UP && count > 0){
-            --iterator; 
+            --iterator;
             --count;
         }
         else if(kbInput == INPUT_KEY_DOWN && count < conf.size()-1){
@@ -264,7 +264,7 @@ void update_config(map<string, string> &conf){
     read_config_from_file(conf);
 }
 
-void compile_game(string path, string compileCmd){
+void compile_game(const string &path, const string &compileCmd){
     //Assume that project has been downloaded to folder of repo's name
     fs::current_path(CWD);
     auto p = fs::current_path();
@@ -312,7 +312,7 @@ void print_input_map(){
 void disable_term_buffer(termios config){
     struct termios newTerm;
     newTerm = config;
-	
+
     //Disable buffer and turn echo off
 	newTerm.c_lflag &=(~ICANON & ~ECHO);
     printf("\e[?25l"); //Hide cursor, Termios doens't have a flag for this?
@@ -352,17 +352,17 @@ void main_menu(map<string, string> conf){
         else if(kbInput == INPUT_KEY_DOWN && selection < sizeof(MENU_ITEMS) / sizeof(MENU_ITEMS[0])-1){
             selection += 1;
         }
-        
+
         //Execute chosen selection
         if(kbInput == INPUT_KEY_SELECT){
             switch (selection){
                 case 0: //Auto build
                     setup_filestructure(conf["tempDir"]);
-                    clone_repo_to(conf["repoUrl"], conf["tempDir"]);
+                    clone_repo_to(set_repo_url(GIT_URL, conf["gitUserName"], conf["gitRepoName"]), conf["tempDir"]);
                     compile_game((conf["tempDir"] + "/" + conf["gitRepoName"]), conf["compileCmd"]);
                     create_game_launcher(conf);
                     break;
-                
+
                 case 1: //Print config file
                     while(kbInput != INPUT_KEY_QUIT){
                         print_config(conf);
@@ -378,13 +378,13 @@ void main_menu(map<string, string> conf){
 
                 case 3: //Sync repo
                     setup_filestructure(conf["tempDir"]);
-                    clone_repo_to(conf["repoUrl"], conf["tempDir"]);
+                    clone_repo_to(set_repo_url(GIT_URL, conf["gitUserName"], conf["gitRepoName"]), conf["tempDir"]);
                     break;
 
                 case 4: //Compile game
                     try{
                         compile_game((conf["tempDir"] + "/" + conf["gitRepoName"]), conf["compileCmd"]);
-                        create_game_launcher(conf);    
+                        create_game_launcher(conf);
                     }
                     catch(const std::exception& e){
                         cerr << e.what() << '\n';
@@ -412,20 +412,20 @@ void main_menu(map<string, string> conf){
                 default:
                     break;
             }
-        }        
+        }
     }
 }
 
 int main(){
-    //Setup terminal 
+    //Setup terminal
     struct termios defaultTerm;
     tcgetattr(STDIN_FILENO,&defaultTerm);
     disable_term_buffer(defaultTerm);
-    
+
     //Setup config
     auto conf = init_config_items();
     read_config_from_file(conf);
-    
+
     main_menu(conf);
 
     //Reset terminal
