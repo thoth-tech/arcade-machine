@@ -40,6 +40,7 @@ ArcadeMachine::ArcadeMachine()
     
     Splashscreen introArcadeMachineTeam("intro_arcade_team");
     Splashscreen introSplashkit("intro_splashkit");
+    Audio audio;
     
     // Set objects to private properties
     this->m_helper = helper;
@@ -48,6 +49,7 @@ ArcadeMachine::ArcadeMachine()
     this->m_introThothTech = introThothTech;
     this->m_introArcadeTeam = introArcadeMachineTeam;
     this->m_introSplashkit = introSplashkit;
+    this->audio = audio;
 }
 
 ArcadeMachine::~ArcadeMachine()
@@ -68,6 +70,11 @@ void ArcadeMachine::mainMenu()
 {
     while (!quit_requested())
     {
+        this->audio.playMusic(this->audio.getCurrentMusic());
+        audio.set_volume_for_machine();
+        if(key_typed(P_KEY)){
+            write_line(audio.getVolume());
+        }
         process_events();
         clear_screen();
         drawMainMenu();
@@ -79,6 +86,7 @@ void ArcadeMachine::mainMenu()
 /**
     Starts the Games Menu
 */
+
 void ArcadeMachine::gamesMenu()
 {
     // Instantiate new menu
@@ -107,7 +115,6 @@ void ArcadeMachine::gamesMenu()
         refresh_screen(60);
     }
 }
-
 /**
     Starts the Options Menu
 */
@@ -121,17 +128,9 @@ void ArcadeMachine::optionsMenu()
     {
         process_events();
         clear_screen();
-
         //options.updateOption();
         options.drawOptionsMenu();
-
-        this->m_exitOptions = options.checkAction();
-        
-        if(!has_background_music)
-        {
-            //audio->playMusic(options.getCurrentMusic(), options.getVolume());
-            has_background_music=false;   
-        }
+        this->m_exitOptions = options.checkAction(this->audio);  
         
         if(options.isChangeMusic())
         {
@@ -249,7 +248,8 @@ void ArcadeMachine::prepareMainMenu()
     this->m_grid.updateCell(m_menuButtonNode->getNext()->button, 3, 10);
 
     // Play main menu music
-    if (this->m_playMusic) play_music("music_mainmenu");
+    // if (this->m_playMusic) play_music("music_mainmenu");
+    
 }
 
 /// Plays the Thoth Tech splashscreen animation
