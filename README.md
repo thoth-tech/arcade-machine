@@ -1,5 +1,5 @@
-<p align="center" width="40%">
-    <img width="40%" src="https://github.com/thoth-tech/.github/blob/main/images/splashkit.png"/>
+<p align="left">
+    <img width="150px" src="https://github.com/thoth-tech/.github/blob/main/images/splashkit.png"/>
 </p>
 
 # Arcade Machine
