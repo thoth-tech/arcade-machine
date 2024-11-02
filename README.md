@@ -1,3 +1,7 @@
+<p align="center" width="100%">
+    <img width="40%" src="https://github.com/thoth-tech/.github/blob/main/images/splashkit.png"/>
+</p>
+
 # Arcade Machine
 
 **Arcade Machine** is an interactive application built to showcase and execute games created with the [SplashKit SDK](https://github.com/thoth-tech/splashkit-core). Designed as a hub for all your SplashKit games, Arcade Machine provides an efficient and user-friendly way to compile, organize, and run games in one place. It’s ideal for both developers and players who want to easily access and test their creations.
