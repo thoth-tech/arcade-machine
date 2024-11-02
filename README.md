@@ -1,4 +1,4 @@
-<p align="center" width="100%">
+<p align="center" width="40%">
     <img width="40%" src="https://github.com/thoth-tech/.github/blob/main/images/splashkit.png"/>
 </p>
 
