@@ -2,6 +2,12 @@
     <img width="150px" src="https://github.com/thoth-tech/.github/blob/main/images/splashkit.png"/>
 </p>
 
+![GitHub contributors](https://img.shields.io/github/contributors/thoth-tech/arcade-machine?label=Contributors&color=F5A623)
+![GitHub issues](https://img.shields.io/github/issues/thoth-tech/arcade-machine?label=Issues&color=F5A623)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/thoth-tech/arcade-machine?label=Pull%20Requests&color=F5A623)
+![Forks](https://img.shields.io/github/forks/thoth-tech/arcade-machine?label=Forks&color=F5A623)
+![Stars](https://img.shields.io/github/stars/thoth-tech/arcade-machine?label=Stars&color=F5A623)
+
 # Arcade Machine
 
 **Arcade Machine** is an interactive application built to showcase and execute games created with the [SplashKit SDK](https://github.com/thoth-tech/splashkit-core). Designed as a hub for all your SplashKit games, Arcade Machine provides an efficient and user-friendly way to compile, organize, and run games in one place. It’s ideal for both developers and players who want to easily access and test their creations.
