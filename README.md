@@ -10,7 +10,7 @@
 
 ### General (All Operating Systems)
 
-- Install the SplashKit SDK by following the [installation guide](http://www.splashkit.io/articles/installation/).
+- Install the SplashKit SDK by following the [installation guide](https://splashkit.io/installation/).
 
 #### Windows (mingw32)
 
