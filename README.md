@@ -2,11 +2,12 @@
     <img width="150px" src="https://github.com/thoth-tech/.github/blob/main/images/splashkit.png"/>
 </p>
 
-![GitHub contributors](https://img.shields.io/github/contributors/thoth-tech/arcade-machine?label=Contributors&color=F5A623)
-![GitHub issues](https://img.shields.io/github/issues/thoth-tech/arcade-machine?label=Issues&color=F5A623)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/thoth-tech/arcade-machine?label=Pull%20Requests&color=F5A623)
-![Forks](https://img.shields.io/github/forks/thoth-tech/arcade-machine?label=Forks&color=F5A623)
-![Stars](https://img.shields.io/github/stars/thoth-tech/arcade-machine?label=Stars&color=F5A623)
+[![GitHub contributors](https://img.shields.io/github/contributors/thoth-tech/arcade-machine?label=Contributors&color=F5A623)](https://github.com/thoth-tech/arcade-machine/graphs/contributors)
+[![GitHub issues](https://img.shields.io/github/issues/thoth-tech/arcade-machine?label=Issues&color=F5A623)](https://github.com/thoth-tech/arcade-machine/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/thoth-tech/arcade-machine?label=Pull%20Requests&color=F5A623)](https://github.com/thoth-tech/arcade-machine/pulls)
+[![Forks](https://img.shields.io/github/forks/thoth-tech/arcade-machine?label=Forks&color=F5A623)](https://github.com/thoth-tech/arcade-machine/network/members)
+[![Stars](https://img.shields.io/github/stars/thoth-tech/arcade-machine?label=Stars&color=F5A623)](https://github.com/thoth-tech/arcade-machine/stargazers)
+
 
 # Arcade Machine
 
