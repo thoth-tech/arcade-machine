@@ -10,6 +10,7 @@
 #include "Selector.h"
 #include "OptionsScreenButton.h"
 #include "Audio.h"
+// #include "AudioSetting.h"
 
 // Options class
 class Option
@@ -22,7 +23,7 @@ private:
     int m_insideSeletor = 1;
     float m_volume = 40;
     bool m_isOptionOpen = true;
-
+    // AudioSetting m_audio_setting;
     GridLayout m_grid;
     Audio m_audio;
     std::vector<Button*> m_optionsBtns;
@@ -34,16 +35,39 @@ private:
 
 public:
     Option();
-
     void createOptionsButtons();
     void drawOptionsMenu();
-    bool checkAction();
-    void soundMenu();
-
-
+    bool checkAction(Audio &audio);
+    void soundMenu(Audio &audio);
     float getVolume();
-    int getCurrentMusic();
-    void setCurrentMusic();
+    void setCurrentMusic(Audio &audio)
+    {
+
+        if(key_typed(LEFT_KEY))
+        {
+            if(audio.getCurrentMusic()>1)
+            audio.setSongId(audio.getCurrentMusic()-1);
+            else
+            audio.setSongId(4);
+
+        }
+        if(key_typed(RIGHT_KEY)){
+        if(audio.getCurrentMusic()<4)     
+        audio.setSongId(audio.getCurrentMusic()+1);
+        else
+        audio.setSongId(1);}
+    }
+    void changeVolume(Audio &audio){
+        if(key_typed(K_KEY)){
+            audio.setVolume(audio.getVolume()-1);
+            set_music_volume(audio.getVolume()/10);
+        }
+        if(key_typed(L_KEY)){
+            audio.setVolume(audio.getVolume()+1);
+            set_music_volume(audio.getVolume()/10);
+        }
+        
+    }
     void volumeControl();
     void changeDisplay();
     void playAboutScreen();

@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include "AudioSetting.h"
 
 // Define number of rows and columns in grid
 #define ROWS 7
@@ -78,6 +79,9 @@ private:
 
     /// Turn menu music on/off
     bool m_playMusic = true;
+
+    ///Music controller
+    Audio audio;
 
     /// Menu button node
     ButtonNode *m_menuButtonNode = nullptr;
