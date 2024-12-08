@@ -93,9 +93,4 @@ If you prefer to compile without the Makefile, use the following command:
 
 ## Contributing
 
-Thank you to all the contributors!
-
-[<img src="https://github.com/{{ contributor }}.png" width="60px;"/><br /><sub><ahref="https://github.com/{{ contributor }}">{{ contributor }}</a></sub>](https://github.com/{{ contributor }}/{{ repository }}
-
 We welcome contributions to improve Arcade Machine and make it even better! If you’re interested in contributing, please review our guidelines in the [CONTRIBUTING.md](./CONTRIBUTING.md) file. Contributions can include bug fixes, new features, documentation improvements, or general enhancements. We appreciate your support in making Arcade Machine a great experience for all users!
-
